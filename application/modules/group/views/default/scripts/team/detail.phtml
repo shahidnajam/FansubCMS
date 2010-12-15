@@ -1,0 +1,18 @@
+<h1><?=$this->translate('member_detail_headline',$this->user->name)?></h1>
+<div id="team-detail-avatar"><img src="<?=$this->gravatar($this->user->email,150)?>" alt="" /></div>
+<div class="float-left">
+    <h2><?=$this->translate('member_detail_tasks_headline')?></h2>
+    <?php if(count($this->user->UserTask)): ?>
+        <?php foreach($this->user->UserTask as $task): ?>
+            <?=$task->Task->name?><br />
+        <?php endforeach; ?>
+    <?php else: ?>
+        <?=$this->translate('member_detail_no_tasks')?>
+    <?php endif; ?>
+    <h2><?=$this->translate('description')?></h2>
+    <?php if(strlen($this->formatText($this->user->description)) > 0): ?>
+        <?=$this->formatText($this->user->description)?>
+    <?php else: ?>
+        <?=$this->translate('member_detail_no_description')?>
+    <?php endif; ?>
+</div>

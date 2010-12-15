@@ -1,0 +1,12 @@
+<?php
+if(!empty($this->url))$this->author = '<a href="'.$this->url.'" target="blank">'.$this->author.'</a>';
+?>
+<div class="admin-box">
+    <div class="author"><?=$this->translate('news_comment_author',$this->author)?> <img alt="Avatar" src="<?=$this->gravatar($this->email,20)?>" /></div>
+    <div class="created"><?=$this->translate('news_comment_created_at_date',$this->formatDate($this->created_at))?></div>
+    <div class="content"><?=$this->formatText($this->comment)?></div>
+    <div class="actions">
+        <a href="<?=$this->baseUrl()?>/news/admin/deletecomment/id/<?=$this->id?>"><img src="<?=$this->baseUrl()?>/images/default/icons/16/minus.png" title="<?=$this->translate('delete')?>" alt="<?=$this->translate('delete')?>" /></a>
+        <a href="<?=$this->baseUrl()?>/news/admin/markham/id/<?=$this->id?>"><img src="<?=$this->baseUrl()?>/images/default/icons/16/arrow-000-medium.png" title="<?=$this->translate('news_admin_isHam')?>" alt="<?=$this->translate('news_admin_isHam')?>" /></a></div>
+</div>
+</div>

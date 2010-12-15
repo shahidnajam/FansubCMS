@@ -1,0 +1,9 @@
+<tr class="<?=$this->partialCounter % 2 ? 'specialOne' : 'specialTwo'; ?>">
+        <td><?=$this->id?></td>
+        <td><?=$this->name?></td>
+        <td><?=$this->name_jp?></td>
+        <td><?=$this->translate('project_status_'.$this->status)?></td>
+        <td><?=$this->translate($this->private.'_term')?></td>
+        <td><?=$this->formatDate($this->created_at,null,Zend_Date::DATE_FULL)?></td>
+        <td><?=$this->partial('partials/tableActions.phtml',array('id'=>$this->id))?></td>
+</tr>

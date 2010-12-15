@@ -1,0 +1,7 @@
+<tr class="<?=$this->partialCounter % 2 ? 'specialOne' : 'specialTwo'?>">
+    <td><?=$this->number?><?=$this->version > 1 ? 'v'.$this->version : ''?></td>
+    <td><?=$this->title?></td>
+    <td><?=$this->crc?></td>
+    <td><?=$this->formatDate($this->released_at,'longdate')?></td>
+    <td><?=$this->container?>[<?=$this->vcodec?>, <?=$this->acodec?>]</td>
+</tr>

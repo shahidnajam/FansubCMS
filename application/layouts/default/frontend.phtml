@@ -1,0 +1,57 @@
+<?=$this->doctype()?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title><?=$this->layout()->group?></title>
+        <?php
+        $this->headLink()->appendStylesheet($this->baseUrl()."/themes/shadowbox.css");
+        $this->headLink()->appendStylesheet($this->baseUrl()."/themes/default/common.css");
+        echo $this->headLink()->appendStylesheet($this->baseUrl()."/themes/default/frontend.css");
+
+        $this->headScript()->appendFile($this->baseUrl().'/lib/jquery/jquery-1.4.2.min.js', 'text/javascript', array());
+        $this->headScript()->appendFile($this->baseUrl().'/lib/jquery/shadowbox.js', 'text/javascript', array());
+        echo $this->headScript()->appendFile($this->baseUrl().'/lib/common.js', 'text/javascript', array());
+        ?>
+        <script type="text/javascript">
+            Shadowbox.init({
+                // a darker overlay looks better on this particular site
+                overlayOpacity: 0.8
+            });
+        </script>
+    </head>
+    <body>
+        <div id="root">
+            <div id="header"></div>
+            <div class="menu">
+                <div id="menu">
+                    <?=$this->navigation()->menu()->renderMenu(null, array("renderParents" => true, 'minDepth' => 0, 'maxDepth' => 0))?>
+                </div>
+            </div>
+            <div id="layout-content">
+                <?php if(isset($this->message)): ?>
+                <div class="infobox">
+                        <?=$this->message?>
+                </div>
+                <?php endif; ?>
+                <div class="box fullwidth">
+                <?= $this->layout()->content?>
+                </div>
+            </div>
+            <div id="gadgets">
+                <?php
+                // show the gadgets, that were configured
+                if(is_array($this->gadgets)) {
+                    foreach($this->gadgets as $gadget) {
+                        echo $this->action($gadget['action'],$gadget['name'],'gadgets',$gadget['params']);
+                    }
+                }
+                ?>
+            </div>
+            <br class="clearfix" />
+            <div id="footer"><a href="<?=$this->baseUrl()?>/group/imprint/"><?=$this->translate('imprint_disclaimer')?></a><br />
+                Code &copy; 2010 by Hikaru-Shindo<br/>
+                Design &copy; 2010 by punkid
+            </div>
+        </div>
+    </body>
+</html>

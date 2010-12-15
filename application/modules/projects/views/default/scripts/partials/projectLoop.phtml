@@ -1,0 +1,16 @@
+<div class="project-wrapper">
+    <?php $status = 'project_status_'.$this->status; ?>
+    <h2><?=$this->name?></h2>
+    <h3><?=$this->name_jp?></h3>
+    <div class="poster"><a href="<?=$this->baseUrl()?>/projects/index/details/project/<?=urlencode($this->name)?>"><img src="<?=$this->poster?>" alt="<?=$this->name?>" /></a></div>
+    <div class="project_status">
+        <span class="inline-headline"><?=$this->translate('project_status')?></span>
+        <span class="<?=$status?>"><?=$this->translate($status)?></span>
+    </div>
+    <div class="content">
+        <?=$this->markdown($this->shortenText($this->description,250))?>
+        <a href="<?=$this->baseUrl()?>/projects/index/details/project/<?=urlencode($this->name)?>"><?=$this->translate('project_details')?></a>
+    </div>
+</div>
+<div class="seperator"></div>
+<br class="clearfix" />

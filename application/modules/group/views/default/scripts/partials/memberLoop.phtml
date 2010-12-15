@@ -1,0 +1,22 @@
+<div class="team_member">
+    <div class="avatar">
+        <img src="<?=$this->gravatar($this->email,50)?>" alt="" />
+    </div>
+    <div class="member-info">
+        <span style="font-weight:bold;">
+            <a href="<?=$this->baseUrl()?>/group/team/detail/<?=urlencode($this->name)?>"><?=$this->name?></a>
+        </span>
+        <?php if($this->active == 'no'):?>
+        <span style="font-style: italic;">(<?=$this->translate('member_inactive')?>)</span>
+        <?php endif;?>
+        <br />
+        <?php
+        $tasks = array();
+        foreach($this->tasks as $task) {
+            $tasks[] = $task['name'];
+        }
+        ?>
+        <?=implode(', ',$tasks)?>
+    </div>
+</div>
+<?= $this->partialCounter % 2 == 0 ? '<br class="clearfix" />' : '' ?>

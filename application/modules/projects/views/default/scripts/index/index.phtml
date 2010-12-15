@@ -1,0 +1,8 @@
+<?php if(count($this->projects)):?>
+<?=$this->partial('partials/quickselect.phtml',$this->quickSelect)?>
+<div class="seperator"></div>
+<?=$this->partialLoop('partials/projectLoop.phtml',$this->projects)?>
+<?=$this->partial('partials/quickselect.phtml',$this->quickSelect)?>
+<?php else: ?>
+<?=$this->translate('project_no_projects')?>
+<?php endif;?>

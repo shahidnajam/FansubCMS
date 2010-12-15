@@ -1,0 +1,33 @@
+<?=$this->partial('partials/header.phtml')?>
+<div id="distance"></div>
+<div id="container">
+<h1><?=$this->translate('install_welcome_headline')?></h1>
+<div style="padding-top:5px">
+    <?=$this->translate('install_welcome_message')?>
+</div>
+<h2><?=$this->translate('install_requirements')?></h2>
+<div class="content">
+<?=$this->translate('install_cache_dir_writable')?> <?=$this->requirements->cache ? '<span style="color:green;">'.$this->translate('install_default_passed').'</span>' : '<span style="color:red;">'.$this->translate('install_default_failed').'</span>'?><br />
+<?=$this->translate('install_session_dir_writable')?> <?=$this->requirements->sessions ? '<span style="color:green;">'.$this->translate('install_default_passed').'</span>' : '<span style="color:red;">'.$this->translate('install_default_failed').'</span>'?><br />
+<?=$this->translate('install_captcha_dir_writable')?> <?=$this->requirements->captcha ? '<span style="color:green;">'.$this->translate('install_default_passed').'</span>' : '<span style="color:red;">'.$this->translate('install_default_failed').'</span>'?><br />
+<?=$this->translate('install_upload_dir_writable')?> <?=$this->requirements->upload ? '<span style="color:green;">'.$this->translate('install_default_passed').'</span>' : '<span style="color:red;">'.$this->translate('install_default_failed').'</span>'?>
+</div>
+<h2><?=$this->translate('install_database_version')?></h2>
+<div class="content">
+    <strong><?=$this->translate('install_database_current_version')?></strong> <?=$this->databaseCurrent?><br />
+    <strong><?=$this->translate('install_database_latest_version')?></strong> <?=$this->databaseLatest?><br />
+    <div class="status">
+        <?php if($this->databaseUpdateNeeded): ?>
+            <?=$this->translate('install_database_update_needed')?><br />
+        <a href="<?=$this->baseUrl()?>/install/update"><?=$this->translate('install_default_update')?></a>
+
+        <?php elseif($this->databaseInitNeeded): ?>
+            <?=$this->translate('install_database_install_needed')?><br />
+        <a href="<?=$this->baseUrl()?>/install/install"><?=$this->translate('install_default_install')?></a>
+        <?php else: ?>
+        <?=$this->translate('install_database_nothing_to_do')?>
+        <?php endif; ?>
+    </div>
+</div>
+</div>
+<?=$this->partial('partials/footer.phtml')?>

@@ -1,0 +1,61 @@
+<style>
+* {
+	margin:0;
+	padding:0;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+#distance {
+	width:1px;
+	height:50%;
+	background-color:#a1a1a1;
+	margin-bottom:-225px; /* hälfte der Container Höhe */
+	float:left;
+}
+#container {
+	margin:0 auto;
+	position:relative; /* packt den Container vor distance */
+	height:450px;
+	width:550px;
+	clear:left;
+	background-color:#A4AA9C;
+	border:solid 2px;
+	border-color:#B98675;
+}
+h1 {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:20px;
+	text-align:center;
+	background-color:#7C8982;
+}
+h2 {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+	text-align:center;
+}
+</style>
+<div id="distance"></div>
+<div id="container">
+  <h1>Welcome to the FansubCMS Installer</h1>
+<h2>Requirements check</h2>
+<strong>Database config is present:</strong> <?php echo $this->status->database ? 'yes' : 'no'; ?><br />
+<strong>Environment config is present:</strong> <?php echo $this->status->environment ? 'yes' : 'no'; ?><br />
+<strong>Email config is present:</strong> <?php echo $this->status->email ? 'yes' : 'no'; ?><br />
+<strong>Cache directory is writable:</strong> <?php echo $this->status->cache ? 'writable' : 'not writable'; ?><br />
+<strong>Session directory is writable:</strong> <?php echo $this->status->sessions ? 'writable' : 'not writable'; ?><br />
+<strong>Captcha directory is writable:</strong> <?php echo $this->status->captcha ? 'writable' : 'not writable'; ?><br />
+<strong>Upload directory is writable:</strong> <?php echo $this->status->upload ? 'writable' : 'not writable'; ?><br />
+<strong>Base model directory is writable:</strong> <?php echo $this->status->models_base ? 'writable' : 'not writable'; ?><br />
+<strong>Database migration directory is writable (update only):</strong> <?php echo $this->status->migrations ? 'writable' : 'not writable'; ?><br />
+<strong>Database connection can be established:</strong> <?php echo $this->status->dbCon === true ? 'yes' : $this->status->dbCon; ?><br />
+<p>
+    <?php if($this->canUpdate):?>
+    <a href="update.php">Update</a>
+    <?php elseif($this->canInstall):?>
+    <a href="install1.php">Install</a>
+    <?php else: ?>
+    There were errors above please correct these first.
+    <?php endif; ?>
+</p>
+</div>
+

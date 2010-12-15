@@ -1,0 +1,13 @@
+<?=$this->partial('partials/header.phtml')?>
+<div id="distance"></div>
+<div id="container">
+<h1><?=$this->translate('install_migrate_headline')?></h1>
+<?php if(!empty($this->error)): ?>
+<div style="border: black solid 1px; background-color: #CCC">
+    <?=$this->error?>
+</div>
+<?php endif; ?>
+<?=$this->translate('install_update_migrate_run_question')?>
+<?=$this->form?>
+</div>
+<?=$this->partial('partials/footer.phtml')?>

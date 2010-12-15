@@ -1,0 +1,48 @@
+<?=$this->partial('partials/quickselect.phtml',$this->quickSelect)?>
+<h1><?=$this->projectName?></h1>
+<?php if($this->project): ?>
+<h2><?=$this->project->name_jp?></h2>
+<div class="poster">
+    <img src="<?=$this->project->poster?>" alt="<?=$this->project->name?>" />
+</div>
+<div class="seperator"></div>
+<br class="clearfix" />
+<h3><?=$this->translate('project_description')?></h3>
+<?php $status = 'project_status_'.$this->project->status; ?>
+<span class="project-status-desc"><?=$this->translate('project_status')?></span>
+<span class="<?=$status?>"><?=$this->translate($status)?></span>
+<div><?=$this->markdown($this->project->description)?></div>
+<div class="seperator"></div>
+<br class="clearfix" />
+<h3><?=$this->translate('project_screenshot')?></h3>
+    <?php if(count($this->project->ProjectScreenshot)):?>
+    <?php foreach($this->project->ProjectScreenshot as $screenshot):?>
+    <a href="<?=$screenshot->screenshot?>" rel="shadowbox[Screenshot]">
+        <img class="screenshot" src="<?=$screenshot->screenshot?>" alt="" />
+    </a>
+    <?php endforeach; ?>
+    <?php else: ?>
+    <?=$this->translate('project_no_screenshot')?>
+    <?php endif; ?>
+<div class="seperator"></div>
+<br class="clearfix" />
+<h3><?=$this->translate('project_episodes')?></h3>
+<table>
+    <tr>
+        <th><?=$this->translate('project_episode_number')?></th>
+        <th><?=$this->translate('project_episode_title')?></th>
+        <th><?=$this->translate('project_episode_crc')?></th>
+        <th><?=$this->translate('project_episode_date')?></th>
+        <th><?=$this->translate('project_episode_info')?></th>
+    </tr>
+    <?php if(count($this->project->getReleasedEpisodes())):?>
+    <?=$this->partialLoop('partials/projectEpisodeLoop.phtml',$this->project->getReleasedEpisodes())?>
+    <?php else: ?>
+    <tr>
+        <td colspan="5"><?=$this->translate('project_no_episode')?></td>
+    </tr>
+    <?php endif; ?>
+</table>
+<?php else: ?>
+<?=$this->translate('project_not_exist',$this->projectName)?>
+<?php endif; ?>

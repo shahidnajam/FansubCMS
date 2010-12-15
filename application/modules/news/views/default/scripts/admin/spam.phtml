@@ -1,0 +1,7 @@
+<h1><?=$this->translate('news_admin_spam_headline')?></h1>
+<?php if(count($this->spam)): ?>
+    <?=$this->partialLoop('partials/adminSpamLoop.phtml',$this->spam)?>
+    <? $this->paginationControl($this->spam, 'Sliding', 'partials/pagination.phtml')?>
+<?php else: ?>
+    <div class="info"><?=$this->translate('news_no_spam')?></div>
+<?php endif; ?>

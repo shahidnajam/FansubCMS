@@ -1,0 +1,23 @@
+<h1><?=$this->translate('admin_headline')?></h1>
+<table class="systemInfo">
+    <tr>
+        <th><?=$this->translate('admin-system-environment')?></th><td><?=APPLICATION_ENV?></td>
+    </tr>
+    <tr>
+        <th><?=$this->translate('admin-system-protocol')?></th><td><?=$this->system->SERVER_PROTOCOL?></td>
+    </tr>
+    <tr>
+        <th><?=$this->translate('admin-system-host')?></th><td><?=$this->system->HTTP_HOST?></td>
+    </tr>
+    <tr>
+        <th><?=$this->translate('admin-system-serverSoftware')?></th><td><?=$this->system->SERVER_SOFTWARE?></td>
+    </tr>
+    <tr>
+        <th><?=$this->translate('admin-system-phpVersion')?></th><td><?=phpversion()?></td>
+    </tr>
+    <?php if($this->isAdmin): ?>
+        <tr>
+            <th><?=$this->translate('admin-system-cache')?></th><td><a href="<?=$this->baseUrl()?>/admin/cache/flush/"><?=$this->translate('admin-system-flushCache')?></a></td>
+        </tr>
+    <?php endif; ?>
+</table>

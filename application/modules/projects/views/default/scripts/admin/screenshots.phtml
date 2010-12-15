@@ -1,0 +1,24 @@
+<h1><?=$this->translate('project_screenshots_headline')?></h1>
+<?php if(count($this->screenshots)): ?>
+<table id="episodes-admin-listing">
+    <tr>
+        <th><?=$this->translate('project_admin_screenshot_table_screen')?></th>
+        <th><?=$this->translate('project_admin_screenshot_table_project')?></th>
+        <th><?=$this->translate('table_action')?>
+    </tr>
+    <?php $screen = new ProjectScreenshot(); ?>
+        <?php $i = 0; foreach($this->screenshots as $screen):?>
+    <tr class="<?=$i % 2 ? 'specialOne' : 'specialTwo'?>">
+        <td><?=$screen->screenshot?></td>
+        <td><?=$screen->Project->name?></td>
+        <td><?=$this->partial('partials/tableActions.phtml',array('id'=>$screen->id))?></td>
+    </tr>
+        <?php $i++; endforeach;?>
+</table>
+    <?= $this->paginationControl($this->screenshots, 'Sliding', 'partials/pagination.phtml')?>
+<?php else: ?>
+<div class="info"><?=$this->translate('project_no_screenshot')?></div>
+<?php endif; ?>
+<?php if($this->isAllowed('projects_admin','addscreenshot')): ?>
+<div class="add"><a href="<?=$this->baseUrl()?>/projects/admin/addscreenshot/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/picture--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
+<?php endif; ?>

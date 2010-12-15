@@ -1,0 +1,49 @@
+<?=$this->doctype()?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title><?=$this->layout()->group?> - <?=$this->translate('administration')?></title>
+        <?php
+        $this->headLink()->appendStylesheet($this->baseUrl()."/themes/shadowbox.css");
+        $this->headLink()->appendStylesheet($this->baseUrl()."/themes/default/common.css");
+        $this->headLink()->appendStylesheet($this->baseUrl()."/themes/default/admin.css");
+        $this->headLink()->appendStylesheet($this->baseUrl()."/lib/markitup/sets/markdown/style.css");
+        echo $this->headLink()->appendStylesheet($this->baseUrl()."/lib/markitup/skins/markitup/style.css");
+
+        $this->headScript()->appendFile($this->baseUrl().'/lib/jquery/jquery-1.4.2.min.js', 'text/javascript', array());
+        $this->headScript()->appendFile($this->baseUrl().'/lib/jquery/shadowbox.js', 'text/javascript', array());
+        echo $this->headScript()->appendFile($this->baseUrl().'/lib/common.js', 'text/javascript', array());
+        ?>
+        <script type="text/javascript">
+            Shadowbox.init({
+                // a darker overlay looks better on this particular site
+                overlayOpacity: 0.8
+            });
+        </script>
+    </head>
+    <body>
+        <div id="header">
+        </div>
+        <div class="spacer gray"></div>
+        <div>
+            <br class="clearfix" />
+            <div id="admin-menu">
+                <?=$this->navigation()->setAcl(Zend_Registry::get('Zend_Acl'))->setRole('fansubcms_user_custom_role_logged_in_user')->menu()->renderMenu()?>
+            </div>
+            <div id="content">
+                <?php if(isset($this->message)): ?>
+                <div class="success">
+                        <?=$this->message?>
+                </div>
+                <br class="clearfix" />
+                <?php endif; ?>
+                <?= $this->layout()->content?>
+            </div>
+        </div>
+        <br class="clearfix" />
+        <div id="footer">
+            &copy; 2010 by Hikaru-Shindo<br/>
+            &copy; Design by punkid
+        </div>
+    </body>
+</html>

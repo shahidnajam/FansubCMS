@@ -1,0 +1,13 @@
+<?php if(count($this->news)):?>
+<?php foreach($this->news as $news):?>
+<div class="author"><img src="<?=$this->gravatar($news->User->email,100)?>" alt="" /><br/><?=$this->translate('news_author',$news->User->name)?> </div>
+<div class="title"><h3><?=$news->title?></h3></div>
+<div class="created"><?=$this->translate('news_created_at_date',$this->formatDate($news->created_at))?></div>
+<div class="content"><?=$this->markdown($news->text)?></div>
+<div class="comments"><a href="<?=$this->baseUrl()?>/news/comment/index/id/<?=$news->id?>"><?=$this->translate('news_comment_num',count($news->getComments()))?></a></div>
+<div class="newsseperator"></div>
+<?php endforeach;?>
+<?= $this->paginationControl($this->news, 'Sliding', 'partials/pagination.phtml')?>
+<?php else: ?>
+<span class="info"><?=$this->translate('news_no_news')?></span>
+<?php endif;?>

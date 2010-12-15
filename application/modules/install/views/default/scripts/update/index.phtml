@@ -1,0 +1,13 @@
+<?=$this->partial('partials/header.phtml')?>
+<div id="distance"></div>
+<div id="container">
+<h1><?=$this->translate('install_update_headline')?></h1>
+<p><?php if(!empty($this->error)): ?></p>
+<div class="status">
+    <?=$this->error?>
+</div>
+<?php endif; ?>
+<?=$this->translate('install_update_dry_run_question')?>
+<?=$this->form?>
+</div>
+<?=$this->partial('partials/footer.phtml')?>

@@ -1,0 +1,20 @@
+<h1><?=$this->translate('project_list_headline')?></h1>
+<?php if(count($this->projects)): ?>
+<table>
+    <tr>
+        <th><?=$this->translate('project_list_table_id')?></th>
+        <th><?=$this->translate('project_list_table_name')?></th>
+        <th><?=$this->translate('project_list_table_name_jp')?></th>
+        <th><?=$this->translate('project_list_table_status')?></th>
+        <th><?=$this->translate('project_list_table_private')?></th>
+        <th><?=$this->translate('project_list_table_date')?></th>
+        <th><?=$this->translate('table_action')?></th>
+    </tr>
+    <?=$this->partialLoop('partials/projectListLoop.phtml',$this->projects)?>
+</table>
+<?php else: ?>
+    <div class="info"><?=$this->translate('project_no_project')?></div>
+<?php endif; ?>
+<?php if($this->isAllowed('projects_admin','add')): ?>
+<div class="add"><a href="<?=$this->baseUrl()?>/projects/admin/add/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/folder--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
+<?php endif; ?>

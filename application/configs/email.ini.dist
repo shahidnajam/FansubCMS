@@ -1,0 +1,14 @@
+[email]
+
+; mail delivery
+smtp.user = "test@example.com"
+smtp.password = ""
+smtp.host = "mail.example.com"
+smtp.port = 25
+smtp.ssl = true
+; / mail delivery
+
+; mail
+email.noreply = "noreply@example.com"
+email.admin = "admin@example.com"
+; / mail

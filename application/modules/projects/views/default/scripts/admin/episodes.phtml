@@ -1,0 +1,33 @@
+<h1><?=$this->pageTitle?></h1>
+<?php if(count($this->episodes)): ?>
+<table id="episodes-admin-listing">
+    <tr>
+        <?php if(!empty($this->all)): ?><th><?=$this->translate('project_admin_episode_table_project')?></th><?php endif; ?>
+        <th><?=$this->translate('project_admin_episode_table_number')?></th>
+        <th><?=$this->translate('project_admin_episode_table_name')?></th>
+        <th><?=$this->translate('project_admin_episode_table_crc')?></th>
+        <th><?=$this->translate('project_admin_episode_table_codec')?></th>
+        <th><?=$this->translate('project_admin_episode_table_released_at')?></th>
+        <th><?=$this->translate('project_admin_episode_table_updated_by')?></th>
+        <th><?=$this->translate('table_action')?></th>
+    </tr>
+        <?php $i = 0; foreach($this->episodes as $episode):?>
+    <tr class="<?=$i % 2 ? 'specialOne' : 'specialTwo'?>">
+        <?php if(!empty($this->all)): ?><td><?=$episode->Project->name?></td><?php endif;?>
+        <td><?=$episode->number?></td>
+        <td><?=$episode->title?></td>
+        <td><?=$episode->crc?></td>
+        <td><?=$episode->container?>[<?=$episode->vcodec?>, <?=$episode->acodec?>]</td>
+        <td><?=!empty($episode->released_at) ? $this->formatDate($episode->released_at) : $this->translate('no_term')?></td>
+        <td><?=$episode->getUpdater()?></td>
+        <td><?=$this->partial('partials/tableActions.phtml',array('id'=>$episode->id))?></td>
+    </tr>
+        <?php $i++; endforeach;?>
+</table>
+    <?= $this->paginationControl($this->episodes, 'Sliding', 'partials/pagination.phtml')?>
+<?php else: ?>
+<div class="info"><?=$this->translate('project_no_episode')?></div>
+<?php endif; ?>
+<?php if($this->isAllowed('projects_admin','addepisode')): ?>
+<div class="add"><a href="<?=$this->baseUrl()?>/projects/admin/addepisode/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/monitor--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
+<?php endif; ?>

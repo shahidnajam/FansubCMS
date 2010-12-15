@@ -1,0 +1,10 @@
+<div style="width: 800px; margin: auto;">
+    <h1>Step 5: Locking the Installer</h1>
+    <?php if($this->locked): ?>
+    <div style="width: 90%; background: #AAFFCC; padding: 5px; border: #000 solid 1px">The installer has locked.<br />You can now login to your CMS.</div>
+    <input type="button" class="button" name="finish" value="Finish!" onclick="window.location = '../'" />
+    <?php else: ?>
+    <div style="width: 90%; background: #FFCCCC; padding: 5px; border: #000 solid 1px">The installer could not be locked. <br />Please create a file named <strong>.lock</strong> in the installer's directory.</div>
+    <input type="button" class="button" name="finish" value="Finish!" onclick="window.location = '../'" />
+    <?php endif; ?>
+</div>

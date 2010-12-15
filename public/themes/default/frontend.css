@@ -1,0 +1,325 @@
+/*
+ * Default layout for FansubCMS by punkid
+ * Frontend version
+*/
+
+/* Layout commons */
+* {
+    color:#cbc2b3;
+}
+
+body {
+    background-color: #17141D;
+    background-image: url(../../images/default/bg.png);
+    background-repeat: repeat-x; 
+}
+
+#layout-content .paginationControl {
+    float:left;
+    width: 680px;
+    text-align: center;
+}
+
+#layout-content option {
+    color:black;
+}
+
+#captcha-input {
+    color:black;
+}
+
+.vertical-seperator {
+    margin:10px;
+    float:left;
+    background-image: url(../../images/default/news_seperator.png);
+    background-repeat:repeat-x;
+    height:1px;
+    width: 680px;
+}
+
+.fullwidth {
+    width: 100%;
+}
+
+.seperator {
+    margin:10px;
+    float:left;
+    background-image: url(../../images/default/seperator.png);
+    background-repeat:repeat-x;
+    height:1px;
+    width: 680px;
+}
+
+.float-left {
+    float:left;
+}
+
+/* Layout */
+
+#header {
+    background-image: url("../../images/default/logo.png");
+    background-repeat:no-repeat;
+    height: 160px;
+}
+
+#layout-content {
+    float: left;
+    width: 700px;
+    margin-right: auto;
+}
+
+.inline-headline {
+    padding-top: 10px;
+}
+
+span.inline-headline {
+    font-weight: bold;
+}
+
+.menu {
+    width: 100%;
+    height: 25px;
+    background-image: url("../../images/default/menu_bg.png");
+    background-repeat: repeat-x;
+    border-top: 1px solid #110f17;
+    border-bottom: 1px solid #110f17;
+}
+
+#menu {
+    display:table;
+    list-style:none outside none;
+    margin:0 auto;
+    padding:0;
+    white-space:nowrap;
+}
+
+#menu ul, #menu ul li {
+    display:table-cell;
+    margin:0;
+    padding:0;
+}
+
+#menu ul li a:hover {
+    color: #fb9129;
+}
+
+#menu ul li a {
+    border-left:1px solid #08070b;
+    border-right:1px solid #483e60;
+    color:#fbb829;
+    float:left;
+    font-size:16px;
+    font-weight:bold;
+    height:25px;
+    letter-spacing:1px;
+    line-height:25px;
+    padding:0 1em;
+    text-decoration:none;
+}
+
+#menu ul .active a {
+    height:25px;
+    background-image: url("../../images/default/menu_active_bg.png");
+    background-repeat: repeat-x;
+}
+
+#gadgets {
+    float: right;
+    width: 260px;
+}
+
+.gadget {
+    border: 1px solid #79718d;
+    background: #1f1b29;
+    margin-top:10px;
+}
+
+.gadget .gadget-head {
+    color: #fbb829;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.gadget .gadget-body {
+    padding: 5px;
+}
+
+.gadget .gadget-body li {
+    margin-left: 20px;
+}
+
+.box {
+    background-color: #1f1b29;
+    border: 1px solid #79718d;
+    padding: 10px;
+    margin-right:10px;
+    margin-top: 10px;
+    float: left;
+}
+
+/* Projects */
+#screenshots {
+    width: 100%;
+    text-align: center;
+    margin-top:10px;
+}
+
+.screenshot {
+    width: 150px;
+}
+
+.box .poster {
+    margin-top:10px;
+    text-align: center;
+}
+
+.project-status-desc {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+#quickselect {
+    color:black;
+}
+.quickselect {
+    margin-top:10px;
+}
+
+.box .project_status {
+    margin-top:10px;
+}
+
+.project_status_progress {
+    color: white;
+}
+
+.project_status_completed {
+    color:lime;
+}
+
+.project_status_planned {
+    color:aqua;
+}
+
+.project_status_paused {
+    color:orange;
+}
+
+.project_status_dropped {
+    color:red;
+}
+
+.project_status_licensed {
+    color:red;
+}
+
+/* Team overview */
+
+.team_member {
+    width: 320px;
+    float: left;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.team_member .avatar {
+    float:left;
+    margin-right:10px;
+    width: 50px;
+}
+
+team_member .member-info {
+    width: 260px;
+    float: left;
+}
+
+#team-detail-avatar {
+    float:left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/* News */
+
+.author {
+    font-size:10px;
+    width:110px;
+    height:150px;
+    float: left;
+}
+
+.title {
+    float:left;
+    width:590px;
+}
+
+.created {
+    font-size:10px;
+    float:left;
+    width:590px;
+}
+
+.content {
+    float: left;
+    width: 590px;
+    margin-top:10px;
+}
+
+.comments {
+    float:left;
+    width:700px;
+    text-align: right;
+    padding-top:10px;
+}
+
+.newsseperator {
+    margin:10px;
+    float:left;
+    background-image: url(../../images/default/news_seperator.png);
+    background-repeat:repeat-x;
+    height:1px;
+    width: 680px;
+}
+
+#url {
+    color:black;
+}
+
+#comment {
+    color:black;
+}
+
+.comment-wrapper {
+    margin-top: 10px;
+}
+
+/* Contact */
+
+#contact_form {
+    width: 700px;
+}
+
+#author {
+    color:black;
+}
+
+#email {
+    color:black;
+}
+
+#content {
+    color:black;
+}
+
+/* Login form */
+
+#username {
+    color:black;
+}
+
+#password {
+    color:black;
+}
+

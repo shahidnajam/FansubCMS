@@ -1,0 +1,14 @@
+<?= $this->action('show','index','news',array('id'=>$this->news->id))?>
+<br class="clearfix" />
+<h3 class="inline-headline"><?=$this->translate('news_comment')?></h3>
+<div class="seperator"></div>
+<?php if(count($this->news->getComments())):?>
+<?= $this->partialLoop('partials/commentLoop.phtml',$this->paginator)?>
+<?= $this->paginationControl($this->paginator, 'Sliding', 'partials/pagination.phtml')?>
+<?php else: ?>
+<?= $this->translate('news_comment_no_comments')?>
+<?php endif;?>
+<div class="seperator"></div>
+<br class="clearfix" />
+<h3 class="inline-headline"><?=$this->translate('news_comment_write')?></h3>
+<?=$this->writeForm?>

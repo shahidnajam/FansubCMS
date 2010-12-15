@@ -1,0 +1,6 @@
+[database]
+db.dbms = "mysql"
+db.user = "root"
+db.password = ""
+db.host = "localhost"
+db.database = "fansubcms"

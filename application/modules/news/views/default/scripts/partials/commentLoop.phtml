@@ -1,0 +1,10 @@
+<div class="comment-wrapper">
+<?php
+// if an url is set link the authors nick
+if(!empty($this->url))$this->author = '<a href="'.$this->url.'" target="blank">'.$this->author.'</a>';
+?>
+<div class="author"><img alt="Avatar" src="<?=$this->gravatar($this->email,100)?>" /><?=$this->translate('news_comment_author',$this->author)?> </div>
+<div class="created"><?=$this->translate('news_comment_created_at_date',$this->formatDate($this->created_at))?></div>
+<div class="content"><?=$this->formatText($this->comment)?></div>
+</div>
+<div class="seperator"></div>

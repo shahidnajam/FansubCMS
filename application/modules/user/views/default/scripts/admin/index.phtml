@@ -1,0 +1,15 @@
+<h1><?=$this->translate('user_list_headline')?></h1>
+<table>
+    <tr>
+        <th><?=$this->translate('user_list_table_id')?></th>
+        <th><?=$this->translate('user_list_table_name')?></th>
+        <th><?=$this->translate('user_list_table_email')?></th>
+        <th><?=$this->translate('user_list_table_date')?></th>
+        <th><?=$this->translate('user_list_table_last_login')?></th>
+        <th><?=$this->translate('table_action')?></th>
+    </tr>
+    <?=$this->partialLoop('partials/userListLoop.phtml',$this->users)?>
+</table>
+<?php if($this->isAllowed('user_admin','add')): ?>
+<div class="add"><a href="<?=$this->baseUrl()?>/user/admin/add/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/user--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
+<?php endif; ?>

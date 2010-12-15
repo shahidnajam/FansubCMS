@@ -1,0 +1,6 @@
+<h1><?=$this->translate('news_admin_comments_headline')?></h1>
+<?php if(count($this->comments)): ?>
+<?=$this->partialLoop('partials/adminCommentLoop.phtml',$this->comments)?>
+<?php else: ?>
+<div class="info"><?=$this->translate('news_admin_no_comments')?></div>
+<?php endif; ?>

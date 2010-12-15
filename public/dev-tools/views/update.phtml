@@ -1,0 +1,15 @@
+<div style="width: 800px; margin: auto;">
+    <h1>FansubCMS Update</h1>
+    <strong>Current Database Version:</strong> <?php echo $this->currentVersion; ?><br />
+    <strong>Latest Database Version:</strong> <?php echo $this->latestVersion; ?><br />
+    <strong>YAML schema:</strong> <?php echo $this->yamlStatus ? 'YAMLs are okay.' : 'YAMLs have changed. Migration needed!'; ?><br />
+    <?php if($this->currentVersion < $this->latestVersion): ?>
+    <input type="button" class="button" value="Migrate!" name="migrate" onclick="window.location = 'update2.php'" />
+    <?php elseif(!$this->yamlStatus): ?>
+    <input type="button" class="button" value="Generate migration!" name="generatemigrate" onclick="window.location = 'update1.php'" />
+    <?php else: ?>
+    Your CMS instance is up-to-date!
+    <?php endif; ?>
+    <input type="button" class="button" value="Get backup!" name="backup" onclick="window.location = 'update3.php'" /><br />
+    <a href="index.php">Back</a>
+</div>

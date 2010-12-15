@@ -1,0 +1,7 @@
+<?php
+$session = Zend_Registry::get('applicationSessionNamespace');
+$actions = $session->tableActions;
+?>
+<?php foreach($actions as $action => $mvc): ?>
+<a title="<?=$this->translate($action.'_table_action')?>" href="<?=$this->baseUrl()?>/<?=$mvc['module']?>/<?=$mvc['controller']?>/<?=$mvc['action']?>/id/<?=$this->id?>" class="<?=$action.'_table_action'?> tableAction"><span><?=$this->translate($action.'_table_action')?></span></a>
+<?php endforeach; ?>

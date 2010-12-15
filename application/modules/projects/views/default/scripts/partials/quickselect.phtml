@@ -1,0 +1,13 @@
+<div class="quickselect">
+    <form class="quickselect" method="post" action="#">
+        <?=$this->translate('project_quickselect')?>
+        <select id="quickselect" name="project" onchange="jumpFromSelect('<?=$this->baseUrl()?>/projects/index/details/project/',this)">
+            <option value=""><?=$this->translate('project_quickselect_noselect')?></option>
+<?php foreach($this as $project):?>
+            <?php if(isset($project['name'])):?>
+            <option value="<?=urlencode($project['name'])?>"><?=htmlspecialchars($project['name'])?></option>
+            <?php endif; ?>
+<?php endforeach;?>
+        </select>
+    </form>
+</div>

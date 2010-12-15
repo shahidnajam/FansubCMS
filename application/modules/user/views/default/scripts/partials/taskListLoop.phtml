@@ -1,0 +1,5 @@
+<tr class="<?=$this->partialCounter % 2 ? 'specialOne' : 'specialTwo'; ?>">
+        <td><?=$this->id?></td>
+        <td><?=$this->name?></td>
+        <td><?=$this->partial('partials/tableActions.phtml',array('id'=>$this->id))?></td>
+</tr>

@@ -1,0 +1,18 @@
+[environment]
+setup = false
+locale = "de"
+page.layout = "default"
+page.group.name = "ExampleSubs"
+page.group.short = "ES"
+page.timezone = "Europe/Berlin"
+page.session.name = "es_sid"
+wordpress.api = "place your WordPress API Key here!"
+news.front = 5
+news.comments.numpage = 10
+
+[gadgets]
+gadget.randomproject.action = "random"
+gadget.randomproject.name = "project"
+gadget.randomproject.params.num = 1
+gadget.latestrelease.action = "latest"
+gadget.latestrelease.name = "project"
