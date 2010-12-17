@@ -31,7 +31,7 @@ try {
         header('Content-Type: text/plain');
     }
 
-    if(APPLICATON_ENV == 'production') {
+    if(APPLICATION_ENV == 'production') {
         echo "A fatal system error has occured. Please contact an admistrator.";
     } else {
         echo "A fatal system error has occured. Please contact an administrator.\n\n";

@@ -1,0 +1,16 @@
+# ignore all the cache files
+/application/data/cache/**/*
+# ignore sessions - they don't need to be versioned
+/application/data/sessions/*
+# captchas don't need to be versioned
+/public/images/captcha/*
+# we don't need to version uploaded files
+/public/upload/**/*
+
+# ignore non-dist configs
+/application/configs/database.ini
+/application/configs/email.ini
+/application/configs/environment.ini
+
+# netbeans
+/nbproject/*
