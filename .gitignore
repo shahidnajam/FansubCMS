@@ -1,16 +1,30 @@
-# ignore all the cache files
-/application/data/cache/**/*
-# ignore sessions - they don't need to be versioned
+# Ignore all the cache files
+/application/data/cache/*
+# Ignore sessions - they don't need to be versioned
 /application/data/sessions/*
-# captchas don't need to be versioned
+# Captchas don't need to be versioned
 /public/images/captcha/*
-# we don't need to version uploaded files
-/public/upload/**/*
+# We don't need to version uploaded files
+/public/upload/*
+# Ignore addons except for gadgets because they are no core parts that should be versioned in this git repository
+/application/addons/*
+!/application/addons/gadgets/
 
-# ignore non-dist configs
+# Ignore non-dist configs
 /application/configs/database.ini
 /application/configs/email.ini
 /application/configs/environment.ini
 
-# netbeans
+# Netbeans
 /nbproject/*
+
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# OS generated files
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
