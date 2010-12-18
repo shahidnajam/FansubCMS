@@ -5,6 +5,10 @@
 
 /* Layout commons */
 * {
+    
+}
+
+#root{
     color:#cbc2b3;
 }
 
@@ -52,6 +56,11 @@ body {
 
 .float-left {
     float:left;
+}
+
+.errors {
+    color: #FF3333;
+    list-style-position: inside;
 }
 
 /* Layout */

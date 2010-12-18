@@ -10,7 +10,7 @@ class Projects_Form_EditProjectEpisode extends Zend_Form {
 
         # title
         $title = $this->createElement('text', 'title')
-                ->addValidator('StringLength', false, array(3,255))
+                ->addValidator('StringLength', false, array(2,255))
                 ->setRequired(true)
                 ->setValue(isset($values['title']) ? $values['title'] : null)
                 ->setLabel('project_admin_field_episode_title');
