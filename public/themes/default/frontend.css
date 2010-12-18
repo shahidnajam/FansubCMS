@@ -324,6 +324,10 @@ team_member .member-info {
 
 /* Login form */
 
+#login .required:after {
+    content: "";
+}
+
 #username {
     color:black;
 }

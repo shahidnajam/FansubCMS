@@ -3,6 +3,11 @@ body {
     min-width: 1000px;
 }
 
+.errors {
+    color: #FF0000;
+    list-style-position: inside;
+}
+
 a:link, a:focus, a:visited, a:active {
     color:#1b1d1f;
     text-decoration: none;

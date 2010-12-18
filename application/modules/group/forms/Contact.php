@@ -33,14 +33,14 @@ class Group_Form_Contact extends Zend_Form {
                         )))
                 ->addValidator('EmailAddress', false, array(
                     'messages' => array(
-                        Zend_Validate_EmailAddress::DOT_ATOM => 'group_contact_form_error_email_email',
-                        Zend_Validate_EmailAddress::INVALID_FORMAT => 'group_contact_form_error_email_email',
-                        Zend_Validate_EmailAddress::INVALID_HOSTNAME => 'group_contact_form_error_email_email',
-                        Zend_Validate_EmailAddress::INVALID_LOCAL_PART => 'group_contact_form_error_email_email',
-                        Zend_Validate_EmailAddress::INVALID_MX_RECORD => 'group_contact_form_error_email_email',
-                        Zend_Validate_EmailAddress::INVALID_SEGMENT => 'group_contact_form_error_email_email',
-                        Zend_Validate_EmailAddress::LENGTH_EXCEEDED => 'group_contact_form_error_email_email',
-                        Zend_Validate_EmailAddress::QUOTED_STRING => 'group_contact_form_error_email_email'
+                        Zend_Validate_EmailAddress::DOT_ATOM => 'default_form_error_email',
+                        Zend_Validate_EmailAddress::INVALID_FORMAT => 'default_form_error_email',
+                        Zend_Validate_EmailAddress::INVALID_HOSTNAME => 'default_form_error_email',
+                        Zend_Validate_EmailAddress::INVALID_LOCAL_PART => 'default_form_error_email',
+                        Zend_Validate_EmailAddress::INVALID_MX_RECORD => 'default_form_error_email',
+                        Zend_Validate_EmailAddress::INVALID_SEGMENT => 'default_form_error_email',
+                        Zend_Validate_EmailAddress::LENGTH_EXCEEDED => 'default_form_error_email',
+                        Zend_Validate_EmailAddress::QUOTED_STRING => 'default_form_error_email'
                         ))
                 )
                 ->setRequired(true)
