@@ -2,7 +2,7 @@
 <div class="author"><img src="<?=$this->gravatar($this->news->User->email,100)?>" alt="" /><br/><?=$this->translate('news_author',$this->news->User->name)?></div>
 <div class="title"><h3><?=$this->news->title?></h3></div>
 <div class="created"><?=$this->translate('news_created_at_date',$this->formatDate($this->news->created_at))?></div>
-<div class="content"><?=$this->markdown($this->news->text)?></div>
+<div class="content"><?=$this->textile($this->news->text)?></div>
 <?php else: ?>
 <?=$this->translate('news_not_existent')?>
 <?php endif; ?>
