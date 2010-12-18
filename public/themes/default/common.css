@@ -5,36 +5,36 @@
     font-size: 11px;
 }
 
-img {
+#root img {
     border: none;
 }
 
-a:link, a:focus, a:visited, a:active {
+#root a:link, #root a:focus, #root a:visited, #root a:active {
     color: #d2d2d1;
     text-decoration: none;
 }
-a:hover { 
-    color: orange; 
+#root a:hover {
+    color: orange;
     text-decoration: none;
-} 
+}
 
-p {
+#root p {
 
 }
 
-h1 {
+#root h1 {
     color:#fbb829;
     font-size: 18px;
     font-weight: bold;
 }
 
-h2 {
+#root h2 {
     color:#fbb829;
     font-size: 16px;
     font-weight: bold;
 }
 
-h3 {
+#root h3 {
     color:#fbb829;
     font-size: 14px;
     padding-top: 5px;
@@ -42,40 +42,33 @@ h3 {
     font-weight: bold;
 }
 
-ol {
+#root ol {
     padding-left: 20px;
 }
 
-table {
+#root table {
     width: 100%;
 }
 
-table th {
+#root table th {
     background-color: #FFFF88;
     color: #1b1d1f;
 }
 
-table .specialOne {
+#root table .specialOne {
     background-color: #555;
 }
 
-table .specialTwo {
+#root table .specialTwo {
     background-color: #777;
 }
 
-table .specialOne:hover, table .specialTwo:hover {
+#root table .specialOne:hover, table .specialTwo:hover {
     background-color: #999;
 }
 
-.clearfix {
+#root .clearfix {
     clear: both;
-}
-
-#root {
-    padding: 20px;
-    color: #FFF;
-    width: 990px;
-    margin: auto;
 }
 
 #footer {
@@ -87,21 +80,21 @@ table .specialOne:hover, table .specialTwo:hover {
     float: left;
 }
 
-.button {
+#root .button {
     border: #000000 1px solid;
     min-width: 50px;
     color:black;
 }
 
-.required {
+#root .required {
     font-weight: bold;
 }
 
-.required:after {
+#root .required:after {
     content: " *";
 }
 
-.infobox {
+#root .infobox {
     width: 680px;
     border: #AAAAAA solid 1px;
     background-color: #333;
@@ -111,11 +104,11 @@ table .specialOne:hover, table .specialTwo:hover {
     margin-bottom: 10px;
 }
 
-.infobox span {
+#root .infobox span {
     color: #ddd;
 }
 
-.zend_form dd img {
+#root .zend_form dd img {
     display: block;
     margin-bottom: 5px;
     margin-top: 5px;

@@ -8,8 +8,12 @@
     
 }
 
-#root{
+#root {
     color:#cbc2b3;
+    padding: 20px;
+    color: #FFF;
+    width: 990px;
+    margin: auto;
 }
 
 body {
@@ -109,13 +113,13 @@ span.inline-headline {
 }
 
 #menu ul li a:hover {
-    color: #fb9129;
+    color: #fb9129 ! important;
 }
 
 #menu ul li a {
     border-left:1px solid #08070b;
     border-right:1px solid #483e60;
-    color:#fbb829;
+    color:#fbb829 ! important;
     float:left;
     font-size:16px;
     font-weight:bold;
@@ -123,7 +127,7 @@ span.inline-headline {
     letter-spacing:1px;
     line-height:25px;
     padding:0 1em;
-    text-decoration:none;
+    text-decoration:none ! important;
 }
 
 #menu ul .active a {

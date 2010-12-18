@@ -3,49 +3,42 @@ body {
     min-width: 1000px;
 }
 
-.errors {
+#root .errors {
     color: #FF0000;
     list-style-position: inside;
 }
 
-a:link, a:focus, a:visited, a:active {
+#root a:link, #root a:focus, #root a:visited, #root a:active {
     color:#1b1d1f;
     text-decoration: none;
 }
 
-a:hover {
+#root a:hover {
     color: #FFFF88;
     text-decoration: none;
 }
 
-a.add2:hover {
+#root a.add2:hover {
 	color: #74864B;
 	text-decoration: none;
 }
 
-table tr, table td, table th {
+#root table tr, #root table td, #root table th {
     border: #000000 1px solid;
     color: #1B1D1F;
     padding:2px;
     font-size: 10px;
 }
 
-table .specialOne {
+#root table .specialOne {
     background-color: #FFFFFF;
 }
-table .specialTwo {
+#root table .specialTwo {
     background-color: #EEEEEE;
 }
 
-table .specialOne:hover, table .specialTwo:hover {
+#root table .specialOne:hover, #root table .specialTwo:hover {
     background-color: #FFFF88;
-}
-
-#root {
-    color: #1b1d1f;
-    margin: auto;
-    padding: 0px;
-    width: 990px;
 }
 
 #header {
@@ -58,7 +51,7 @@ table .specialOne:hover, table .specialTwo:hover {
     border-bottom: #000000 solid 1px;
 }
 
-h1 {
+#root h1 {
     font-size: medium;
     background-color: #74864b;
     color: #1B1D1F;
@@ -74,7 +67,7 @@ h1 {
     margin-left: 10px;
 }
 
-.navigation {
+#root .navigation {
     list-style-image:url("../../images/default/list_style_image.png");
     list-style-position:inside;
     background-color: #74864b;
@@ -99,47 +92,47 @@ h1 {
     color: #FFFF88;
 }
 
-a.systemInfo {
+#root a.systemInfo {
     width: 70%;
 }
 
-.systeminfo th {
+#root .systeminfo th {
     margin: 5px;
     width: auto;
 }
 
-.systeminfo td {
+#root .systeminfo td {
     margin: 5px;
 }
 
-.spacer {
+#root .spacer {
     height: 10px;
     width: 100%;
 }
 
-.gray {
+#root .gray {
     border-top: #B2B2B2 solid 1px;
     margin-bottom: 10px;
     background-color: #36393D;
 }
 
-.admin-box {
+#root .admin-box {
     border: #000 solid 1px;
     margin: 10px;
     padding: 5px;
 }
 
-.paginationControl {
+#root .paginationControl {
     float:left;
     width: 730px;
     text-align: center;
 }
 
-.add {
+#root .add {
 	padding:5px;
 }
 
-.info {
+#root .info {
 	padding:5px;
 }
 
@@ -203,7 +196,7 @@ a.systemInfo {
 	padding:5px;
 }
 
-.success {
+#root .success {
 	border-bottom: 1px solid #36393D; 
 	padding: 5px; 
 	background: #0F7;
