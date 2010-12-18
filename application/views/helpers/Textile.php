@@ -10,7 +10,7 @@
  * @version 1.0
  * 
  */
-
+require_once('classTextile.php');
 class FansubCMS_View_Helper_Textile {
 	/**
 	 * Changes textile to HTML
@@ -18,8 +18,8 @@ class FansubCMS_View_Helper_Textile {
 	 * @return string
 	 */
 	public function textile($text) {
-		$parser = Zend_Markup::factory('Textile');
-		return $parser->render($text);
+		$parser = new Textile();
+		return $parser->TextileThis($text);
 	}
 	
 }
