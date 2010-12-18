@@ -280,6 +280,15 @@ team_member .member-info {
     margin-top:10px;
 }
 
+.content p {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.content ol, .content ul {
+    list-style-position: inside;
+}
+
 .comments {
     float:left;
     width:700px;
