@@ -11,7 +11,7 @@
 <?php $status = 'project_status_'.$this->project->status; ?>
 <span class="project-status-desc"><?=$this->translate('project_status')?></span>
 <span class="<?=$status?>"><?=$this->translate($status)?></span>
-<div><?=$this->markdown($this->project->description)?></div>
+<div><?=$this->textile($this->project->description)?></div>
 <div class="seperator"></div>
 <br class="clearfix" />
 <h3><?=$this->translate('project_screenshot')?></h3>

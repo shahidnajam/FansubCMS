@@ -8,7 +8,7 @@
         <span class="<?=$status?>"><?=$this->translate($status)?></span>
     </div>
     <div class="content">
-        <?=$this->markdown($this->shortenText($this->description,250))?>
+        <?=$this->textile($this->shortenText($this->description,250))?>
         <a href="<?=$this->baseUrl()?>/projects/index/details/project/<?=urlencode($this->name)?>"><?=$this->translate('project_details')?></a>
     </div>
 </div>
