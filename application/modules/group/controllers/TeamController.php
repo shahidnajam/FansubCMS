@@ -24,7 +24,13 @@ class Group_TeamController extends FansubCMS_Controller_Action {
 
     public function detailAction() {
         $username = $this->request->getParam('username',false);
+        if($username == false) {
+            return $this->_helper->redirector('member','team','group');
+        }
         $table = Doctrine::getTable('User');
         $this->view->user = $table->getTeamMemberByName($username);
+        if(!$this->view->user) {
+            return $this->_helper->redirector('member','team','group');
+        }
     }
 }
