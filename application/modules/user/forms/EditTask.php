@@ -14,7 +14,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
- */
+*/
 
 class User_Form_EditTask extends Zend_Form {
 
@@ -28,20 +28,22 @@ class User_Form_EditTask extends Zend_Form {
 
         # username
         $name = $this->createElement('text', 'taskname')
-                        ->addValidator('StringLength', false, array(
-                            'min'=>3,
-                            'max'=>255,
-                            'messages'=>array(
-                                Zend_Validate_StringLength::TOO_LONG => 'default_form_error_length',
-                                Zend_Validate_StringLength::TOO_SHORT => 'default_form_error_length'
-                            )))
-                        ->addValidator('NotEmpty', true, array(
-                            'messages' => array(
-                                Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
-                                )))
-                        ->setRequired(true)
-                        ->setValue(isset($values['name']) ? $values['name'] : null)
-                        ->setLabel('user_admin_field_taskname');
+                ->addFilter('StripTags')
+                ->addFilter('StringTrim')
+                ->addValidator('NotEmpty', true, array(
+                'messages' => array(
+                        Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
+                )))
+                ->addValidator('StringLength', false, array(
+                'min'=>3,
+                'max'=>255,
+                'messages'=>array(
+                        Zend_Validate_StringLength::TOO_LONG => 'default_form_error_length',
+                        Zend_Validate_StringLength::TOO_SHORT => 'default_form_error_length'
+                )))
+                ->setRequired(true)
+                ->setValue(isset($values['name']) ? $values['name'] : null)
+                ->setLabel('user_admin_field_taskname');
 
 
         # add elements to the form

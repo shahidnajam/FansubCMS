@@ -14,7 +14,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
- */
+*/
 
 class News_Form_EditNews extends Zend_Form {
 
@@ -27,37 +27,40 @@ class News_Form_EditNews extends Zend_Form {
                 ->setAttrib('id', $insert ? 'addnews' : 'editnews');
 
         $title = $this->createElement('text', 'title')
-                        ->setRequired(true)
-                        ->addValidator('NotEmpty', true, array(
-                            'messages' => array(
-                                Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
-                                )))
-                        ->setLabel('news_admin_add_field_title')
-                        ->setValue(isset($values['title']) ? $values['title'] : null);
+                ->setRequired(true)
+                ->addFilter('StripTags')
+                ->addFilter('StringTrim')
+                ->addValidator('NotEmpty', true, array(
+                'messages' => array(
+                        Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
+                )))
+                ->setLabel('news_admin_add_field_title')
+                ->setValue(isset($values['title']) ? $values['title'] : null);
 
         $text = $this->createElement('textarea', 'text')
-                        ->setRequired(true)
-                        ->addValidator('NotEmpty', true, array(
-                            'messages' => array(
-                                Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
-                                )))
-                        ->setAttrib('rows', 15)
-                        ->setAttrib('cols', 40)
-                        ->setLabel('news_admin_add_field_text')
-                        ->setValue(isset($values['text']) ? $values['text'] : null);
+                ->setRequired(true)
+                ->addFilter('StringTrim')
+                ->addValidator('NotEmpty', true, array(
+                'messages' => array(
+                        Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
+                )))
+                ->setAttrib('rows', 15)
+                ->setAttrib('cols', 40)
+                ->setLabel('news_admin_add_field_text')
+                ->setValue(isset($values['text']) ? $values['text'] : null);
 
         $public = $this->createElement('radio', 'public')
-                        ->setMultiOptions(array(
-                            'yes' => 'yes_term',
-                            'no' => 'no_term'
-                        ))
-                        ->setRequired(true)
-                        ->addValidator('NotEmpty', true, array(
-                            'messages' => array(
-                                Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
-                                )))
-                        ->setLabel('news_admin_add_field_public')
-                        ->setValue(isset($values['public']) ? $values['public'] : 'no');
+                ->setMultiOptions(array(
+                'yes' => 'yes_term',
+                'no' => 'no_term'
+                ))
+                ->setRequired(true)
+                ->addValidator('NotEmpty', true, array(
+                'messages' => array(
+                        Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
+                )))
+                ->setLabel('news_admin_add_field_public')
+                ->setValue(isset($values['public']) ? $values['public'] : 'no');
 
 
         # add elements to the form
