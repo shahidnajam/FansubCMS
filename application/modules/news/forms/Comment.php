@@ -68,8 +68,6 @@ class News_Form_Comment extends Zend_Form {
                 ->addValidator('EmailAddress', false, array(
                 'allow' => Zend_Validate_Hostname::ALLOW_DNS,
                 'domain' => true,
-                'mx' => true,
-                'deep' => true,
                 'messages' => array(
                         Zend_Validate_EmailAddress::DOT_ATOM => 'default_form_error_email',
                         Zend_Validate_EmailAddress::INVALID_FORMAT => 'default_form_error_email',

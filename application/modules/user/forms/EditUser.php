@@ -40,21 +40,15 @@ class User_Form_EditUser extends Zend_Form {
                         Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
                 )))
                 ->addValidator('StringLength', true, array(3, 255))
-                ->addValidator($usernameInDbValidator)
                 ->setRequired(true)
                 ->setValue(isset($values['name']) ? $values['name'] : null)
                 ->setLabel('user_admin_field_username');
-
+        if($insert === true) {
+            $username->addValidator($usernameInDbValidator);
+        }
         # password
         $password = $this->createElement('password', 'password1');
-        $password->addValidator('StringLength', false, array(
-                'min' => 8,
-                'max' => 64,
-                'messages' => array(
-                        Zend_Validate_StringLength::TOO_LONG => 'default_form_error_length',
-                        Zend_Validate_StringLength::TOO_SHORT => 'default_form_error_length'
-                )))
-                ->setRequired($insert ? true : false)
+        $password->setRequired($insert ? true : false)
                 ->setLabel('user_admin_field_password');
         if ($insert) {
             $password->addValidator('NotEmpty', true, array(
@@ -62,6 +56,14 @@ class User_Form_EditUser extends Zend_Form {
                             Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
             )));
         }
+
+        $password->addValidator('StringLength', false, array(
+                'min' => 8,
+                'max' => 64,
+                'messages' => array(
+                        Zend_Validate_StringLength::TOO_LONG => 'default_form_error_length',
+                        Zend_Validate_StringLength::TOO_SHORT => 'default_form_error_length'
+                )));
 
         # retype password
         $repassword = $this->createElement('password', 'password2');
@@ -72,11 +74,6 @@ class User_Form_EditUser extends Zend_Form {
                         Zend_Validate_StringLength::TOO_LONG => 'default_form_error_length',
                         Zend_Validate_StringLength::TOO_SHORT => 'default_form_error_length'
                 )))
-                ->addValidator('Identical', false, array(
-                'messages' => array(
-                        Zend_Validate_Identical::NOT_SAME => 'user_form_error_passwords_not_match'
-                )
-                ))
                 ->setRequired($insert ? true : false)
                 ->setLabel('user_admin_field_retype_password');
         if ($insert) {
@@ -85,6 +82,12 @@ class User_Form_EditUser extends Zend_Form {
                             Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
             )));
         }
+
+        $repassword->addValidator('Identical', false, array(
+                'messages' => array(
+                        Zend_Validate_Identical::NOT_SAME => 'user_form_error_passwords_not_match'
+                )
+                ));
 
         # Email
         $email = $this->createElement('text', 'email');
@@ -97,8 +100,6 @@ class User_Form_EditUser extends Zend_Form {
                 ->addValidator('EmailAddress', false, array(
                 'allow' => Zend_Validate_Hostname::ALLOW_DNS,
                 'domain' => true,
-                'mx' => true,
-                'deep' => true,
                 'messages' => array(
                         Zend_Validate_EmailAddress::DOT_ATOM => 'default_form_error_email',
                         Zend_Validate_EmailAddress::INVALID_FORMAT => 'default_form_error_email',
