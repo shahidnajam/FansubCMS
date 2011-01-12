@@ -1,0 +1,21 @@
+<?php
+$envConf = Zend_Registry::get('environmentSettings');
+$locale = empty($envConf->locale) ? 'en' : $envConf->locale;
+if($locale == "en") $locale = ""; // because "" is english while en is japanese for some reason
+?>
+<script type="text/javascript">
+    $(function() {
+        $.datepicker.setDefaults( $.datepicker.regional[ "<?=$locale?>" ] );
+        var options = {
+//            "dateFormat":"dd.mm.yy",
+            "duration":"fast",
+            "changeMonth":true,
+            "changeYear":true,
+            "yearRange":"1990:c",
+            "altField":"<?=$this->altIdentifier?>",
+            "altFormat":"yy-mm-dd",
+            "":""
+        };
+        $("<?=$this->identifier?>").datepicker(options);
+    });
+</script>
