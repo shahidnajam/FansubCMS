@@ -388,7 +388,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
                                     'File' => array('basePath' => APPLICATION_PATH),
                                     'Memory',
                                     'Time',
-                                    'Registry',
                                     'Html',
                                     'Exception'
                             )

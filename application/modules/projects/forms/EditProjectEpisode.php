@@ -191,8 +191,11 @@ class Projects_Form_EditProjectEpisode extends Zend_Form {
                 ->setLabel('project_admin_field_episode_released')
                 ->setValue($released);
         # release date
+        $envConf = Zend_Registry::get('environmentSettings');
+        $time = empty($values['released_at']) ? time() : strtotime($values['released_at']);
+        $date = new Zend_Date($time,null,$envConf->locale);
         $releaseDate = $this->createElement('text', 'releasedate')
-                ->setValue(isset($values['released_at']) ? date("d.m.Y",strtotime($values['released_at'])) : null)
+                ->setValue($date->toString(Zend_Date::DATE_SHORT))
                 ->setLabel('project_admin_field_episode_release_date');
         $iso = $this->createElement('hidden', 'isoDate')
                 ->setValue(isset($values['released_at']) ? $values['released_at'] : null);

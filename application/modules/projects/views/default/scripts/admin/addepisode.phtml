@@ -1,15 +1,14 @@
+<?= $this->partial('partials/datepicker.phtml', array('identifier' => '#releasedate', 'altIdentifier' => '#isoDate')) ?>
+<h1><?= $this->translate('project_addepisode_headline') ?></h1>
+<?= $this->form ?>
 <script type="text/javascript">
-    $(function() {
-        var options = {
-            "dateFormat":"dd.mm.yy",
-            "duration":"fast",
-            "changeMonth":true,
-            "changeYear":true,
-            "yearRange":"1990:c",
-            "altField":"#isoDate",
-            "altFormat":"yy-mm-dd"};
-        $("#releasedate").datepicker(options);
-    });
+    $("input[name='released']").click(checkChange);
+    function checkChange() {
+        if($("input[name='released']:checked").val() == "yes") {
+            $("#releasedate").removeAttr("disabled");
+        } else {
+            $("#releasedate").attr("disabled", "disabled");
+        }
+    }
+    checkChange();
 </script>
-<h1><?=$this->translate('project_addepisode_headline')?></h1>
-<?=$this->form?>
