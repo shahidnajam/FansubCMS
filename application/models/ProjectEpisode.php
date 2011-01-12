@@ -57,8 +57,12 @@ class ProjectEpisode extends BaseModelProjectEpisode
             $this->acodec = $values['acodec'];
         if(!empty($values['crc']))
             $this->crc = $values['crc'];
-        if(!empty($values['released']) && $values['released'] == 'yes' && empty($this->released_at)) {
-            $this->released_at = date('Y-m-d H:i:s');
+        if(!empty($values['released']) && $values['released'] == 'yes') {
+            if(empty($values['isoDate'])) {
+                $this->released_at = date('Y-m-d H:i:s');
+            } else {
+                $this->released_at = $values['isoDate'];
+            }
         } else if(!empty($values['released']) && $values['released'] == 'no') {
             $this->released_at = null;
         }

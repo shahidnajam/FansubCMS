@@ -1,2 +1,15 @@
+<script type="text/javascript">
+    $(function() {
+        var options = {
+            "dateFormat":"dd.mm.yy",
+            "duration":"fast",
+            "changeMonth":true,
+            "changeYear":true,
+            "yearRange":"1990:c",
+            "altField":"#isoDate",
+            "altFormat":"yy-mm-dd"};
+        $("#releasedate").datepicker(options);
+    });
+</script>
 <h1><?=$this->translate('project_editepisode_headline')?></h1>
 <?=$this->form?>
