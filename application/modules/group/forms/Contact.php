@@ -52,6 +52,10 @@ class Group_Form_Contact extends Zend_Form {
                         Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
                 )))
                 ->addValidator('EmailAddress', false, array(
+                'allow' => Zend_Validate_Hostname::ALLOW_DNS,
+                'domain' => true,
+                'mx' => true,
+                'deep' => true,
                 'messages' => array(
                         Zend_Validate_EmailAddress::DOT_ATOM => 'default_form_error_email',
                         Zend_Validate_EmailAddress::INVALID_FORMAT => 'default_form_error_email',

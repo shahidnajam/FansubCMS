@@ -27,6 +27,11 @@ class User_Form_EditUser extends Zend_Form {
                 ->setAttrib('id', $insert ? 'adduser' : 'edituser');
 
         # username
+        $usernameInDbValidator = new FansubCMS_Validator_NoRecordExists('User', 'name');
+        $usernameInDbValidator->setMessages(array(
+            FansubCMS_Validator_NoRecordExists::RECORD_EXISTS => 'user_form_error_user_exists'
+        ));;
+
         $username = $this->createElement('text', 'username')
                 ->addFilter('StripTags')
                 ->addFilter('StringTrim')
@@ -34,7 +39,8 @@ class User_Form_EditUser extends Zend_Form {
                 'messages' => array(
                         Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
                 )))
-                ->addValidator('StringLength', false, array(3, 255))
+                ->addValidator('StringLength', true, array(3, 255))
+                ->addValidator($usernameInDbValidator)
                 ->setRequired(true)
                 ->setValue(isset($values['name']) ? $values['name'] : null)
                 ->setLabel('user_admin_field_username');
@@ -89,6 +95,10 @@ class User_Form_EditUser extends Zend_Form {
                         Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
                 )))
                 ->addValidator('EmailAddress', false, array(
+                'allow' => Zend_Validate_Hostname::ALLOW_DNS,
+                'domain' => true,
+                'mx' => true,
+                'deep' => true,
                 'messages' => array(
                         Zend_Validate_EmailAddress::DOT_ATOM => 'default_form_error_email',
                         Zend_Validate_EmailAddress::INVALID_FORMAT => 'default_form_error_email',

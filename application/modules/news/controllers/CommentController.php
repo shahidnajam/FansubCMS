@@ -36,10 +36,10 @@ class CommentController extends FansubCMS_Controller_Action {
 	                $values = $this->view->writeForm->getValues();
 	                $nc = new NewsComment();
 	                $nc->ip = getenv('REMOTE_ADDR');
-	                $nc->email = $values['email'];
+	                $nc->email = User::isLoggedIn() ? Zend_Auth::getInstance()->getIdentity()->email : $values['email'];
 	                $nc->news_id = $this->view->news->id;
 	                $nc->visible = 'yes'; // there is no moderation yet
-	                $nc->author = $values['author'];
+	                $nc->author = User::isLoggedIn() ? Zend_Auth::getInstance()->getIdentity()->name : $values['author'];
 	                $nc->url = $values['url'];
 	                $nc->comment = $values['comment'];
 	                $nc->checkSpam();

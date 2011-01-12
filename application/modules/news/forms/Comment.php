@@ -27,6 +27,9 @@ class News_Form_Comment extends Zend_Form {
                 ->setAttrib('id', 'postcomment');
 
         # author
+        $authorValidatorDB = new FansubCMS_Validator_NoRecordExists('User', 'name');
+        $authorValidatorDB->setMessages(array(FansubCMS_Validator_NoRecordExists::RECORD_EXISTS => 'news_comment_form_error_author_user_exists'));
+
         $author = $this->createElement('text', 'author');
         $author->addFilter('StripTags')
                 ->addFilter('StringTrim')
@@ -34,23 +37,24 @@ class News_Form_Comment extends Zend_Form {
                 'messages'=> array(
                         Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
                 )))
-                ->addValidator('alnum', true, array(
+                /*   ->addValidator('alnum', true, array(
                 'messages' => array(
                         Zend_Validate_Alnum::NOT_ALNUM => 'news_comment_form_error_author_alnum'
                 )
-                ))
+                )) */
                 //               ->addValidator('regex', false, array(
                 //                   'pattern' => '/^[a-zA-Z]+/',
                 //                   'messages' => array(
                 //                       Zend_Validate_Regex::NOT_MATCH => 'news_comment_form_error_regex'
                 //                   )))
-                ->addValidator('stringLength', false, array(
+                ->addValidator('stringLength', true, array(
                 'min' => 3,
                 'max' => 32,
                 'messages' => array(
                         Zend_Validate_StringLength::TOO_LONG => 'news_comment_form_error_author_length',
                         Zend_Validate_StringLength::TOO_SHORT => 'news_comment_form_error_author_length'
                 )))
+                ->addValidator($authorValidatorDB)
                 ->setRequired(true)
                 ->setLabel('news_comment_field_author');
         # email
@@ -62,6 +66,10 @@ class News_Form_Comment extends Zend_Form {
                 ->addFilter('StripTags')
                 ->addFilter('StringTrim')
                 ->addValidator('EmailAddress', false, array(
+                'allow' => Zend_Validate_Hostname::ALLOW_DNS,
+                'domain' => true,
+                'mx' => true,
+                'deep' => true,
                 'messages' => array(
                         Zend_Validate_EmailAddress::DOT_ATOM => 'default_form_error_email',
                         Zend_Validate_EmailAddress::INVALID_FORMAT => 'default_form_error_email',
@@ -117,10 +125,11 @@ class News_Form_Comment extends Zend_Form {
             $captcha->setRequired(true);
         }
         # add elements to the form
-        $this->addElement($author)
-                ->addElement($email)
-                ->addElement($url)
-                ->addElement($comment);
+        if (!User::isLoggedIn())
+            $this->addElement($author)
+                 ->addElement($email);
+        $this->addElement($url)
+             ->addElement($comment);
 
         if (!User::isLoggedIn())
             $this->addElement($captcha);
