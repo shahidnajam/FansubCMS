@@ -7,7 +7,7 @@
  * @subpackage Plugins
  * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
  * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
- * @version    $Id: Variables.php 40 2009-05-06 22:58:54Z gugakfugl $
+ * @version    $Id: Variables.php 152 2010-06-18 15:38:32Z gugakfugl $
  */
 
 /**
@@ -50,6 +50,16 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
     {
         return $this->_identifier;
     }
+    
+    /**
+     * Returns the base64 encoded icon
+     *
+     * @return string
+     **/
+    public function getIconData()
+    {
+        return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAFWSURBVBgZBcE/SFQBAAfg792dppJeEhjZn80MChpqdQ2iscmlscGi1nBPaGkviKKhONSpvSGHcCrBiDDjEhOC0I68sjvf+/V9RQCsLHRu7k0yvtN8MTMPICJieaLVS5IkafVeTkZEFLGy0JndO6vWNGVafPJVh2p8q/lqZl60DpIkaWcpa1nLYtpJkqR1EPVLz+pX4rj47FDbD2NKJ1U+6jTeTRdL/YuNrkLdhhuAZVP6ukqbh7V0TzmtadSEDZXKhhMG7ekZl24jGDLgtwEd6+jbdWAAEY0gKsPO+KPy01+jGgqlUjTK4ZroK/UVKoeOgJ5CpRyq5e2qjhF1laAS8c+Ymk1ZrVXXt2+9+fJBYUwDpZ4RR7Wtf9u9m2tF8Hwi9zJ3/tg5pW2FHVv7eZJHd75TBPD0QuYze7n4Zdv+ch7cfg8UAcDjq7mfwTycew1AEQAAAMB/0x+5JQ3zQMYAAAAASUVORK5CYII=';
+    }
 
     /**
      * Gets menu tab for the Debugbar
@@ -70,20 +80,33 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
     {
         $this->_request = Zend_Controller_Front::getInstance()->getRequest();
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
-        $viewVars = $viewRenderer->view->getVars();
-        $vars = '';
+        if ($viewRenderer->view && method_exists($viewRenderer->view, 'getVars')) {
+            $viewVars = $this->_cleanData($viewRenderer->view->getVars());
+        } else {
+            $viewVars = "No 'getVars()' method in view class";
+        }
+        $vars = '<div style="width:50%;float:left;">';
+        $vars .= '<h4>View variables</h4>'
+              . '<div id="ZFDebug_vars" style="margin-left:-22px">' . $viewVars . '</div>'
+              . '<h4>Request parameters</h4>'
+              . '<div id="ZFDebug_requests" style="margin-left:-22px">' . $this->_cleanData($this->_request->getParams()) . '</div>';
+        $vars .= '</div><div style="width:45%;float:left;">';
         if ($this->_request->isPost())
         {
-            $vars .= '<h4>$_POST</h4>'
-                   . '<div id="ZFDebug_post">' . $this->_cleanData($this->_request->getPost()) . '</div>';
+            $vars .= '<h4>Post variables</h4>'
+                   . '<div id="ZFDebug_post" style="margin-left:-22px">' . $this->_cleanData($this->_request->getPost()) . '</div>';
         }
 
-        $vars .= '<h4>$_COOKIE</h4>'
-               . '<div id="ZFDebug_cookie">' . $this->_cleanData($this->_request->getCookie()) . '</div>'
-               . '<h4>Request</h4>'
-               . '<div id="ZFDebug_requests">' . $this->_cleanData($this->_request->getParams()) . '</div>'
-               . '<h4>View vars</h4>'
-               . '<div id="ZFDebug_vars">' . $this->_cleanData($viewVars) . '</div>';
+        $registry = Zend_Registry::getInstance();
+        $vars .= '<h4>Zend Registry</h4>';
+        $registry->ksort();
+        $vars .= '<div id="ZFDebug_registry" style="margin-left:-22px">' . $this->_cleanData($registry) . '</div>';
+        
+        $cookies = $this->_request->getCookie();
+        $vars .= '<h4>Cookies</h4>'
+               . '<div id="ZFDebug_cookie" style="margin-left:-22px">' . $this->_cleanData($cookies) . '</div>';
+        
+        $vars .= '</div><div style="clear:both">&nbsp;</div>';
         return $vars;
     }
 

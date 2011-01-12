@@ -7,7 +7,7 @@
  * @subpackage Plugins
  * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
  * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
- * @version    $Id: Interface.php 13 2009-04-29 21:10:38Z andreas.pankratz@s-square.de $
+ * @version    $Id: Interface.php 109 2009-09-21 20:56:13Z gugakfugl $
  */
 
 /**
@@ -39,4 +39,12 @@ interface ZFDebug_Controller_Plugin_Debug_Plugin_Interface
      * @return string
      */
     public function getIdentifier();
+    
+    
+    /**
+     * Return the path to an icon
+     *
+     * @return string
+     */
+    public function getIconData();
 }
