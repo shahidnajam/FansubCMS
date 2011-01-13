@@ -1,4 +1,8 @@
-<?= $this->action('show','index','news',array('id'=>$this->news->id))?>
+<?php if($this->news): ?>
+<div class="author"><img src="<?=$this->gravatar($this->news->User->email,100)?>" alt="" /><br/><?=$this->translate('news_author',$this->news->User->name)?></div>
+<div class="title"><h3><?=$this->news->title?></h3></div>
+<div class="created"><?=$this->translate('news_created_at_date',$this->formatDate($this->news->created_at))?></div>
+<div class="content"><?=$this->textile($this->news->text)?></div>
 <br class="clearfix" />
 <h3 class="inline-headline"><?=$this->translate('news_comment')?></h3>
 <div class="seperator"></div>
@@ -12,3 +16,6 @@
 <br class="clearfix" />
 <h3 class="inline-headline"><?=$this->translate('news_comment_write')?></h3>
 <?=$this->writeForm?>
+<?php else: ?>
+<?=$this->translate('news_not_existent')?>
+<?php endif; ?>

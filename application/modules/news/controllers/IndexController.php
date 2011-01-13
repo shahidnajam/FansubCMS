@@ -29,12 +29,4 @@ class IndexController extends FansubCMS_Controller_Action {
         $this->view->news->setItemCountPerPage($this->conf->news->front);
         $this->view->news->setCurrentPageNumber($page);
     }
-
-    public function showAction() {
-        $id = $this->getRequest()->getParam('id');
-        $this->view->news = false;
-        if($id) {
-            $this->view->news = News::getNewsById($id);
-        }
-    }
 }

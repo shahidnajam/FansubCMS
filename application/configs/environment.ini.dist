@@ -9,6 +9,7 @@ page.session.name = "es_sid"
 wordpress.api = "place your WordPress API Key here!"
 news.front = 5
 news.comments.numpage = 10
+news.usePermaLink = true
 
 [gadgets]
 gadget.randomproject.action = "random"

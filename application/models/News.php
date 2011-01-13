@@ -58,12 +58,47 @@ class News extends BaseModelNews {
           ->where('id = ?',$id);
         return $q->fetchOne();
     }
+
+    /**
+     * get news for permalinks
+     * @param integer $day
+     * @param integer $month
+     * @param integer $year
+     * @param string $title
+     * @return string
+     */
+    static function getNewsByDateAndTitle($day,$month,$year,$title) {
+        $time = strtotime($year.'-'.$month.'-'.$day);
+        $date = new Zend_Date($time);
+        $q = Doctrine_Query::create();
+        $q->from('News n')
+          ->where('created_at BETWEEN ? AND ?',array(
+              $date->toString('YYYY-MM-dd').' 00:00:00',
+              $date->toString('YYYY-MM-dd').' 23:59:59'))
+          ->andWhere('title = ?',$title);
+        return $q->fetchOne();
+    }
+
+    /**
+     * retrieve url parameters for permalinks or not
+     * @return string
+     */
+    public function getUrlParams() {
+        $conf = Zend_Registry::get('environmentSettings');
+        if($conf->news->usePermaLink) {
+            $date = new Zend_Date(strtotime($this->created_at));
+            return 'archive/'.$date->toString('YYYY').'/'.$date->toString('MM').'/'.$date->toString('dd').'/'.urlencode($this->title);
+        } else {
+            return 'comment/index/id/'.$this->id;
+        }
+    }
     
     /**
      * gets comments that are not marked as spam or invisible
      * @return Doctrine_Collection
      */
     public function getComments() {
+
     	$q = Doctrine_Query::create();
     	$q->from('NewsComment nc')
     	  ->where('spam = ?','no')

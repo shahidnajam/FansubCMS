@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  This file is part of FansubCMS.
  *
@@ -17,42 +18,53 @@
  */
 
 class CommentController extends FansubCMS_Controller_Action {
-	public function init() {
-		parent::init();
-		$this->conf = Zend_Registry::get('environmentSettings');
-	}
-	
+
+    public function init() {
+        parent::init();
+        $this->conf = Zend_Registry::get('environmentSettings');
+    }
+
     public function indexAction() {
-    	$req = $this->getRequest();
+        $envConf = Zend_Registry::get('environmentSettings');
+        $req = $this->getRequest();
         $id = $req->getParam('id');
+        $day = $req->getParam('day');
+        $month = $req->getParam('month');
+        $year = $req->getParam('year');
+        $title = $req->getParam('title');
         $this->view->news = false;
         $this->view->paginator = false;
         $this->view->writeForm = new News_Form_Comment('#');
-        if($id) {
+        if ($id && !$envConf->news->usePermaLink) {
             $this->view->news = News::getNewsById($id);
-            
-	        if($req->isPost() && $this->view->news) {
-	            if($this->view->writeForm->isValid($_POST)) {
-	                $values = $this->view->writeForm->getValues();
-	                $nc = new NewsComment();
-	                $nc->ip = getenv('REMOTE_ADDR');
-	                $nc->email = User::isLoggedIn() ? Zend_Auth::getInstance()->getIdentity()->email : $values['email'];
-	                $nc->news_id = $this->view->news->id;
-	                $nc->visible = 'yes'; // there is no moderation yet
-	                $nc->author = User::isLoggedIn() ? Zend_Auth::getInstance()->getIdentity()->name : $values['author'];
-	                $nc->url = $values['url'];
-	                $nc->comment = $values['comment'];
-	                $nc->checkSpam();
-	                $nc->save();
-	                $this->view->writeForm = new News_Form_Comment('#'); // clear form because comment is submitted
-	            }
-	        }
-            
-            $paginator = $this->view->news->getCommentPaginator(false,true);
+        } else if($year && $month && $day && $title && $envConf->news->usePermaLink) {
+            $this->view->news = News::getNewsByDateAndTitle($day,$month,$year,  urldecode($title));
+        }
+
+        if($this->view->news) {
+            $paginator = $this->view->news->getCommentPaginator(false, true);
             $page = $req->getParam('page');
             $paginator->setItemCountPerPage($this->conf->news->comments->numpage);
             $paginator->setCurrentPageNumber($page);
             $this->view->paginator = $paginator;
         }
+
+        if ($req->isPost() && $this->view->news) {
+            if ($this->view->writeForm->isValid($_POST)) {
+                $values = $this->view->writeForm->getValues();
+                $nc = new NewsComment();
+                $nc->ip = getenv('REMOTE_ADDR');
+                $nc->email = User::isLoggedIn() ? Zend_Auth::getInstance()->getIdentity()->email : $values['email'];
+                $nc->news_id = $this->view->news->id;
+                $nc->visible = 'yes'; // there is no moderation yet
+                $nc->author = User::isLoggedIn() ? Zend_Auth::getInstance()->getIdentity()->name : $values['author'];
+                $nc->url = $values['url'];
+                $nc->comment = $values['comment'];
+                $nc->checkSpam();
+                $nc->save();
+                $this->view->writeForm = new News_Form_Comment('#'); // clear form because comment is submitted
+            }
+        }
     }
+
 }
