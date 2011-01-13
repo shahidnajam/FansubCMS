@@ -22,7 +22,7 @@
  * @subpackage Controllers
  * @author Hikaru-Shindo <hikaru@animeownage.de>
  */
-class Default_ErrorController extends FansubCMS_Controller_Action {
+class Cms_ErrorController extends FansubCMS_Controller_Action {
     /**
      * This function handles all the general errors.
      * @return void

@@ -46,7 +46,7 @@ class FansubCMS_Controller_Plugin_LayoutVersion extends Zend_Controller_Plugin_A
         }
         # add the default view paths
 
-        $this->view->addScriptPath(APPLICATION_PATH . DIRECTORY_SEPARATOR .
+        $this->view->addScriptPath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'cms' . DIRECTORY_SEPARATOR .
                 'views' . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR . 'scripts');
         $this->view->addScriptPath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' .
                 DIRECTORY_SEPARATOR . $request->getModuleName() . DIRECTORY_SEPARATOR .
@@ -56,7 +56,7 @@ class FansubCMS_Controller_Plugin_LayoutVersion extends Zend_Controller_Plugin_A
                 'views' . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR . 'scripts');
         # if it's not default add also the special version
         if($this->_layout != 'default') {
-            $dir = APPLICATION_PATH .  DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . $this->_layout . DIRECTORY_SEPARATOR . 'scripts';
+            $dir = APPLICATION_PATH .  DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'cms' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . $this->_layout . DIRECTORY_SEPARATOR . 'scripts';
             if(is_dir($dir)) # we should only add if it exists
                 $this->view->addScriptPath($dir);
 

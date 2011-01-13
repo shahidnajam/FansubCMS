@@ -16,7 +16,7 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class IndexController extends FansubCMS_Controller_Action {
+class News_IndexController extends FansubCMS_Controller_Action {
     public function init() {
         parent::init();
         $this->conf = Zend_Registry::get('environmentSettings');

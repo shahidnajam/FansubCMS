@@ -54,7 +54,7 @@ class FansubCMS_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         if($hasResource && !$this->_acl->isAllowed('fansubcms_user_custom_role_logged_in_user',$resource, $request->getActionName())) {
             $request->setActionName('denied');
             $request->setControllerName('error');
-            $request->setModuleName('default');
+            $request->setModuleName('cms');
         }
     }
 }

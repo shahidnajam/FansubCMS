@@ -17,7 +17,7 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class CommentController extends FansubCMS_Controller_Action {
+class News_CommentController extends FansubCMS_Controller_Action {
 
     public function init() {
         parent::init();
