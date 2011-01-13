@@ -46,7 +46,7 @@ class News_IndexController extends FansubCMS_Controller_Action {
                     'title'=>$post->title,
                     'link'=>'http://'.$_SERVER['HTTP_HOST'].$this->view->baseUrl().'/news/'.$post->getUrlParams(),
                     'description'=>$post->text,
-                    'lastUpdate'=>$post->updated_at,
+                    'lastUpdate'=>strtotime($post->updated_at),
             );
         }
         // generate and render RSS feed
