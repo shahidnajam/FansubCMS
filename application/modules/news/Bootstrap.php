@@ -14,8 +14,21 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
- */
+*/
 
 class News_Bootstrap extends Zend_Application_Module_Bootstrap {
-	// nothing to do just for autoloading of forms
+    public $frontController;
+    public $settings;
+
+    protected function _initModule() {
+        $this->settings = new Zend_Config_Ini(dirname(__FILE__).'/configs/module.ini');
+        $this->frontController = Zend_Controller_Front::getInstance();
+    }
+
+    protected function _initRoute() {
+        if($this->settings->routes->router != null) {
+            $router = $this->frontController->getRouter();
+            $router->addConfig($this->settings->routes->router, 'routes');
+        }
+    }
 }
