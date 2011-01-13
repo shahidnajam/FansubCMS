@@ -40,23 +40,28 @@ class News_IndexController extends FansubCMS_Controller_Action {
     protected function _generateFeed($news) {
         $this->_helper->layout->disableLayout();
         $settings = Zend_Registry::get('environmentSettings');
+        $mailSettings = Zend_Registry::get('emailSettings');
 
         foreach($news as $post) {
             $entries[]=array(
                     'title'=>$post->title,
                     'link'=>'http://'.$_SERVER['HTTP_HOST'].$this->view->baseUrl().'/news/'.$post->getUrlParams(),
                     'description'=>$post->text,
+                    'content'=>$this->view->textile($post->text),
                     'lastUpdate'=>strtotime($post->updated_at),
             );
         }
         // generate and render RSS feed
         $feed=Zend_Feed::importArray(array(
                 'title'   => $settings->page->group->name,
-                'link'    => 'http://'.$_SERVER['HTTP_HOST'].$this->view->baseUrl(),
+                'link'    => 'http://'.$_SERVER['HTTP_HOST'].$this->view->baseUrl().'/news/feed',
                 'charset' => 'UTF-8',
                 'entries' => $entries,
-                ), 'rss');
+                'author'=>$settings->page->group->name,
+                'email'=>$mailSettings->email->admin,
+                ), 'atom');
         $feed->send();
         die;
     }
 }
+

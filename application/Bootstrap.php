@@ -401,7 +401,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
             $this->frontController->registerPlugin($debug);
         }
         # init error handler
-        $this->frontController->throwExceptions(false);
+        $this->frontController->throwExceptions(true);
         $errorhandler = new Zend_Controller_Plugin_ErrorHandler();
         $errorhandler->setErrorHandler(array('module' => 'cms', 'controller' => 'error', 'action' => 'error'));
         $this->frontController->registerPlugin($errorhandler);
