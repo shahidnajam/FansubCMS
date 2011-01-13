@@ -6,6 +6,9 @@
 /public/images/captcha/*
 # We don't need to version uploaded files
 /public/upload/*
+!/public/upload/static/
+/public/upload/static/*
+!/public/upload/static/delete.me
 # Ignore addons except for gadgets because they are no core parts that should be versioned in this git repository
 /application/addons/*
 !/application/addons/gadgets/
