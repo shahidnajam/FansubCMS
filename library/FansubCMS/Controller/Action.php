@@ -53,6 +53,8 @@ class FansubCMS_Controller_Action extends Zend_Controller_Action {
             unset($this->session->message);
             unset($this->session->message_type);
         }
+
+        $this->session->markitup = '';
     }
 
     /**

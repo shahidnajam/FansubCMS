@@ -261,3 +261,9 @@ body {
 .project_delete_screenshot_table_action  {
     background-image: url("../../images/default/icons/16/picture--minus.png");
 }
+.cms_edit_static_table_action  {
+    background-image: url("../../images/default/icons/16/document--pencil.png");
+}
+.cms_delete_static_table_action  {
+    background-image: url("../../images/default/icons/16/document--minus.png");
+}

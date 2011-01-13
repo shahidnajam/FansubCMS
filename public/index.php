@@ -26,6 +26,9 @@ defined('APPLICATION_ENV')
 
 define('UPLOAD_PATH', realpath(dirname(__FILE__).'/upload'));
 
+defined('HTTP_PATH')
+        || define('HTTP_PATH', realpath(dirname(__FILE__)));
+
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
         realpath(APPLICATION_PATH . '/../library'),

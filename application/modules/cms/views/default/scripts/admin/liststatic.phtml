@@ -1,0 +1,32 @@
+<h1><?=$this->translate('cms_list_static_headline')?></h1>
+<?php if(count($this->pages)): ?>
+<table>
+    <tr>
+        <th><?=$this->translate('cms_liststatic_title')?></th>
+        <th><?=$this->translate('table_action')?></th>
+    </tr>
+    <?php
+    foreach($this->pages as $page):
+        ?>
+    <tr>
+        <td><?=$page?></td>
+        <td>
+                <?php
+                $session = Zend_Registry::get('applicationSessionNamespace');
+                $actions = $session->tableActions;
+                ?>
+                <?php foreach($actions as $action => $mvc): ?>
+            <a title="<?=$this->translate($action.'_table_action')?>" href="<?=$this->baseUrl()?>/<?=$mvc['module']?>/<?=$mvc['controller']?>/<?=$mvc['action']?>/title/<?=$page?>" class="<?=$action.'_table_action'?> tableAction"><span><?=$this->translate($action.'_table_action')?></span></a>
+                <?php endforeach; ?>
+        </td>
+    </tr>
+    <?php
+    endforeach;
+    ?>
+</table>
+<?php else: ?>
+<?=$this->translate('cms_no_static_pages')?><br />
+<?php endif; ?>
+<?php if($this->isAllowed('cms_admin','addstatic')): ?>
+<div class="add"><a href="<?=$this->baseUrl()?>/cms/admin/addstatic/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/document--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
+<?php endif; ?>
