@@ -14,7 +14,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
- */
+*/
 
 class News_IndexController extends FansubCMS_Controller_Action {
     public function init() {
@@ -24,9 +24,39 @@ class News_IndexController extends FansubCMS_Controller_Action {
 
     public function indexAction() {
         $newsTable = Doctrine::getTable('News');
-    	$this->view->news = $newsTable->getPaginator(true);
-    	$page = $this->getRequest()->getParam('page');
+        $this->view->news = $newsTable->getPaginator(true);
+        $page = $this->getRequest()->getParam('page');
         $this->view->news->setItemCountPerPage($this->conf->news->front);
         $this->view->news->setCurrentPageNumber($page);
+        if($this->getRequest()->getParam('rss')) {
+            $this->view->news->setItemCountPerPage(50);
+            $this->view->news->setCurrentPageNumber(1);
+            $this->_generateFeed($this->view->news);
+        }
+    }
+
+    # helpers
+
+    protected function _generateFeed($news) {
+        $this->_helper->layout->disableLayout();
+        $settings = Zend_Registry::get('environmentSettings');
+
+        foreach($news as $post) {
+            $entries[]=array(
+                    'title'=>$post->title,
+                    'link'=>'http://'.$_SERVER['HTTP_HOST'].$this->view->baseUrl().'/news/'.$post->getUrlParams(),
+                    'description'=>$post->text,
+                    'lastUpdate'=>$post->updated_at,
+            );
+        }
+        // generate and render RSS feed
+        $feed=Zend_Feed::importArray(array(
+                'title'   => $settings->page->group->name,
+                'link'    => 'http://'.$_SERVER['HTTP_HOST'].$this->view->baseUrl(),
+                'charset' => 'UTF-8',
+                'entries' => $entries,
+                ), 'rss');
+        $feed->send();
+        die;
     }
 }

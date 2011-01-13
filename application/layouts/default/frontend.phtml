@@ -37,7 +37,7 @@
                 </div>
                 <?php endif; ?>
                 <div class="box fullwidth">
-                <?= $this->layout()->content?>
+                    <?= $this->layout()->content?>
                 </div>
             </div>
             <div id="gadgets">
@@ -49,6 +49,15 @@
                     }
                 }
                 ?>
+                <div class="gadget">
+                    <div class="gadget-head">
+                        <?=$this->translate('default-links-navigation-headline')?>
+                    </div>
+                    <div class="gadget-body">
+                        <a href="<?=$this->baseUrl()?>/news/rss"><?=$this->translate('default-news-rss')?></a><!--<br />
+                        <a href="<?=$this->baseUrl()?>/projects/rss"><?=$this->translate('default-project-rss')?></a>-->
+                    </div>
+                </div>
             </div>
             <br class="clearfix" />
             <div id="footer"><a href="<?=$this->baseUrl()?>/group/imprint/"><?=$this->translate('imprint_disclaimer')?></a><br />
