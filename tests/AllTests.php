@@ -42,24 +42,7 @@
  * @link      http://www.phpundercontrol.org/
  */
 
-//if ( defined( 'PHPUnit_MAIN_METHOD' ) === false )
-//{
-//    define( 'PHPUnit_MAIN_METHOD', 'phpucAllTests::main' );
-//}
-//
-//require_once 'PHPUnit/Framework/TestSuite.php';
-//require_once 'PHPUnit/TextUI/TestRunner.php';
-
 require_once dirname(__FILE__) . '/DummyTest.php';
-
-//require_once dirname( __FILE__ ) . '/Commands/CommandsAllTests.php';
-//require_once dirname( __FILE__ ) . '/Console/ConsoleAllTests.php';
-//require_once dirname( __FILE__ ) . '/Data/DataAllTests.php';
-//require_once dirname( __FILE__ ) . '/Graph/GraphAllTests.php';
-//require_once dirname( __FILE__ ) . '/Stylesheet/StylesheetAllTests.php';
-//require_once dirname( __FILE__ ) . '/Tasks/TasksAllTests.php';
-//require_once dirname( __FILE__ ) . '/Util/UtilAllTests.php';
-//require_once dirname( __FILE__ ) . '/VersionControl/VersionControlAllTests.php';
 
 /**
  * Main test suite for phpUnderControl.
@@ -97,8 +80,3 @@ class phpucAllTests
         return $suite;
     }
 }
-//
-//if ( PHPUnit_MAIN_METHOD === 'phpucAllTests::main' )
-//{
-//    phpucAllTests::main();
-//}
