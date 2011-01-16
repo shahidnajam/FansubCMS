@@ -155,7 +155,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Session::start(); // sollte wenn name feststeht ge�ndert werden
         # get an instance of the frontend controller
         $this->bootstrap('FrontController');
-        $this->frontController = $this->getResource('FrontController');
+        $this->frontController = Zend_Controller_Front::getInstance();
 
         # prefix default module as well
         $this->frontController->setParam('prefixDefaultModule', true);
