@@ -24,6 +24,7 @@
 # Eclipse project files
 .classpath
 .project
+.buildpath
 .settings/
 
 # OS generated files
