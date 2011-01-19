@@ -47,6 +47,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action {
             if($req->isPost()) { // there are profile updates
                 if($this->view->form->isValid($_POST)) {
                     $values = $this->view->form->getValues();
+                    @unlink($file);
                     @file_put_contents($file, $values['text']);
                     $this->session->message = $this->translate('cms_admin_editstatic_success');
                     $this->_helper->redirector->gotoRoute(array('action'=>'liststatic','controller'=>'admin','module'=>'cms'));
