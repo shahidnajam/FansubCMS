@@ -122,6 +122,15 @@ body {
     padding: 5px;
 }
 
+#root .admin-box .actions {
+    margin-top: 10px;
+    margin-left: -5px;
+    margin-right: -5px;
+    margin-bottom: -5px;
+    padding: 2px;
+    background-color: #AAA;	
+}
+
 #root .paginationControl {
     float:left;
     width: 730px;

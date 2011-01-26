@@ -5,6 +5,6 @@ if(!empty($this->url))$this->author = '<a href="'.$this->url.'" target="blank">'
     <div class="author"><?=$this->translate('news_comment_author',$this->author)?> <img alt="Avatar" src="<?=$this->gravatar($this->email,20)?>" /></div>
     <div class="created"><?=$this->translate('news_comment_created_at_date',$this->formatDate($this->created_at))?></div>
     <div class="visible"><?=$this->translate('news_admin_comment_visible',$this->translate($this->visible.'_term'))?></div>
-    <div class="spam"><?=$this->translate('news_admin_comment_spam',$this->translate($this->spam.'_term'))?></div>
     <div class="content"><?=$this->formatText($this->comment)?></div>
+    <div class="actions"><?=$this->partial('partials/commentActions.phtml',array('id'=>$this->id))?></div>
 </div>
