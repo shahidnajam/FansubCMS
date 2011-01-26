@@ -40,7 +40,7 @@ class FansubCMS_Controller_Plugin_InstallCheck extends Zend_Controller_Plugin_Ab
         
         if($installed) {
             # check if update is needed
-            $mig = new Install_Api_Migration();
+            $mig = Install_Api_Migration::getInstance();
             if($mig->getCurrentVersion() < $mig->getLatestVersion()) {
                 # update needed
                 $redirect->gotoSimple('index','index','install');
