@@ -19,7 +19,7 @@
 class Install_InstallController extends FansubCMS_Controller_Action {
     public function init() {
         $envConf = Zend_Registry::get('environmentSettings');
-        if(!$envConf->install && APPLICATION_ENV != 'development') die('locked!');
+        if(!$envConf->setup && APPLICATION_ENV != 'development') die('locked!');
         $this->_helper->layout()->disableLayout(); // no layout in the installer
     }
 
@@ -34,7 +34,7 @@ class Install_InstallController extends FansubCMS_Controller_Action {
                 $submit = $this->request->getParam('yes');
                 if(!empty($submit)) {
                     Doctrine::createTablesFromModels();
-                    Install_Model_Api_Migration::getInstance()->setCurrentVersion(Install_Model_Api_Migration::getInstance()->getLatestVersion()); // we are on the top atm
+                    Install_Api_Migration::getInstance()->setCurrentVersion(Install_Api_Migration::getInstance()->getLatestVersion()); // we are on the top atm
                     $this->_helper->redirector->gotoSimple('createuser','install','install');
                 } else {
                     $this->_helper->redirector->gotoSimple('index','index','install');

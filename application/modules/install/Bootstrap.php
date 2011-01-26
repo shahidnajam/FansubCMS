@@ -15,7 +15,23 @@
  *  You should have received a copy of the GNU General Public License
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
-
-class Install_Bootstrap extends Zend_Application_Module_Bootstrap {
-	// nothing to do just for autoloading of forms
+class Install_Bootstrap extends Zend_Application_Module_Bootstrap
+{
+   public $autoloader;
+    
+    
+    protected function _initInstallAutoload()
+    {
+        $this->autoloader = new Zend_Loader_Autoloader_Resource(array(
+            'namespace' => 'Install',
+            'basePath'  => dirname(__FILE__)
+        ));
+        # autoload the api
+        $this->autoloader->addResourceTypes(array(
+            'api' => array(
+                'path'      => "api" . DIRECTORY_SEPARATOR,
+                'namespace' => "Api"
+            )
+        ));
+    }
 }
