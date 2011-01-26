@@ -17,6 +17,7 @@
 /application/configs/database.ini
 /application/configs/email.ini
 /application/configs/environment.ini
+/application/configs/navigation.ini
 
 # Netbeans
 /nbproject/*
