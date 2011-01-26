@@ -16,15 +16,8 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-<<<<<<< HEAD
 class News_AdminController extends FansubCMS_Controller_Action {
     public function indexAction() {
-=======
-class AdminController extends FansubCMS_Controller_Action
-{
-    public function indexAction()
-    {
->>>>>>> pichu
         $table = Doctrine_Core::getTable('News');
         $this->view->news = $table->getPaginator('all');
         $page = $this->getRequest()->getParam('page');
