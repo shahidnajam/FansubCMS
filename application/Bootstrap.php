@@ -109,9 +109,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         } else {
             $dbDefaultDsn = $this->databasesettings->db->dsn;
         }
-        $conn = Doctrine_Manager::connection($dbDefaultDsn, $this->databasesettings->db->database, "defaultConnection");
-        $conn->execute("SET NAMES 'UTF8'");
-        $conn->setAttribute(Doctrine::ATTR_USE_NATIVE_ENUM, true);
+        try {
+            $conn = Doctrine_Manager::connection($dbDefaultDsn, $this->databasesettings->db->database, "defaultConnection");
+            $conn->execute("SET NAMES 'UTF8'");
+            $conn->setAttribute(Doctrine::ATTR_USE_NATIVE_ENUM, true);
+        } catch (Exception $e) {
+            $message = "This page is encountering database issues. If you are the administrator please check your settings.";
+            if($this->environmentsettings->setup || APPLICATION_ENV == 'development') {
+                $message .= "<br /><strong>Error Message:</strong> ".$e->getMessage();
+            }
+            die($message);
+        }
 
         if (!empty($this->databasesettings->db->dbms) && $this->databasesettings->db->dbms == 'mysql') {
             $conn->setAttribute(Doctrine::ATTR_AUTOCOMMIT, false);
@@ -428,6 +436,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $layoutPlugin->registerAdminLayout('admin', $layoutPath, 'admin');
             $this->frontController->registerPlugin($layoutPlugin);
         }
+        
+        $installPlugin = new FansubCMS_Controller_Plugin_InstallCheck();
+        $this->frontController->registerPlugin($installPlugin);
 
         $layoutVersionPlugin = new FansubCMS_Controller_Plugin_LayoutVersion($layoutAdd);
         $this->frontController->registerPlugin($layoutVersionPlugin);

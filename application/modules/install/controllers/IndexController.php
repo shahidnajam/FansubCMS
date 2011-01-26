@@ -19,7 +19,7 @@
 class Install_IndexController extends FansubCMS_Controller_Action {
     public function init() {
         $envConf = Zend_Registry::get('environmentSettings');
-        if(!$envConf->setup && APPLICATION_ENV != 'development') die('locked!');
+        if(!$envConf->setup && APPLICATION_ENV != 'development') die('Installer locked!');
         $this->_helper->layout()->disableLayout(); // no layout in the installer
     }
 
