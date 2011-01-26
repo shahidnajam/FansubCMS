@@ -16,7 +16,7 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Install_Model_Api_Migration {
+class Install_Api_Migration {
     private static $_instance;
     private $_migration;
 

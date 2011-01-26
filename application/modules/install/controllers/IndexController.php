@@ -19,14 +19,14 @@
 class Install_IndexController extends FansubCMS_Controller_Action {
     public function init() {
         $envConf = Zend_Registry::get('environmentSettings');
-        if(!$envConf->install && APPLICATION_ENV != 'development') die('locked!');
+        if(!$envConf->setup && APPLICATION_ENV != 'development') die('locked!');
         $this->_helper->layout()->disableLayout(); // no layout in the installer
     }
 
     public function indexAction() {
         $migration = new Doctrine_Migration();
-        $this->view->databaseCurrent = Install_Model_Api_Migration::getInstance()->getCurrentVersion();
-        $this->view->databaseLatest = Install_Model_Api_Migration::getInstance()->getLatestVersion();
+        $this->view->databaseCurrent = Install_Api_Migration::getInstance()->getCurrentVersion();
+        $this->view->databaseLatest = Install_Api_Migration::getInstance()->getLatestVersion();
 
         if($this->view->databaseCurrent < $this->view->databaseLatest) {
             $this->view->databaseUpdateNeeded = true;
