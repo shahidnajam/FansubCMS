@@ -16,8 +16,15 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
+<<<<<<< HEAD
 class News_AdminController extends FansubCMS_Controller_Action {
     public function indexAction() {
+=======
+class AdminController extends FansubCMS_Controller_Action
+{
+    public function indexAction()
+    {
+>>>>>>> pichu
         $table = Doctrine_Core::getTable('News');
         $this->view->news = $table->getPaginator('all');
         $page = $this->getRequest()->getParam('page');
@@ -31,7 +38,8 @@ class News_AdminController extends FansubCMS_Controller_Action {
             $this->session->tableActions['news_delete'] = array('module' => 'news', 'controller' => 'admin', 'action' => 'delete');
     }
 
-    public function editAction() {
+    public function editAction()
+    {
         $id = $this->getRequest()->getParam('id');
         $table = Doctrine_Core::getTable('News');
         $n = $table->findOneBy('id', $id ? $id : 0);
@@ -56,12 +64,14 @@ class News_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function spamAction() {
+    public function spamAction()
+    {
         $table = Doctrine::getTable('NewsComment');
         $this->view->spam = $table->getSpamPaginator();
     }
 
-    public function deleteAction() {
+    public function deleteAction()
+    {
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('News');
         if($id) {
@@ -80,7 +90,8 @@ class News_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function addAction() {
+    public function addAction()
+    {
         $this->view->form = new News_Form_EditNews(null, true);
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates
@@ -102,7 +113,9 @@ class News_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function commentsAction() {
+    public function commentsAction()
+    {
+        $this->view->role = $this->defaultUseRole;
         $id = $this->getRequest()->getParam('id');
         $table = Doctrine_Core::getTable('News');
         $n = $table->findOneBy('id', $id ? $id : 0);
@@ -110,10 +123,14 @@ class News_AdminController extends FansubCMS_Controller_Action {
             $this->session->message = $this->translate('news_not_existent');
             $this->_helper->redirector->gotoRoute(array('action'=>'index','controller'=>'admin','module'=>'news'),'news');
         }
-        $this->view->comments = $n->NewsComment->toArray();
+        $this->view->comments = $n->getCommentPaginator(false);
+        $page = $this->getRequest()->getParam('page');
+        $this->view->comments->setItemCountPerPage(25);
+        $this->view->comments->setCurrentPageNumber($page); 
     }
 
-    public function markhamAction() {
+public function markhamAction()
+    {
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('NewsComment');
         if($id) {
@@ -141,8 +158,39 @@ class News_AdminController extends FansubCMS_Controller_Action {
             $this->_helper->redirector->gotoRoute(array('action'=>'spam','controller'=>'admin','module'=>'news'),'news');
         }
     }
+    
+    public function markspamAction()
+    {
+        $id = $this->request->getParam('id');
+        $table = Doctrine_Core::getTable('NewsComment');
+        if($id) {
+            $comment = $table->find($id);
+            $this->view->form = new FansubCMS_Form_Confirmation();
+            if($this->request->getParam('yes') && $comment) {
+                $a = new FansubCMS_Validator_Akismet();
+                $a = $a->getAkismet();
+                $a->setCommentAuthor($comment->author);
+                $a->setCommentAuthorEmail($comment->email);
+                $a->setCommentAuthorURL($comment->url);
+                $a->setCommentContent($comment->comment);
+                $a->setUserIP($comment->ip);
+                $a->submitSpam();
+                $comment->spam = 'yes';
+                $comment->visible = 'yes';
+                $comment->save();
+                $this->session->message = $this->translate('news_admin_mark_spam_success');
+                $this->_helper->redirector->gotoRoute(array('action'=>'comments','controller'=>'admin','module'=>'news','id'=>$comment->news_id),'news');
+            } else if($this->request->getParam('no')) {
+                $this->_helper->redirector->gotoRoute(array('action'=>'comments','controller'=>'admin','module'=>'news','id'=>$comment->news_id),'news');
+            }
+        } else {
+            $this->session->message = $this->translate('news_comment_not_existent');
+            $this->_helper->redirector->gotoRoute(array('action'=>'index','controller'=>'admin','module'=>'news'),'news');
+        }
+    }
 
-    public function deletecommentAction() {
+    public function deletecommentAction()
+    {
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('NewsComment');
         if($id) {
@@ -152,9 +200,9 @@ class News_AdminController extends FansubCMS_Controller_Action {
             if($this->request->getParam('yes') && $comment) {
                 $comment->delete();
                 $this->session->message = $this->translate('news_admin_deletecomment_success');
-                $spam ? $this->_helper->redirector->gotoRoute(array('action'=>'spam','controller'=>'admin','module'=>'news'),'news') : $this->_helper->redirector->gotoRoute(array('action'=>'index','controller'=>'admin','module'=>'news'),'news');
+                $spam ? $this->_helper->redirector->gotoRoute(array('action'=>'spam','controller'=>'admin','module'=>'news'),'news') : $this->_helper->redirector->gotoRoute(array('action'=>'comments','controller'=>'admin','module'=>'news', 'id' => $id),'news');
             } else if($this->request->getParam('no')) {
-                $spam ? $this->_helper->redirector->gotoRoute(array('action'=>'spam','controller'=>'admin','module'=>'news'),'news') : $this->_helper->redirector->gotoRoute(array('action'=>'index','controller'=>'admin','module'=>'news'),'news');
+                $spam ? $this->_helper->redirector->gotoRoute(array('action'=>'spam','controller'=>'admin','module'=>'news'),'news') : $this->_helper->redirector->gotoRoute(array('action'=>'comments','controller'=>'admin','module'=>'news', 'id' => $id),'news');
             }
         } else {
             $this->session->message = $this->translate('news_comment_not_existent');
