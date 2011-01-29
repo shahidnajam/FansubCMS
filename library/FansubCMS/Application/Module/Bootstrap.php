@@ -76,4 +76,74 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
             $router->addConfig($this->moduleSettings->routes->router, 'routes');
         }
     }
+    
+    protected function _initI18n()
+    {
+        $cm = Zend_Registry::get('Zend_Cache_Manager');
+        if(!$cm->hasCacheTemplate('I18n_Settings')) {
+            if(function_exists('apc_add')) {
+                # apc is available
+                $backend = array(
+                    'name' => 'Apc',
+                    'options' => array()
+                    );
+            } else {
+                # there is no apc - cache to file
+                $backend = array(
+                    'name' => 'File',
+                    'options' => array(
+                        'cache_dir' => CACHE_PATH
+                    ));
+            }
+            # life time in development 30 seconds in other mode a half hour
+            $lifetime = APPLICATION_ENV == 'development' ? 30 : 1800;
+            $frontend = array(
+                    'name' => 'Core',
+                    'options' => array(
+                        'lifetime' => $lifetime,
+                        'automatic_serialization' => true
+                    )
+                );
+            $options = array(
+                'frontend' => $frontend,
+                'backend' => $backend);
+            # add a new cache template for this module
+            $cm->setCacheTemplate('I18n_Settings', $options);
+            Zend_Registry::set('Zend_Cache_Manager', $cm);
+        }
+        $cache = $cm->getCache('I18n_Settings');
+        
+        $trans = $cache->load(ucfirst($this->getModuleName()));
+        // there are no translations or cache is invalid - generate cache!
+        $locale = $this->envSettings->locale;
+        if (!$trans) {
+            $addon =   APPLICATION_PATH . '/addons/'. strtolower($this->getModuleName()) .'/locale/';
+            $module =   APPLICATION_PATH . '/modules/'. strtolower($this->getModuleName()) .'/locale/';
+            if(file_exists($addon . $locale . '.ini')) {
+                $trans = new Zend_Config_Ini($addon . $locale . '.ini');
+            } elseif(file_exists($module . $locale . '.ini')) {
+                $trans = new Zend_Config_Ini($module . $locale . '.ini');
+            } elseif(file_exists($addon . 'en.ini')) {
+                $trans = new Zend_Config_Ini($addon . 'en.ini');
+            } else {
+                $trans = new Zend_Config_Ini($module . 'en.ini');
+            }
+            $arr = $trans->toArray();
+            $ret = array();
+            foreach($arr as $val) {
+                $ret = array_merge($ret, $val);
+            }
+            
+            $trans = $ret;
+            $cache->save($trans);
+        }
+        # get translation object
+        $transObj = Zend_Registry::get('Zend_Translate');
+        # add the modules translation
+        $transObj->addTranslation($trans, $locale);
+        # save the transjation to registry
+        Zend_Registry::set('Zend_Translate',$transObj);
+        
+        return $transObj;
+    }
 }

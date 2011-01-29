@@ -327,25 +327,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initI18n()
     {
-        $cm = $this->cacheManager;
-        $cache = $cm->getCache('FansubCMS');
-        $trans = $cache->load('Translate');
-        // there are no translations or cache is invalid - generate cache!
-        if (!$trans) {
-            $locale = $this->environmentsettings->locale;
-            $trans = new Zend_Translate('ini', APPLICATION_PATH . '/modules/cms/locale/' . $locale . '.ini', $locale);
-            // add all the translations
-            $modules = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'locale' . DIRECTORY_SEPARATOR . $locale . '.ini');
-            foreach ($modules as $module) {
-                $trans->addTranslation($module, $locale);
-            }
-            $addons = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'addons' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'locale' . DIRECTORY_SEPARATOR . $locale . '.ini');
-            foreach ($addons as $addon) {
-                $trans->addTranslation($addon, $locale);
-            }
-            $cache->save($trans);
-        }
+        $trans = new Zend_Translate('Array',array(''=>''), $this->environmentsettings->locale);
 
+        # the translations itself will be added in module bootstraps
+        
         // save the translation in the registry
         Zend_Registry::set('Zend_Translate', $trans);
     }

@@ -20,10 +20,42 @@ class FansubCMS_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abst
     public function preDispatch(Zend_Controller_Request_Abstract $request) {
         $this->layout = Zend_Layout::getMvcInstance();
         $cm = Zend_Registry::get('Zend_Cache_Manager');
-        $cache = $cm->getCache('FansubCMS');
+        # add a navigation cache
+        if(!$cm->hasCacheTemplate('Navigation_Settings')) {
+            if(function_exists('apc_add')) {
+                # apc is available
+                $backend = array(
+                    'name' => 'Apc',
+                    'options' => array()
+                    );
+            } else {
+                # there is no apc - cache to file
+                $backend = array(
+                    'name' => 'File',
+                    'options' => array(
+                        'cache_dir' => CACHE_PATH
+                    ));
+            }
+            # life time in development 30 seconds in other mode a five minutes
+            $lifetime = APPLICATION_ENV == 'development' ? 30 : 300;
+            $frontend = array(
+                    'name' => 'Core',
+                    'options' => array(
+                        'lifetime' => $lifetime,
+                        'automatic_serialization' => true
+                    )
+                );
+            $options = array(
+                'frontend' => $frontend,
+                'backend' => $backend);
+            # add a new cache template for this module
+            $cm->setCacheTemplate('Navigation_Settings', $options);
+            Zend_Registry::set('Zend_Cache_Manager', $cm);
+        }
+        $cache = $cm->getCache('Navigation_Settings');
         if(($request->getParam('module') == 'admin' || $request->getParam('controller') == 'admin') && Zend_Auth::getInstance()->hasIdentity()) {
-            $navigation = $cache->load('Navigation_Backend');
-            if(!$navigation) {
+            $config = $cache->load('Navigation_Backend_Settings');
+            if(!$config) {
                 // add the module and addon admin menus
                 $modConf = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs'. DIRECTORY_SEPARATOR . 'module.ini');
                 $modConf = array_merge($modConf,$addConf = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'addons' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs'. DIRECTORY_SEPARATOR . 'module.ini') ? $addConf : array());
@@ -38,24 +70,30 @@ class FansubCMS_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abst
                         // do nothing on error, just ignore
                     }
                 }
-                 $navigation = new Zend_Navigation($adminNav);
-                 $cache->save($navigation);
+                $config = $adminNav->toArray();
+                $cache->save($config);
             }
+            $navigation = new Zend_Navigation($config);
         } else {
-            $navigation = $cache->load('Navigation_Frontend');
-            if(!$navigation) {
+            $config = $cache->load('Navigation_Frontend_Settings');
+            
+            if(!$config) {
                 $config = new Zend_Config_Ini(APPLICATION_PATH.'/configs/navigation.ini','nav');
-                $navigation = new Zend_Navigation($config);
-                $cache->save($navigation);
+                $config = $config->toArray();
+                $cache->save($config);
             }
+            
             if(Zend_Auth::getInstance()->hasIdentity()) {
-                $adminPage = new Zend_Navigation_Page_Mvc();
-                $adminPage->setLabel('administration');
-                $adminPage->setModule('admin');
-                $adminPage->setOrder(999999999);
-                $adminPage->setRoute('default');
-                $navigation->addPage($adminPage);
+                $adminPage = array(
+                    'administrationLinkAdministration' => array(
+                        'label' => 'administration',
+                        'module' => 'admin',
+                        'order' => 999999999,
+                        'route' => 'default',
+                    ));
+                $config = array_merge($config, $adminPage);
             }
+            $navigation = new Zend_Navigation($config);
         }
         $this->layout->getView()->navigation($navigation);
     }

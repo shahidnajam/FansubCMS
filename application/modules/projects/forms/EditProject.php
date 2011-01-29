@@ -26,7 +26,7 @@ class Projects_Form_EditProject extends Zend_Form {
                 ->setMethod('post')
                 ->setAttrib('id', $insert ? 'addproject' : 'editproject');
 
-        # name
+        # name      
         $name = $this->createElement('text', 'name')
                 ->addFilter('StripTags')
                 ->addFilter('StringTrim')
@@ -34,7 +34,7 @@ class Projects_Form_EditProject extends Zend_Form {
                 'messages' => array(
                         Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
                 )))
-                ->addValidator('StringLength', false, array(
+                ->addValidator('StringLength', true, array(
                 'min' => 3,
                 'max' => 255,
                 'messages' => array(
