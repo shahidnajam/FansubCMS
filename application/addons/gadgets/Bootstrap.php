@@ -14,25 +14,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
- */
-class Projects_Delegate_Default_Sorting
+*/
+
+class Gadgets_Bootstrap extends FansubCMS_Application_Module_Bootstrap
 {
-    public function __construct($settings, $request)
-    {
-        $this->request = $request;
-        $this->settings = $settings;
-    }
-    
-    public function sortProjects($projects)
-    {
-        $return = array();
-        # sort the projects according to their status
-        foreach($projects as $project) {
-            if(empty($return[$project->status])) {
-                $return[$project->status] = array();
-            }
-            $return[$project->status][] = $project;
-        }
-        return $return;
-    }
+
 }

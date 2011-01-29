@@ -35,6 +35,6 @@ class Projects_IndexController extends FansubCMS_Controller_Action {
         $name = urldecode($this->getRequest()->getParam('project'));
         $project = Doctrine::getTable('Project');
         $this->view->projectName = $name;
-        $this->view->project = $project = $project->findOneBy('name', $name);
+        $this->view->project = $project->findOneBy('name', $name);
     }
 }
