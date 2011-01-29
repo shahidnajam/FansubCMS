@@ -16,6 +16,7 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Projects_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Projects_Bootstrap extends FansubCMS_Application_Module_Bootstrap
+{
 
 }

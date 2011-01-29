@@ -18,8 +18,9 @@
 
 class Group_TeamController extends FansubCMS_Controller_Action {
     public function memberAction() {
+        $this->_addDelegateType('Sorting');
+        $this->view->users = $this->invokeDelegate('Sorting', 'sortTeam', array(User::getTeam(false)));
         $this->view->title = $this->translate('group_member_title');
-        $this->view->users = User::getTeam(false);
     }
 
     public function detailAction() {

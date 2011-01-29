@@ -197,7 +197,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         # hook to settings
         $this->settings->applicationStatus = $this->applicationStatus;
-
+        
         # hook needed objects/values to the zend registry
         Zend_Registry::set('settings', $this->settings);
         Zend_Registry::set('applicationStatus', $this->applicationStatus);

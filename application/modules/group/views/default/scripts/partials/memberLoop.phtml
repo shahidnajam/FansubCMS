@@ -6,9 +6,6 @@
         <span style="font-weight:bold;">
             <a href="<?=$this->baseUrl()?>/group/team/detail/<?=urlencode($this->name)?>"><?=$this->name?></a>
         </span>
-        <?php if($this->active == 'no'):?>
-        <span style="font-style: italic;">(<?=$this->translate('member_inactive')?>)</span>
-        <?php endif;?>
         <br />
         <?php
         $tasks = array();

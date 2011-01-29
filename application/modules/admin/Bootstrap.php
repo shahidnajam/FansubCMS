@@ -16,6 +16,11 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Admin_Bootstrap extends Zend_Application_Module_Bootstrap {
-
+class Admin_Bootstrap extends FansubCMS_Application_Module_Bootstrap 
+{
+    public function _initModule()
+    {
+        $this->path = APPLICATION_PATH . DIRECTORY_SEPARATOR . "addons" . DIRECTORY_SEPARATOR . strtolower($this->getModuleName());
+        parent::_initModule();
+    }
 }

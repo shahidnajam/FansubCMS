@@ -25,9 +25,10 @@ class Projects_IndexController extends FansubCMS_Controller_Action {
     }
 
     public function indexAction() {
+        $this->_addDelegateType('Sorting');
         $projectsTable = Doctrine::getTable('Project');
         $projects = $projectsTable->getFrontListing();
-        $this->view->projects = $projects;
+        $this->view->projects = $this->invokeDelegate('Sorting', 'sortProjects', array($projects));
     }
 
     public function detailsAction() {

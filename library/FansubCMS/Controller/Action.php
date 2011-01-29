@@ -31,6 +31,7 @@ class FansubCMS_Controller_Action extends Zend_Controller_Action {
             $session,
             $request,
             $defaultUseRole;
+    private $_delegateHelper;
 
     /**
      * The class constructor
@@ -39,6 +40,7 @@ class FansubCMS_Controller_Action extends Zend_Controller_Action {
      * @param array $invokeArgs
      */
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
+        $this->_delegateHelper = new FansubCMS_Helper_Delegate($request->getModuleName());
         parent::__construct($request, $response, $invokeArgs);
         $this->defaultUseRole = 'fansubcms_user_custom_role_logged_in_user';
         $this->request = $request;
@@ -65,6 +67,27 @@ class FansubCMS_Controller_Action extends Zend_Controller_Action {
      */
     public function translate($key,$params = array()) {
         return $this->view->translate($key,$params);
+    }
+    
+    /**
+     * 
+     * Add a delegate to the controller/action
+     * @param string $name The name of the delegate
+     */
+    protected function _addDelegateType($name) 
+    {
+        $this->_delegateHelper->addDelegateType($name);
+    }
+    /**
+     * 
+     * Invoke a delegate
+     * @param string $name
+     * @param string $method
+     * @param array $args
+     */
+    protected function invokeDelegate($name, $method, $args) 
+    {
+        return $this->_delegateHelper->invokeDelegate($name, $method, $args);
     }
 }
 ?>

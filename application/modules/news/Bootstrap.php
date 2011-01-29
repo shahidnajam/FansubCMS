@@ -16,19 +16,7 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
 */
 
-class News_Bootstrap extends Zend_Application_Module_Bootstrap {
-    public $frontController;
-    public $settings;
+class News_Bootstrap extends FansubCMS_Application_Module_Bootstrap
+{
 
-    protected function _initModule() {
-        $this->settings = new Zend_Config_Ini(dirname(__FILE__).'/configs/module.ini');
-        $this->frontController = Zend_Controller_Front::getInstance();
-    }
-
-    protected function _initRoute() {
-        if($this->settings->routes->router != null) {
-            $router = $this->frontController->getRouter();
-            $router->addConfig($this->settings->routes->router, 'routes');
-        }
-    }
 }

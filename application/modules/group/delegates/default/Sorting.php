@@ -15,8 +15,25 @@
  *  You should have received a copy of the GNU General Public License
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
-
-class User_Bootstrap extends FansubCMS_Application_Module_Bootstrap
+class Group_Delegate_Default_Sorting
 {
-
+    public function __construct($settings, $request)
+    {
+        $this->request = $request;
+        $this->settings = $settings;
+    }
+    
+    public function sortTeam($team)
+    {
+        $active = array();
+        $inactive = array();
+        foreach($team as $member) {
+            if($member['active'] == 'yes') {
+                $active[] = $member;
+            } else {
+                $inactive[] = $member;
+            }
+        }
+        return array('active'=>$active,'inactive'=>$inactive);
+    }
 }
