@@ -109,18 +109,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         } else {
             $dbDefaultDsn = $this->databasesettings->db->dsn;
         }
-        try {
-            $conn = Doctrine_Manager::connection($dbDefaultDsn, $this->databasesettings->db->database, "defaultConnection");
-            $conn->execute("SET NAMES 'UTF8'");
-            $conn->setAttribute(Doctrine::ATTR_USE_NATIVE_ENUM, true);
-        } catch (Exception $e) {
-            $message = "This page is encountering database issues. If you are the administrator please check your settings.";
-            if($this->environmentsettings->setup || APPLICATION_ENV == 'development') {
-                $message .= "<br /><strong>Error Message:</strong> ".$e->getMessage();
-            }
-            die($message);
-        }
-
+        
+        $conn = Doctrine_Manager::connection($dbDefaultDsn, $this->databasesettings->db->database, "defaultConnection");
+        $conn->execute("SET NAMES 'UTF8'");
+        $conn->setAttribute(Doctrine::ATTR_USE_NATIVE_ENUM, true);
+        
         if (!empty($this->databasesettings->db->dbms) && $this->databasesettings->db->dbms == 'mysql') {
             $conn->setAttribute(Doctrine::ATTR_AUTOCOMMIT, false);
         }
