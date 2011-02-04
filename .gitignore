@@ -19,6 +19,10 @@
 /application/configs/environment.ini
 /application/configs/navigation.ini
 
+# ignore Frameworks in the library
+/library/Doctrine*
+/library/Zend/**
+
 # Netbeans
 /nbproject/*
 
