@@ -58,7 +58,6 @@ class FansubCMS_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abst
             if(!$config) {
                 // add the module and addon admin menus
                 $modConf = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs'. DIRECTORY_SEPARATOR . 'module.ini');
-                $modConf = array_merge($modConf,$addConf = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'addons' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs'. DIRECTORY_SEPARATOR . 'module.ini') ? $addConf : array());
                 foreach($modConf as $nav) {
                     try {
                         $nav = new Zend_Config_Ini($nav,'adminnav',true);

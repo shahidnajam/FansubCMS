@@ -18,9 +18,5 @@
 
 class Admin_Bootstrap extends FansubCMS_Application_Module_Bootstrap 
 {
-    public function _initModule()
-    {
-        $this->path = APPLICATION_PATH . DIRECTORY_SEPARATOR . "addons" . DIRECTORY_SEPARATOR . strtolower($this->getModuleName());
-        parent::_initModule();
-    }
+
 }

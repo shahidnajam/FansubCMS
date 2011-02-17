@@ -27,9 +27,7 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
     
     protected function _initModule ()
     {
-        if(empty($path)) {
-            $this->path = APPLICATION_PATH . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . strtolower($this->getModuleName());
-        }
+        $this->path = APPLICATION_PATH . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . strtolower($this->getModuleName());
         $this->settings = Zend_Registry::get('settings');
 
         $this->bootstrap("FrontController");
@@ -117,14 +115,9 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
         // there are no translations or cache is invalid - generate cache!
         $locale = $this->envSettings->locale;
         if (!$trans) {
-            $addon =   APPLICATION_PATH . '/addons/'. strtolower($this->getModuleName()) .'/locale/';
-            $module =   APPLICATION_PATH . '/modules/'. strtolower($this->getModuleName()) .'/locale/';
-            if(file_exists($addon . $locale . '.ini')) {
-                $trans = new Zend_Config_Ini($addon . $locale . '.ini');
-            } elseif(file_exists($module . $locale . '.ini')) {
+            $module = APPLICATION_PATH . '/modules/'. strtolower($this->getModuleName()) .'/locale/';
+            if(file_exists($module . $locale . '.ini')) {
                 $trans = new Zend_Config_Ini($module . $locale . '.ini');
-            } elseif(file_exists($addon . 'en.ini')) {
-                $trans = new Zend_Config_Ini($addon . 'en.ini');
             } else {
                 $trans = new Zend_Config_Ini($module . 'en.ini');
             }

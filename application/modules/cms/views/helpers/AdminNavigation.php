@@ -16,7 +16,6 @@ class FansubCMS_View_Helper_AdminNavigation extends Zend_View_Helper_Navigation 
         
         // add the module and addon admin menus
         $modConf = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs'. DIRECTORY_SEPARATOR . 'module.ini');
-        $modConf = array_merge($modConf,glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'addons' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs'. DIRECTORY_SEPARATOR . 'module.ini'));
         foreach($modConf as $nav) {
             try {
                 $nav = new Zend_Config_Ini($nav,'adminnav',true);
@@ -31,7 +30,6 @@ class FansubCMS_View_Helper_AdminNavigation extends Zend_View_Helper_Navigation 
         }
         // add necessary translations
         $modConf = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'locale'. DIRECTORY_SEPARATOR . 'navigation_'.$locale.'.ini');
-        $modConf = array_merge($modConf,glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'addons' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'locale'. DIRECTORY_SEPARATOR . 'navigation_'.$locale.'.ini'));
         foreach($modConf as $translation) {
             $trans->addTranslation($translation,$locale);
         }

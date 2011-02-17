@@ -165,7 +165,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         # set default and module controller directrories
         //  $this->frontController->setControllerDirectory($this->settings->controllers->toArray());
         $this->frontController->addModuleDirectory(APPLICATION_PATH . "/modules");
-        $this->frontController->addModuleDirectory(APPLICATION_PATH . "/addons");
         $this->frontController->removeControllerDirectory('default');
 
         # set default module
@@ -198,6 +197,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('emailSettings', $this->mailsettings);
     }
 
+    protected function _initLog()
+    {
+        $logger = new Zend_Log();
+        if(APPLICATION_ENV == 'development')
+        {
+            // just log to firebug
+            $writer = new Zend_Log_Writer_Firebug();
+        }
+    }
+    
     /**
      * init router
      * @return void
@@ -340,10 +349,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         if (!$config) {
             $config = array();
             $modules = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'module.ini');
-            $modules = array_merge($modules, $addons = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'addons' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'module.ini') ? $addons : array());
             foreach ($modules as $module) {
                 $cleanName = str_replace(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR, '', $module);
-                $cleanName = str_replace(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'addons' . DIRECTORY_SEPARATOR, '', $cleanName);
                 $cleanName = str_replace(DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'module.ini', '', $cleanName);
 
                 try {
@@ -400,7 +407,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $this->frontController->registerPlugin($debug);
         }
         # init error handler
-        $this->frontController->throwExceptions(false);
+        $this->frontController->throwExceptions(true);
         $errorhandler = new Zend_Controller_Plugin_ErrorHandler();
         $errorhandler->setErrorHandler(array('module' => 'cms', 'controller' => 'error', 'action' => 'error'));
         $this->frontController->registerPlugin($errorhandler);
