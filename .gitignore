@@ -1,17 +1,28 @@
 # Ignore all the cache files
 /application/data/cache/*
+
 # Ignore sessions - they don't need to be versioned
 /application/data/sessions/*
+
 # Captchas don't need to be versioned
 /public/images/captcha/*
+
 # We don't need to version uploaded files
 /public/upload/*
 !/public/upload/static/
 /public/upload/static/*
 !/public/upload/static/delete.me
-# Ignore addons except for gadgets because they are no core parts that should be versioned in this git repository
-/application/addons/*
-!/application/addons/gadgets/
+
+# Only allow default modules to be versioned
+/application/modules/*
+!/application/modules/admin/
+!/application/modules/cms/
+!/application/modules/gadgets/
+!/application/modules/group/
+!/application/modules/install/
+!/application/modules/news/
+!/application/modules/projects/
+!/application/modules/user/
 
 # Ignore non-dist configs
 /application/configs/database.ini

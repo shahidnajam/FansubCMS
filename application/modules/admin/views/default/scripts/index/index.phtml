@@ -1,4 +1,9 @@
 <h1><?=$this->translate('admin_headline')?></h1>
+<?php 
+$freeSpace = disk_free_space(dirname(__FILE__));
+$totalSpace = disk_total_space(dirname(__FILE__));
+$percentSpace = round($freeSpace / $totalSpace * 100, 1);
+?>
 <table class="systemInfo">
     <tr>
         <th><?=$this->translate('admin-system-environment')?></th><td><?=APPLICATION_ENV?></td>
@@ -14,6 +19,9 @@
     </tr>
     <tr>
         <th><?=$this->translate('admin-system-phpVersion')?></th><td><?=phpversion()?></td>
+    </tr>
+    <tr>
+    	<th><?=$this->translate('admin-system-diskspace')?></th><td><?=$this->filesize($freeSpace)?> / <?=$this->filesize($totalSpace)?> (<?=$percentSpace?>%)</td>
     </tr>
     <?php if($this->isAdmin): ?>
         <tr>
