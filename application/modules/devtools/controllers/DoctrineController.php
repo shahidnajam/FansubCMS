@@ -16,13 +16,13 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Admin_DevtoolsController extends FansubCMS_Controller_Action 
+class Devtools_DoctrineController extends FansubCMS_Controller_Action 
 {
     public function init()
     {
         if(APPLICATION_ENV != 'development')
         {
-            throw new Zend_Controller_Dispatcher_Exception('Invalid controller specified (devtools)');
+            throw new Zend_Controller_Dispatcher_Exception('Invalid module specified (devtools)');
             die;
         }
         $front = Zend_Controller_Front::getInstance();
@@ -49,10 +49,10 @@ class Admin_DevtoolsController extends FansubCMS_Controller_Action
     public function migrationAction()
     {
         $pdata = new stdClass();
-        $changes = Admin_Api_DoctrineTool::generateMigrations(true);
+        $changes = Devtools_Api_DoctrineTool::generateMigrations(true);
         $changeCount = 0;
 
-        $migration = Admin_Api_DoctrineTool::getMigration();
+        $migration = Devtools_Api_DoctrineTool::getMigration();
 
         $currentVersion = $migration->getCurrentVersion();
         $latestVersion = $migration->getLatestVersion();

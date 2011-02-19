@@ -1,5 +1,5 @@
 <?php
-class Admin_Api_DoctrineTool_Import_Schema extends Doctrine_Import_Schema 
+class Devtools_Api_DoctrineTool_Import_Schema extends Doctrine_Import_Schema 
 {
         private $_migrationMode = false;
         private $_migrationPrefix = "ToPrfx";
@@ -91,7 +91,7 @@ class Admin_Api_DoctrineTool_Import_Schema extends Doctrine_Import_Schema
             // Collect and map models to module
 
             $this->_classModuleMap = array();
-            $existingModels = Admin_Api_DoctrineTool::getAllDoctrineModels();
+            $existingModels = Devtools_Api_DoctrineTool::getAllDoctrineModels();
 
             foreach($existingModels as $model) {
                 $this->_mapModuleClass($model);
@@ -222,7 +222,7 @@ class Admin_Api_DoctrineTool_Import_Schema extends Doctrine_Import_Schema
         }
 
         protected function _moveClassfiles($tmpDir)  {
-            $pathfinder = Admin_Api_Pathfinder::getInstance();
+            $pathfinder = Devtools_Api_Pathfinder::getInstance();
 
             $s = DIRECTORY_SEPARATOR;
 

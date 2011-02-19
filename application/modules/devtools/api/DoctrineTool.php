@@ -1,5 +1,5 @@
 <?php
-class Admin_Api_DoctrineTool
+class Devtools_Api_DoctrineTool
 {
     private static $_pathProfile = 0;
     private static $_migrationModelPath;
@@ -22,7 +22,7 @@ class Admin_Api_DoctrineTool
     {
         $modules = array();
         $s = DIRECTORY_SEPARATOR;
-        $pathfinder = Admin_Api_Pathfinder::getInstance();
+        $pathfinder = Devtools_Api_Pathfinder::getInstance();
         $paths = $pathfinder->getAllModelPaths();
         $ret = array();
         foreach ($paths as $namespace => $path) {
@@ -82,12 +82,12 @@ class Admin_Api_DoctrineTool
             'baseClassName'        => 'FansubCMS_Doctrine_Record',
             'suffix'               => '.php'
         );
-        $pathfinder = Admin_Api_Pathfinder::getInstance();
+        $pathfinder = Devtools_Api_Pathfinder::getInstance();
         if ($migrationMode) {
             $options['generateTableClasses'] = false;
         }
         $moduleSchemas = $pathfinder->getAllSchemaPaths();
-        $import = new Admin_Api_DoctrineTool_Import_Schema();
+        $import = new Devtools_Api_DoctrineTool_Import_Schema();
         $import->setOptions($options);
         $import->setMigrationMode($migrationMode);
         $tmpPath = $migrationMode ? $pathfinder->getMigrationTempPathTo() : $pathfinder->getTempPath();
@@ -102,7 +102,7 @@ class Admin_Api_DoctrineTool
         if ($migration->getLatestVersion() > 0) {
             throw new Exception('Refusing to create an initial migration set. Migration classes already exist.');
         }
-        $pathfinder = Admin_Api_Pathfinder::getInstance();
+        $pathfinder = Devtools_Api_Pathfinder::getInstance();
         self::loadAllDoctrineModels();
         $res = Doctrine::generateMigrationsFromModels($pathfinder->getMigrationPath());
         return $res;
@@ -132,7 +132,7 @@ class Admin_Api_DoctrineTool
             throw new Exception(
                 "You can not create migrations from diff with a custom Doctrine attribute 'ATTR_SEQNAME_FORMAT'");
         }
-        $pathfinder = Admin_Api_Pathfinder::getInstance();
+        $pathfinder = Devtools_Api_Pathfinder::getInstance();
         $migrationsPath = $pathfinder->getMigrationPath();
         $initialMigration = false;
         if (!is_dir($migrationsPath)) {
@@ -184,7 +184,7 @@ class Admin_Api_DoctrineTool
     }
     public static function generateMigrationsFromDb($detectOnly = true)
     {
-        $pathfinder = Admin_Api_Pathfinder::getInstance();
+        $pathfinder = Devtools_Api_Pathfinder::getInstance();
         $migrationsPath = $pathfinder->getMigrationPath();
         $initialMigration = false;
         if (!is_dir($migrationsPath)) {
@@ -227,7 +227,7 @@ class Admin_Api_DoctrineTool
     }
     public static function getMigration($conn = null)
     {
-        $pathfinder = Admin_Api_Pathfinder::getInstance();
+        $pathfinder = Devtools_Api_Pathfinder::getInstance();
         if (is_null($conn)) {
             $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
         }

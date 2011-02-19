@@ -1,5 +1,5 @@
 <?php
-class Admin_Api_Pathfinder
+class Devtools_Api_Pathfinder
 {
     private static $_instance;
     protected $_autoloaderPaths = array();
