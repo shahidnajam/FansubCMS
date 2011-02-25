@@ -39,7 +39,7 @@ class Projects_Form_EditProjectScreenshot extends Zend_Form {
                         ->setLabel('project_admin_field_screenshot_screen');
 
         # projects
-        $table = Doctrine::getTable('Project');
+        $table = Doctrine::getTable('Projects_Model_Project');
         $project = $this->createElement('select', 'project')
                         ->setRequired(true)
                         ->addValidator('NotEmpty', true, array(

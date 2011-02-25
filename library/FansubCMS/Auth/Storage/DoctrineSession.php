@@ -26,6 +26,15 @@ class FansubCMS_Auth_Storage_DoctrineSession extends Zend_Auth_Storage_Session
 {
     protected static $_data;
     
+    public function __construct($namespace = self::NAMESPACE_DEFAULT, $member = self::MEMBER_DEFAULT)
+    {
+        /*
+         * @todo this is a dirty way to do it. Find a better way.
+         */
+        Doctrine::loadModels(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'user' . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Base');
+        parent::__construct($namespace, $member);
+    }
+    
     public function write($contents)
     {
         parent::write($contents->toArray(false));

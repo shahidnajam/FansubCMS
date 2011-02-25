@@ -16,7 +16,7 @@
         <td><?=$this->formatDate($news->created_at)?></td>
         <td><?=count($news->getComments())?></td>
         <td><?=$this->translate($news->public.'_term')?></td>
-        <td><?=$news->User->name?></td>
+        <td><?=$news->User_Model_User->name?></td>
         <td><?=$this->partial('partials/tableActions.phtml',array('id'=>$news->id))?></td>
     </tr>
         <?php $i++; endforeach;?>

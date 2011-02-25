@@ -46,7 +46,7 @@ class User_Model_User extends Base_User_Model_User {
             $team = false; // not yet implemented
         } else {
             $q = Doctrine_Query::create();
-            $q->from('User u')
+            $q->from('User_Model_User u')
                     ->where('u.show_team = ?','yes')
                     ->orderBy('u.name ASC');
             $users = $q->fetchArray();
@@ -54,8 +54,8 @@ class User_Model_User extends Base_User_Model_User {
             foreach($users as $user) {
                 $q = Doctrine_Query::create();
                 $q->select('t.name')
-                        ->from('Task t')
-                        ->leftJoin('t.UserTask ut')
+                        ->from('User_Model_Task t')
+                        ->leftJoin('t.User_Model_UserTask ut')
                         ->where('ut.user_id = ?',$user['id']);
                 $task = $q->fetchArray();
                 $user['tasks'] = $task;
@@ -108,8 +108,8 @@ class User_Model_User extends Base_User_Model_User {
 
     public function getTasks() {
         $ret = array();
-        foreach($this->UserTask as $task) {
-            $ret[] = $task->Task->id;
+        foreach($this->User_Model_UserTask as $task) {
+            $ret[] = $task->User_Model_Task->id;
         }
         return $ret;
     }
@@ -128,11 +128,11 @@ class User_Model_User extends Base_User_Model_User {
         $this->save();
         # add roles
         if(is_array($values['roles'])) {
-            foreach($this->UserRole as $role) {
+            foreach($this->User_Model_Role as $role) {
                 $role->delete();
             }
             foreach($values['roles'] as $role) {
-                $r = new UserRole;
+                $r = new User_Model_Role;
                 $r->user_id = $this->id;
                 $r->role_name = $role;
                 $r->save();
@@ -140,11 +140,11 @@ class User_Model_User extends Base_User_Model_User {
         }
         if(is_array($values['tasks'])) {
             $unlink = array();
-            foreach($this->UserTask as $task) {
+            foreach($this->User_Model_UserTask as $task) {
                 $task->delete();
             }
             foreach($values['tasks'] as $task) {
-                $ut = new UserTask;
+                $ut = new User_Model_UserTask;
                 $ut->task_id = $task;
                 $ut->user_id = $this->id;
                 $ut->save();

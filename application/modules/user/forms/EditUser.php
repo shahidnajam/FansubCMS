@@ -27,7 +27,7 @@ class User_Form_EditUser extends Zend_Form {
                 ->setAttrib('id', $insert ? 'adduser' : 'edituser');
 
         # username
-        $usernameInDbValidator = new FansubCMS_Validator_NoRecordExists('User', 'name');
+        $usernameInDbValidator = new FansubCMS_Validator_NoRecordExists('User_Model_User', 'name');
         $usernameInDbValidator->setMessages(array(
             FansubCMS_Validator_NoRecordExists::RECORD_EXISTS => 'user_form_error_user_exists'
         ));;
@@ -117,15 +117,14 @@ class User_Form_EditUser extends Zend_Form {
         # Roles
         $roles = $this->createElement('multiCheckbox', 'roles')
                 ->setLabel('user_admin_field_roles')
-                ->setValue(isset($values['UserRole']) ? $values['UserRole'] : null)
-                ->setMultiOptions(UserRole::getRoles());
-
+                ->setValue(isset($values['User_Model_Role']) ? $values['User_Model_Role'] : null)
+                ->setMultiOptions(User_Model_Role::getRoles());
         # Tasks
-        $table = Doctrine_Core::getTable('Task');
+        $table = Doctrine_Core::getTable('User_Model_Task');
         if (count($table->getTasks())) {
             $tasks = $this->createElement('multiCheckbox', 'tasks')
                     ->setLabel('user_admin_field_tasks')
-                    ->setValue(isset($values['UserTask']) ? $values['UserTask'] : null)
+                    ->setValue(isset($values['User_Model_Task']) ? $values['User_Model_Task'] : null)
                     ->setMultiOptions($table->getTasks());
         }
 

@@ -72,8 +72,8 @@ class User_AdminController extends FansubCMS_Controller_Action {
             $this->_helper->redirector->gotoSimple('index','admin','user');
         }
         $array = $u->toArray();
-        $array['UserRole'] = $u->getRoles();
-        $array['UserTask'] = $u->getTasks();
+        $array['User_Model_Role'] = $u->getRoles();
+        $array['User_Model_Task'] = $u->getTasks();
         $this->view->form = new User_Form_EditUser($array);
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates

@@ -18,8 +18,8 @@ class Projects_Model_Project extends Base_Projects_Model_Project
         if (is_null($this->_released)) {
             $pet = Doctrine::getTable('Projects_Model_Episode');
             $q = $pet->buildQueryForListing('number ASC');
-            $q->where('pe.released_at IS NOT NULL')->andWhere(
-            'pe.project_id = ?', $this->id);
+            $q->where('released_at IS NOT NULL')->andWhere(
+            'project_id = ?', $this->id);
             $this->_released = $q->fetchArray();
         }
         return $this->_released;

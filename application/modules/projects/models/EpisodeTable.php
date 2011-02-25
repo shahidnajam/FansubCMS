@@ -39,10 +39,10 @@ class Projects_Model_EpisodeTable extends Doctrine_Table
     public function getPaginator ($pid = null)
     {
         $q = $this->createQuery();
-        $q->leftJoin('Projects_Model_Project p')->orderBy(
-        'p.name ASC, number ASC, container ASC');
+        $q->leftJoin('Projects_Model_Episode.Projects_Model_Project p')
+        ->orderBy('p.name ASC, Projects_Model_Episode.number ASC, Projects_Model_Episode.container ASC');
         if (! empty($pid)) {
-            $q->where('project_id = ?', $pid);
+            $q->where('Projects_Model_Episode.project_id = ?', $pid);
         }
         $adapter = new FansubCMS_Paginator_Adapter_Doctrine($q);
         return new Zend_Paginator($adapter);
