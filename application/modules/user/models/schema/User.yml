@@ -1,6 +1,4 @@
-detect_relations: true
-
-User:
+User_Model_User:
     tableName: users
     actAs: [Timestampable]
     columns:
@@ -47,7 +45,7 @@ User:
        collate: utf8_unicode_ci
        charset: utf8
 
-UserRole:
+User_Model_Role:
     tableName: user_roles
     columns:
         user_id:
@@ -60,7 +58,10 @@ UserRole:
             length: 255
             notnull: true
     relations:
-        User:
+        User_Model_User:
+            local: user_id
+            foreign: id
+            type: one
             onDelete: CASCADE
             onUpdate: CASCADE
     options:
@@ -68,7 +69,7 @@ UserRole:
        collate: utf8_unicode_ci
        charset: utf8
 
-Task:
+User_Model_Task:
     tableName: tasks
     columns:
         id:
@@ -85,7 +86,7 @@ Task:
         collate: utf8_unicode_ci
         charset: utf8
 
-UserTask:
+User_Model_UserTask:
     tableName: user_tasks
     columns:
         task_id:
@@ -97,10 +98,16 @@ UserTask:
             primary: true
             notnull: true
     relations:
-        User:
+        User_Model_User:
+            local: user_id
+            foreign: id
+            type: one
             onDelete: CASCADE
             onUpdate: CASCADE
-        Task:
+        User_Model_Task:
+            local: task_id
+            foreign: id
+            type: one
             onDelete: CASCADE
             onUpdate: CASCADE
     options:

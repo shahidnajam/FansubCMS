@@ -36,8 +36,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     $environmentsettings,
     $routes,
     $layout,
-    $cacheManager,
-    $acl;
+    $cacheManager;
 
 
     /**
@@ -124,22 +123,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $manager->setAttribute('model_loading', 'conservative');
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         $manager->setAttribute(Doctrine::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
-
-        # if theres no file within the directory, Doctrine will halt. So, we check first
-        # maybe this can be deleted later on
-        $phpFileCount = 0;
-        $fhandle = opendir(APPLICATION_PATH . $this->settings->doctrine->models->path);
-        while (false != ($file = readdir($fhandle))) {
-            if (strpos($file, ".php") != false) {
-                $phpFileCount++;
-            }
-        }
-        if ($phpFileCount > 0) {
-            # just not created for this version yet
-            Doctrine::loadModels(APPLICATION_PATH . $this->settings->doctrine->models->path);
-            # application.ini does now the include for the base models
-            //Doctrine::loadModels(APPLICATION_PATH . $this->settings->doctrine->models->generated);
-        }
     }
 
     /**
@@ -338,53 +321,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
 
     /**
-     * init acl
-     * @return void
-     */
-    protected function _initAcl()
-    {
-        $cm = $this->cacheManager;
-        $cache = $cm->getCache('FansubCMS');
-        $config = $cache->load('Acl_Settings');
-        if (!$config) {
-            $config = array();
-            $modules = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'module.ini');
-            foreach ($modules as $module) {
-                $cleanName = str_replace(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR, '', $module);
-                $cleanName = str_replace(DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'module.ini', '', $cleanName);
-
-                try {
-                    $ini = new Zend_Config_Ini($module, 'acl');
-                    $config[$cleanName] = $ini->toArray();
-                } catch (Zend_Config_Exception $e) {
-                    // there is just no config or no acl block
-                }
-            }
-            $cache->save($config);
-        }
-        $acl = new FansubCMS_Acl();
-        foreach ($config as $options) {
-            $acl->setOptions($options);
-        }
-        if (Zend_Auth::getInstance()->hasIdentity()) {
-            $ident = Zend_Auth::getInstance()->getIdentity();
-
-            $role = new Zend_Acl_Role('fansubcms_user_custom_role_logged_in_user');
-            $inherit = $ident->getRoles();
-
-            foreach ($inherit as $key => $value) {
-                if (!$acl->hasRole($value)) {
-                    unset($inherit[$key]);
-                }
-            }
-
-            $acl->addRole($role, $inherit);
-        }
-        Zend_Registry::set('Zend_Acl', $acl);
-        $this->acl = $acl;
-    }
-
-    /**
      * init plugins
      * @return void
      */
@@ -427,10 +363,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $layoutVersionPlugin = new FansubCMS_Controller_Plugin_LayoutVersion($layoutAdd);
         $this->frontController->registerPlugin($layoutVersionPlugin);
-
-        # not-logged-in-so-go-to-login plugin
-        $aclPlugin = new FansubCMS_Controller_Plugin_Acl(Zend_Auth::getInstance(), $this->acl);
-        $this->frontController->registerPlugin($aclPlugin);
 
         # the navigation plugin
         $navPlugin = new FansubCMS_Controller_Plugin_Navigation();

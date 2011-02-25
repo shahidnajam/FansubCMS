@@ -18,7 +18,7 @@
 
 class Projects_AdminController extends FansubCMS_Controller_Action {
     public function indexAction() {
-        $table = Doctrine_Core::getTable('Project');
+        $table = Doctrine_Core::getTable('Projects_Model_Project');
         $this->view->projects = $table->findAll()->toArray();
         if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'edit'))
             $this->session->tableActions['project_edit'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'edit');
@@ -36,7 +36,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         if($req->isPost()) { // there are profile updates
             if($this->view->form->isValid($_POST)) {
                 $values = $this->view->form->getValues();
-                $p = new Project;
+                $p = new Projects_Model_Project;
                 $p->updateProject($values);
                 $this->session->message = $this->translate('projects_admin_add_success');
                 $this->_helper->redirector->gotoSimple('index','admin','projects');
@@ -48,7 +48,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
 
     public function deleteAction() {
         $id = $this->request->getParam('id');
-        $table = Doctrine_Core::getTable('Project');
+        $table = Doctrine_Core::getTable('Projects_Model_Project');
         if($id) {
             $p = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
@@ -68,7 +68,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
 
     public function editAction() {
         $id = $this->getRequest()->getParam('id');
-        $table = Doctrine_Core::getTable('Project');
+        $table = Doctrine_Core::getTable('Projects_Model_Project');
         $p = $table->findOneBy('id', $id ? $id : 0);
         if(!$p) {
             $this->session->message = $this->translate('project_not_existent');
@@ -94,7 +94,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         $id = $this->request->getParam('id');
 
         if(!empty($id)) {
-            $project = Doctrine_Query::create()->from('Project p')->where('p.id = ?', $id)->fetchOne();
+            $project = Doctrine_Query::create()->from('Projects_Model_Project p')->where('p.id = ?', $id)->fetchOne();
             $this->view->pageTitle = sprintf($this->translate('project_admin_episodes_headline'),$project->name);
             $this->view->all = false;
         } else {
@@ -102,7 +102,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
             $this->view->all = true;
         }
 
-        $table = Doctrine_Core::getTable('ProjectEpisode');
+        $table = Doctrine_Core::getTable('Projects_Model_Episode');
         $paginator = $table->getPaginator(empty($id) ? null : $id);
         if(!$paginator) {
             $this->_helper->redirector->gotoSimple('index','admin','projects');
@@ -123,7 +123,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         if($req->isPost()) { // there are profile updates
             if($this->view->form->isValid($_POST)) {
                 $values = $this->view->form->getValues();
-                $p = new ProjectEpisode();
+                $p = new Projects_Model_Episode();
                 $p->updateEpisode($values);
                 $this->session->message = $this->translate('project_admin_addepisode_success');
                 $this->_helper->redirector->gotoSimple('episodes','admin','projects');
@@ -135,7 +135,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
 
     public function deleteepisodeAction() {
         $id = $this->request->getParam('id');
-        $table = Doctrine_Core::getTable('ProjectEpisode');
+        $table = Doctrine_Core::getTable('Projects_Model_Episode');
         if($id) {
             $p = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
@@ -155,7 +155,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
 
     public function editepisodeAction() {
         $id = $this->getRequest()->getParam('id');
-        $table = Doctrine_Core::getTable('ProjectEpisode');
+        $table = Doctrine_Core::getTable('Projects_Model_Episode');
         $p = $table->findOneBy('id', $id ? $id : 0);
         if(!$p) {
             $this->session->message = $this->translate('project_episode_not_existent');
@@ -176,7 +176,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
     }
 
     public function screenshotsAction() {
-        $table = Doctrine_Core::getTable('ProjectScreenshot');
+        $table = Doctrine_Core::getTable('Projects_Model_Screenshot');
         $this->view->screenshots = $table->getPaginator();
         $page = $this->getRequest()->getParam('page');
         $this->view->screenshots->setItemCountPerPage(25);
@@ -194,7 +194,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
             if($this->view->form->isValid($req->getPost())) {
                 $values = $this->view->form->getValues();
                 $values['file'] = $this->view->form->getElement('screen');
-                $p = new ProjectScreenshot();
+                $p = new Projects_Model_Screenshot();
                 $p->updateScreenshot($values);
                 $this->session->message = $this->translate('project_admin_addscreenshot_success');
                 $this->session->message_type = 'message';
@@ -208,7 +208,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
 
     public function deletescreenshotAction() {
         $id = $this->request->getParam('id');
-        $table = Doctrine_Core::getTable('ProjectScreenshot');
+        $table = Doctrine_Core::getTable('Projects_Model_Screenshot');
         if($id) {
             $p = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
@@ -228,7 +228,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
 
     public function editscreenshotAction() {
         $id = $this->getRequest()->getParam('id');
-        $table = Doctrine_Core::getTable('ProjectScreenshot');
+        $table = Doctrine_Core::getTable('Projects_Model_Screenshot');
         $p = $table->findOneBy('id', $id ? $id : 0);
         if(!$p) {
             $this->session->message = $this->translate('project_screenshot_not_existent');

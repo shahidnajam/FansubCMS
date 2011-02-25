@@ -30,7 +30,7 @@ class Admin_AuthController extends FansubCMS_Controller_Action {
         if($req->isPost()) {
             if($form->isValid($_POST)) {
                 $values = $form->getValues();
-                if(User::login($values['username'],$values['password'])->isValid()) {
+                if(User_Model_User::login($values['username'],$values['password'])->isValid()) {
                     return $this->_helper->redirector('index','index','admin');
                 }
            }

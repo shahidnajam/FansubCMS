@@ -15,13 +15,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
-class Gadgets_ExampleController extends FansubCMS_Controller_Action {
+class Gadgets_ExampleController extends FansubCMS_Controller_Action
+{
     //put your code here
-    public function testAction() {
-        
-    }
-
-    public function test2Action() {
-        
-    }
+    public function testAction ()
+    {}
+    public function test2Action ()
+    {}
 }

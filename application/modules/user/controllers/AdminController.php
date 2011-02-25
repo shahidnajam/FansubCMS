@@ -18,7 +18,7 @@
 
 class User_AdminController extends FansubCMS_Controller_Action {
     public function indexAction() {
-        $table = Doctrine_Core::getTable('User');
+        $table = Doctrine_Core::getTable('User_Model_User');
         $this->view->users = $table->findAll()->toArray();
         if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'edit'))
             $this->session->tableActions['user_edit'] = array('module' => 'user', 'controller' => 'admin', 'action' => 'edit');
@@ -45,7 +45,7 @@ class User_AdminController extends FansubCMS_Controller_Action {
 
     public function deleteAction() {
         $id = $this->request->getParam('id');
-        $table = Doctrine_Core::getTable('User');
+        $table = Doctrine_Core::getTable('User_Model_User');
         if($id) {
             $user = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
@@ -65,7 +65,7 @@ class User_AdminController extends FansubCMS_Controller_Action {
 
     public function editAction() {
         $id = $this->getRequest()->getParam('id');
-        $table = Doctrine_Core::getTable('User');
+        $table = Doctrine_Core::getTable('User_Model_User');
         $u = $table->findOneBy('id', $id ? $id : 0);
         if(!$u) {
             $this->session->message = $this->translate('user_not_existent');
@@ -106,7 +106,7 @@ class User_AdminController extends FansubCMS_Controller_Action {
     }
 
     public function tasksAction() {
-        $table = Doctrine_Core::getTable('Task');
+        $table = Doctrine_Core::getTable('User_Model_Task');
         $this->view->tasks = $table->findAll()->toArray();
         if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'taskedit'))
             $this->session->tableActions['user_edit_task'] = array('module' => 'user', 'controller' => 'admin', 'action' => 'edittask');
@@ -120,7 +120,7 @@ class User_AdminController extends FansubCMS_Controller_Action {
         if($req->isPost()) { // there are profile updates
             if($this->view->form->isValid($_POST)) {
                 $values = $this->view->form->getValues();
-                $t = new Task;
+                $t = new User_Model_Task;
                 $t->name = $values['taskname'];
                 $t->save();
                 $this->session->message = $this->translate('user_admin_taskadd_success');
@@ -133,7 +133,7 @@ class User_AdminController extends FansubCMS_Controller_Action {
 
     public function deletetaskAction() {
         $id = $this->request->getParam('id');
-        $table = Doctrine_Core::getTable('Task');
+        $table = Doctrine_Core::getTable('User_Model_Task');
         if($id) {
             $t = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
@@ -153,7 +153,7 @@ class User_AdminController extends FansubCMS_Controller_Action {
 
     public function edittaskAction() {
         $id = $this->getRequest()->getParam('id');
-        $table = Doctrine_Core::getTable('Task');
+        $table = Doctrine_Core::getTable('User_Model_Task');
         $t = $table->findOneBy('id', $id ? $id : 0);
         if(!$t) {
             $this->session->message = $this->translate('user_admin_task_not_existent');

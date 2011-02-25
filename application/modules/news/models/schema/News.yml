@@ -1,0 +1,85 @@
+News_Model_News:
+    tableName: news
+    actAs: [Timestampable]
+    columns:
+       id:
+            type: integer
+            primary: true
+            autoincrement: true
+            notnull: true
+       user_id:
+            type: integer
+            notnull: true
+       title:
+            type: string
+            length: 255
+       text:
+            type: string
+            length: 60000
+       public:
+            type: enum
+            values: ['yes','no']
+            default: 'no'
+            notnull: true
+    relations:
+        User_Model_User:
+            local: user_id
+            foreign: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+    options:
+       type: InnoDB
+       collate: utf8_unicode_ci
+       charset: utf8
+
+News_Model_Comment:
+    tableName: news_comments
+    actAs: [Timestampable]
+    columns:
+        id:
+            type: integer
+            primary: true
+            autoincrement: true
+            notnull: true
+        news_id:
+            type: integer
+            notnull: true
+        author:
+            type: string
+            length: 32
+        email:
+            type: string
+            length: 255
+        comment:
+            type: string
+            length: 60000
+            notnull: true
+        url:
+            type: string
+            length: 255
+            notnull: true
+        spam:
+            type: enum
+            values: ['yes','no']
+            default: 'no'
+            notnull: true
+        visible:
+            type: enum
+            values: ['yes','no']
+            default: 'no'
+            notnull: true
+        ip:
+            type: string
+            length: 64
+            notnull: true
+    relations:
+        News_Model_News:
+            local: news_id
+            foreign: id
+            type: one
+            onDelete: CASCADE
+            onUpdate: CASCADE
+    options:
+       type: InnoDB
+       collate: utf8_unicode_ci
+       charset: utf8

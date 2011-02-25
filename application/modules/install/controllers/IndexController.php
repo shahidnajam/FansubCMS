@@ -33,7 +33,7 @@ class Install_IndexController extends FansubCMS_Controller_Action {
             $this->view->databaseInitNeeded = false;
         } else {
             $this->view->databaseUpdateNeeded = false;
-            $t = Doctrine::getTable('User');
+            $t = Doctrine::getTable('User_Model_User');
             try {
                 $t->count();
                 $this->view->databaseInitNeeded = false;

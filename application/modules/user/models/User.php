@@ -26,7 +26,7 @@
  * @author     FansubCMS Developer <##EMAIL##>
  * @version    SVN: $Id: Builder.php 7200 2010-02-21 09:37:37Z beberlei $
  */
-class User_Model_User extends BaseModelUser {
+class User_Model_User extends Base_User_Model_User {
     /**
      * sets the users password to its SHA256 hash
      * @param string $pass
@@ -100,7 +100,7 @@ class User_Model_User extends BaseModelUser {
 
     public function getRoles() {
         $ret = array();
-        foreach($this->UserRole as $role) {
+        foreach($this->User_Model_Role as $role) {
             $ret[] = $role->role_name;
         }
         return $ret;

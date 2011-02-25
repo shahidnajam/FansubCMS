@@ -43,6 +43,12 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
     protected function _initModuleAutoload ()
     {
         $this->bootstrap('module');
+        
+        // base model loading
+        if(is_dir($this->path . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Base')) {
+            Doctrine::loadModels($this->path . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Base');
+        }
+        
         $options = array(
         	'namespace' => ucfirst(strtolower($this->getModuleName())), 
         	'basePath' => $this->path
@@ -55,12 +61,12 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
             	'namespace' => "Api"
             ), 
             'baseDelegate' => array(
-                    'path'      => 'delegates' . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR,
-                    'namespace' => 'Delegate_Default'
+                'path'      => 'delegates' . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR,
+                'namespace' => 'Delegate_Default'
             ),
             'delegate' => array(
-                    'path'      => 'delegates' . DIRECTORY_SEPARATOR . $this->envSettings->page->layout . DIRECTORY_SEPARATOR,
-                    'namespace' => 'Delegate_' . ucfirst($this->envSettings->page->layout)
+                'path'      => 'delegates' . DIRECTORY_SEPARATOR . $this->envSettings->page->layout . DIRECTORY_SEPARATOR,
+                'namespace' => 'Delegate_' . ucfirst($this->envSettings->page->layout)
             ),
         );
         $this->autoloader->addResourceTypes($options);

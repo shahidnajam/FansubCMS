@@ -20,20 +20,20 @@ class Projects_IndexController extends FansubCMS_Controller_Action {
 
     public function init() {
         parent::init();
-        $projectsTable = Doctrine::getTable('Project');
+        $projectsTable = Doctrine::getTable('Projects_Model_Project');
         $this->view->quickSelect = $projectsTable->getArrayListing();
     }
 
     public function indexAction() {
         $this->_addDelegateType('Sorting');
-        $projectsTable = Doctrine::getTable('Project');
+        $projectsTable = Doctrine::getTable('Projects_Model_Project');
         $projects = $projectsTable->getFrontListing();
         $this->view->projects = $this->invokeDelegate('Sorting', 'sortProjects', array($projects));
     }
 
     public function detailsAction() {
         $name = urldecode($this->getRequest()->getParam('project'));
-        $project = Doctrine::getTable('Project');
+        $project = Doctrine::getTable('Projects_Model_Project');
         $this->view->projectName = $name;
         $this->view->project = $project->findOneBy('name', $name);
     }

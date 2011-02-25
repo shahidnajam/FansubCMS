@@ -1,54 +1,84 @@
 <p>
-    <table border="1" cellpadding="3">
-        <tr>
-            <td rowspan="2">Versions</td>
-            <td>Migration scripts</td>
-            <td><?=$this->data->latestVersion?></td>
-        </tr>
-        <tr>
-            <td>Database</td>
-            <td><?=$this->data->currentVersion?></td>
-        </tr>
-    </table>
+<table border="1" cellpadding="3">
+	<tr>
+		<td rowspan="2">Versions</td>
+		<td>Migration scripts</td>
+		<td><?=$this->data->latestVersion?></td>
+	</tr>
+	<tr>
+		<td>Database</td>
+		<td><?=$this->data->currentVersion?></td>
+	</tr>
+</table>
 <p>
-
 <table border="1" cellpadding="3">
 	<tr>
 		<td>YAML</td>
-		<? if($this->data->hasChanges): ?>
+		<?php
+if ($this->data->hasChanges) :
+    ?>
 		<td>There are changes</td>
 		<td>
-			<? if(!$this->data->migrationNeeded): ?>
-				<a href="/devtools/doctrine/generatemigrations">List changes, generate migrations</a><br/>
-			<? else: ?>
+			<?php
+    if (! $this->data->migrationNeeded) :
+        ?>
+				<a href="/devtools/doctrine/generatemigrations">List changes,
+		generate migrations</a><br />
+	<?php		
+     else :
+        ?>
 				Please migrate databse first.
-			<? endif; ?>
+			
+    <?php 
+    endif;
+    ?>
 		</td>
-		<? else: ?>
+	<?php	
+ else :
+    ?>
 		<td>OK</td>
 		<td style="color: #CCCCCC;">List changes, generate migrations</td>
-		<? endif; ?>
+		
+<?php 
+endif;
+?>
 	</tr>
 	<tr>
-		<td>Datenbank</td>
-		<? if($this->data->migrationNeeded): ?>
+		<td>Database</td>
+		<?php
+if ($this->data->migrationNeeded) :
+    ?>
 			<td>Migration needed (current version: <?=$this->data->currentVersion?> , latest version: <?=$this->data->latestVersion?>)</td>
-			<td><a href="/devtools/doctrine/migrate">Datenbank Migrieren</a></td>
-		<? else: ?>
+		<td><a href="/install/update">Migrate database</a></td>
+	<?php	
+ else :
+    ?>
 			<td>OK</td>
-			<td style="color: #CCCCCC;">Migrate database</td>
-		<? endif; ?>
+		<td style="color: #CCCCCC;">Migrate database</td>
+		
+<?php
+endif;
+?>
 	</tr>
 	<tr>
 		<td>Models</td>
-		<? if($this->data->hasChanges): ?>
+		<?php
+if ($this->data->hasChanges) :
+    ?>
 			<td>There are changes</td>
-			<td><a href="/devtools/doctrine/generatemodels/?ref=migration&submit=1">Generate models</a></td>
-		<? else: ?>
+		<td><a
+			href="/devtools/doctrine/generatemodels/?ref=migration&submit=1">Generate
+		models</a></td>
+	<?php	
+ else :
+    ?>
 			<td>OK</td>
-			<td style="color: #CCCCCC;">Generate models</td>
-		<? endif; ?>
+		<td style="color: #CCCCCC;">Generate models</td>
+		
+<?php 
+endif;
+?>
 	</tr>
-	
+
 
 </table>

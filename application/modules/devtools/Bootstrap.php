@@ -15,10 +15,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
-
-class Devtools_Bootstrap extends FansubCMS_Application_Module_Bootstrap 
+class Devtools_Bootstrap extends FansubCMS_Application_Module_Bootstrap
 {
-    protected function _initI18n()
+    protected function _initI18n ()
     {
         // does not have any ;)
     }

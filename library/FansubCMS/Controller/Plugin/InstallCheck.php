@@ -30,7 +30,7 @@ class FansubCMS_Controller_Plugin_InstallCheck extends Zend_Controller_Plugin_Ab
             return;
         }
         # check whether the cms is installed or not
-        $t = Doctrine::getTable('User');
+        $t = Doctrine::getTable('User_Model_User');
         try {
             $t->count();
             $installed = true;
