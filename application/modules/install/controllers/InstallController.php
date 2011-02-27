@@ -59,7 +59,7 @@ class Install_InstallController extends FansubCMS_Controller_Action {
                         $user->setPassword($values['password1']);
                         $user->email = $values['email'];
                         $user->save();
-                        $ur = new UserRole();
+                        $ur = new User_Model_Role();
                         $ur->User = $user;
                         $ur->role_name = 'admin_admin';
                         $ur->save();
