@@ -71,9 +71,7 @@ class Devtools_Api_DoctrineTool
      */
     public function __destruct ()
     {
-    /*    $this->_rrmdir($this->getToPath());
-        $this->_rrmdir($this->getFromPath());
-        $this->_rrmdir($this->getTempPath());*/
+        $this->_rrmdir($this->getTempPath());
     }
     
     /*
