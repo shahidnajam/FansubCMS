@@ -54,7 +54,7 @@ class Install_InstallController extends FansubCMS_Controller_Action {
                 if($this->request->isPost()) {
                     if($this->view->form->isValid($_POST)) {
                         $values = $this->view->form->getValues();
-                        $user = new User;
+                        $user = new User_Model_User;
                         $user->name = $values['username'];
                         $user->setPassword($values['password1']);
                         $user->email = $values['email'];
