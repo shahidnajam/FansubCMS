@@ -46,9 +46,10 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
     public function migrationAction ()
     {
         $pdata = new stdClass();
-        $changes = Devtools_Api_DoctrineTool::generateMigrations(true);
+        $api = new Devtools_Api_DoctrineTool();
+        $changes = $api->generateMigration(true);
         $changeCount = 0;
-        $migration = Devtools_Api_DoctrineTool::getMigration();
+        $migration = $api->getMigration();
         $currentVersion = $migration->getCurrentVersion();
         $latestVersion = $migration->getLatestVersion();
         $pdata->migrationNeeded = ($latestVersion > $currentVersion);
@@ -71,12 +72,13 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
     
     public function generatemigrationsAction ()
     {
+        $api = new Devtools_Api_DoctrineTool();
         $pdata = new stdClass();
         $this->view->title = "Generate Migration";
         $generate = ($this->getRequest()->getParam('generate', 0) == 1);
         $pdata->generate = $generate;
         if (! $generate) {
-            $changes = Devtools_Api_DoctrineTool::generateMigrations(true);
+            $changes = $api->generateMigration(true);
             $migrationAllowed = true;
             $changeCount = 0;
             foreach ($changes as $changeType => $arr) {
@@ -89,7 +91,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
             $pdata->changeCount = $changeCount;
             $pdata->migrationAllowed = $migrationAllowed;
         } else {
-            Devtools_Api_DoctrineTool::generateMigrations(false);
+            $api->generateMigration(false);
         }
         $this->view->partialData = $pdata;
         $this->_forward('index');

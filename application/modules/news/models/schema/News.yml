@@ -1,6 +1,7 @@
 News_Model_News:
     tableName: news
-    actAs: [Timestampable]
+    actAs: 
+        Timestampable:
     columns:
        id:
             type: integer

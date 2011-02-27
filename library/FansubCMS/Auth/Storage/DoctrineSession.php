@@ -28,10 +28,6 @@ class FansubCMS_Auth_Storage_DoctrineSession extends Zend_Auth_Storage_Session
     
     public function __construct($namespace = self::NAMESPACE_DEFAULT, $member = self::MEMBER_DEFAULT)
     {
-        /*
-         * @todo this is a dirty way to do it. Find a better way.
-         */
-        Doctrine::loadModels(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'user' . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Base');
         parent::__construct($namespace, $member);
     }
     
@@ -41,13 +37,12 @@ class FansubCMS_Auth_Storage_DoctrineSession extends Zend_Auth_Storage_Session
     }
     
     public function read()
-    {
+    {        
         $objArr = parent::read();
         if(empty(self::$_data)) {
             $table = Doctrine::getTable('User_Model_User');
             self::$_data = $table->findOneBy('id',$objArr['id']);
         }        
         return self::$_data;
-        
     }
 }

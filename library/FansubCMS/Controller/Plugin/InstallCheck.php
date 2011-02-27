@@ -24,8 +24,7 @@ class FansubCMS_Controller_Plugin_InstallCheck extends Zend_Controller_Plugin_Ab
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request) 
     {
-        
-        if($this->getRequest()->getModuleName() == 'install') {
+        if($this->getRequest()->getModuleName() == 'install' || $this->getRequest()->getModuleName() == 'devtools') {
             # we don't need to check while we are in the installer itself
             return;
         }
