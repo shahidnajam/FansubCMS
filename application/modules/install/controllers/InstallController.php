@@ -33,7 +33,7 @@ class Install_InstallController extends FansubCMS_Controller_Action {
             if($this->request->isPost()) {
                 $submit = $this->request->getParam('yes');
                 if(!empty($submit)) {
-                    Install_Api_DoctrineTool::getInstance()->createTablesFromModels();
+                    Install_Api_DoctrineTool::getInstance()->createTablesFromArray();
                     Install_Api_Migration::getInstance()->setCurrentVersion(Install_Api_Migration::getInstance()->getLatestVersion()); // we are on the top atm
                     $this->_helper->redirector->gotoSimple('createuser','install','install');
                 } else {

@@ -103,7 +103,7 @@ class Install_Api_DoctrineTool
      * Initialize the database
      * @return void
      */
-    public function createTablesFromModels()
+    public function createTablesFromArray()
     {
         $models = $this->_getModels();
         Doctrine::createTablesFromArray($models);
@@ -116,7 +116,7 @@ class Install_Api_DoctrineTool
     
     /**
      * 
-     * Copies all models to $path
+     * Get an array of all model class names
      * @return array
      */
     protected function _getModels ()
@@ -129,7 +129,17 @@ class Install_Api_DoctrineTool
         foreach($models as $model) {
             $filename = str_replace($this->getModulePath() . DIRECTORY_SEPARATOR, '', $model);
             $filenameParts = explode(DIRECTORY_SEPARATOR, $filename);
-            $classNames[] = ucfirst($filenameParts[0]).'_Model_'.str_replace('.php', '', $filenameParts[2]);
+            $className = ucfirst($filenameParts[0]).'_Model_'.str_replace('.php', '', $filenameParts[2]);
+            
+            if(!class_exists($className)) {
+                // can't be an doctrine model
+                continue;
+            }
+            
+            if(in_array('FansubCMS_Doctrine_Record', class_parents($className))) {
+                // ignore models which are not doctrine models
+                $classNames[] = $className;
+            }
         }
         
         return $classNames;
