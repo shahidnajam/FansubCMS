@@ -90,7 +90,7 @@ class News_AdminController extends FansubCMS_Controller_Action {
         if($req->isPost()) { // there are profile updates
             if($this->view->form->isValid($_POST)) {
                 $values = $this->view->form->getValues();
-                $n = new News;
+                $n = new News_Model_News;
                 $n->title = $values['title'];
                 $n->text = $values['text'];
                 $public = $values['public'] == 'yes' ? 'yes' : 'no';

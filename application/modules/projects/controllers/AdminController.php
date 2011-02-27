@@ -38,10 +38,10 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
                 $values = $this->view->form->getValues();
                 $p = new Projects_Model_Project;
                 $p->updateProject($values);
-                $this->session->message = $this->translate('projects_admin_add_success');
+                $this->session->message = $this->translate('project_admin_add_success');
                 $this->_helper->redirector->gotoSimple('index','admin','projects');
             } else {
-                $this->view->message = $this->translate('projects_admin_add_failed');
+                $this->view->message = $this->translate('project_admin_add_failed');
             }
         }
     }
@@ -212,7 +212,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         if($id) {
             $p = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
-            $this->view->confirmation = sprintf($this->translate('project_admin_deletescreenshot_confirmation'), $p->Project->name, $p->screenshot);
+            $this->view->confirmation = sprintf($this->translate('project_admin_deletescreenshot_confirmation'), $p->Projects_Model_Project->name, $p->screenshot);
             if($this->request->getParam('yes') && $p) {
                 $p->delete();
                 $this->session->message = $this->translate('project_admin_deletescreenshot_success');

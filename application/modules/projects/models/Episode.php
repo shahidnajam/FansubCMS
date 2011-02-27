@@ -20,6 +20,13 @@ class Projects_Model_Episode extends Base_Projects_Model_Episode
         $q = Doctrine_Query::create();
         $q->from('User_Model_User u')->where('u.id = ?', $this->updated_by);
         $u = $q->fetchOne();
+
+        if(!$u) {
+            $this->set('updated_by', new Doctrine_Null());
+            $this->save();
+            return false; // user seems to be deleted
+        }
+        
         return $u->name;
     }
     public function updateEpisode ($values)

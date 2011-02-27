@@ -32,11 +32,10 @@ class User_AdminController extends FansubCMS_Controller_Action {
         if($req->isPost()) { // there are profile updates
             if($this->view->form->isValid($_POST)) {
                 $values = $this->view->form->getValues();
-                $u = new User;
+                $u = new User_Model_User;
                 $u->updateProfile($values);
                 $this->session->message = $this->translate('user_admin_add_success');
                 $this->_helper->redirector->gotoSimple('index','admin','user');
-                $this->view->form = new News_Form_EditNews(null,true);
             } else {
                 $this->view->message = $this->translate('user_admin_add_failed');
             }
