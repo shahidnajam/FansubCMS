@@ -29,6 +29,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
         $this->_helper->layout()->disableLayout();
         set_time_limit(0);
     }
+    
     public function preDispatch ()
     {
         $this->view->partialName = $this->getRequest()->getParam('action');
@@ -43,6 +44,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
             $this->view->showMenu = true;
         }
     }
+    
     public function migrationAction ()
     {
         $pdata = new stdClass();
@@ -55,7 +57,6 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
         $pdata->migrationNeeded = ($latestVersion > $currentVersion);
         $pdata->currentVersion = $currentVersion;
         $pdata->latestVersion = $latestVersion;
-        // FirePHP_Init::init()->fb($pdata);
         foreach ($changes as $changeType => $arr) {
             $changeCount += count($arr);
         }
@@ -120,7 +121,77 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
         }
     }
     
-    public function setmigrationversionAction() {
+    public function fixtureAction ()
+    {
+        $pdata = new stdClass();
+        $api = new Devtools_Api_DoctrineTool();
+        
+        $fixtures = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'resource' . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . '*.yml');
+        if(count($fixtures)) {
+            $pdata->hasFixtures = true;
+        } else {
+            $pdata->hasFixtures = false;
+        }
+        
+        $this->view->partialData = $pdata;
+        $this->_forward('index');
+    }
+    
+    public function importAction()
+    {
+        $this->view->partialData = new stdClass();
+        $this->view->title = "Import fixtures";
+        $api = new Devtools_Api_DoctrineTool();
+        $submit = $this->getRequest()->getParam('submit', NULL);
+        if (is_null($submit)) {
+            $this->view->partialData->state = 1;
+            $this->_forward('index');
+            return;
+        }
+        $append = $this->request->getParam('append', false);
+        $append = $append ? true : false;
+        $this->view->partialData->append = $append;
+        $this->view->partialData->state = 2;
+        $api->importFixtures(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'resource' . DIRECTORY_SEPARATOR . 'fixtures', $append);
+        $this->view->title = "Import fixtures";
+        if($append) {
+            $this->view->message = "Fixtures were appended to existing database content.";
+        } else {
+            $this->view->message = "Database purged and fixtures imported.";
+        }
+        $ref = $this->getRequest()->getParam('ref', null);
+        if ($ref == 'fixture') {
+            $this->_forward('fixtrue');
+        } else {
+            $this->_forward('index');
+        }
+    }
+    
+    public function dumpAction()
+    {
+        $this->view->partialData = new stdClass();
+        $this->view->title = "Dump fixtures";
+        $api = new Devtools_Api_DoctrineTool();
+        $submit = $this->getRequest()->getParam('submit', NULL);
+        if (is_null($submit)) {
+            $this->view->partialData->state = 1;
+            $this->_forward('index');
+            return;
+        }
+        $this->view->partialData->state = 2;
+        $api->exportFixtures(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'resource' . DIRECTORY_SEPARATOR . 'fixtures');
+        $this->view->title = "Dump fixtures";
+        $this->view->message = "Fixtures were dumped.";
+        $ref = $this->getRequest()->getParam('ref', null);
+        if ($ref == 'fixture') {
+            $this->_forward('fixtrue');
+        } else {
+            $this->_forward('index');
+        }
+    }
+    
+    public function setmigrationversionAction() 
+    {
         $this->view->title = "Set the migration version of the databse";
         
         $version = $this->getRequest()->getParam('version', null);

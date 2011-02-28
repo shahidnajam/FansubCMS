@@ -255,9 +255,60 @@ class Devtools_Api_DoctrineTool
         $this->setMigrationVersion($this->getMigration()->getLatestVersion());
     }
     
+    /**
+     * 
+     * Export fixture files to $path
+     * @param string $path
+     * @return void
+     */
+    public function exportFixtures($path)
+    {
+        $this->_loadDoctrineModels();
+        Doctrine::dumpData($path, true);
+    }
+    
+    /**
+     * 
+     * Import fixtures from $path. If $append is true the database will not be purged 
+     * before importing.
+     * @param string $path
+     * @param boolean $append
+     * @return void
+     */
+    public function importFixtures($path, $append = false)
+    {
+        $this->_loadDoctrineModels();
+        Doctrine::loadData($path, $append);
+    }
+    
     /*
      * Helpers
      */
+    
+    /**
+     * 
+     * Let doctrine load its models
+     * @return void
+     */
+    protected function _loadDoctrineModels()
+    {
+        $models = glob($this->getModulePath() . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . '*.php');
+        
+        foreach($models as $model) {
+            $cleanModel = str_replace($this->getModulePath() . DIRECTORY_SEPARATOR, '', $model);
+            $cleanModel = str_replace('.php', '', $cleanModel);
+            /*
+             * 0 => modulename
+             * 1 => models
+             * 2 => model base name
+             */
+            $classnameParts = explode(DIRECTORY_SEPARATOR, $cleanModel);
+            $classname = ucfirst($classnameParts[0]) . '_Model_' . $classnameParts[2];
+            if(class_exists($classname) && is_subclass_of($classname, 'Doctrine_Record')) {
+                Doctrine::loadModel($classname, $model);
+            }
+        }
+    }
     
     /**
      * 
