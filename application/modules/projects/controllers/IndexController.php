@@ -18,23 +18,92 @@
 
 class Projects_IndexController extends FansubCMS_Controller_Action {
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         $projectsTable = Doctrine::getTable('Projects_Model_Project');
         $this->view->quickSelect = $projectsTable->getArrayListing();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->_addDelegateType('Sorting');
         $projectsTable = Doctrine::getTable('Projects_Model_Project');
         $projects = $projectsTable->getFrontListing();
         $this->view->projects = $this->invokeDelegate('Sorting', 'sortProjects', array($projects));
     }
 
-    public function detailsAction() {
+    public function detailsAction()
+    {
         $name = urldecode($this->getRequest()->getParam('project'));
         $project = Doctrine::getTable('Projects_Model_Project');
         $this->view->projectName = $name;
         $this->view->project = $project->findOneBy('name', $name);
+    }
+    
+    public function feedAction()
+    {
+        $num = $this->request->getParam('entries', 25);
+        if(!is_numeric($num)) {
+            $num = 25;
+        }
+        if($num > 100) {
+            $num = 100; // prevent from full listings which could take like forever to parse
+        }
+        $num = round($num, 0); // prevent from floting point values
+        
+        $q = Doctrine_Query::create();
+        $q->from('Projects_Model_Episode pe')
+          ->leftJoin('pe.Projects_Model_Project p')
+          ->where('pe.released_at IS NOT NULL')
+          ->andWhere('p.private = ?', 'no')
+          ->orderBy('pe.released_at DESC')
+          ->limit($num);
+          
+        $this->_generateFeed($q->execute(array(), Doctrine::HYDRATE_RECORD));
+    }
+    
+    # helpers
+
+    /**
+     * 
+     * Generates a feed of newest released episodes
+     * @param Doctrine_Collection $episodes
+     */
+    protected function _generateFeed($episodes) {
+        $this->_helper->layout->disableLayout();
+        $settings = Zend_Registry::get('environmentSettings');
+        $mailSettings = Zend_Registry::get('emailSettings');
+
+        foreach($episodes as $episode) {
+            # build the ep title to be shown
+            $epTitle = $episode->Projects_Model_Project->name . ' ' . $episode->number;
+            if($episode->version > 1) {
+                $epTitle .= 'v' . $episode->version;
+            }
+            
+            # url encode project title
+            $projUrl = urlencode($episode->Projects_Model_Project->name);
+            
+            # add entry
+            $entries[]=array(
+                    'title'=>$epTitle,
+                    'link'=>'http://'.$_SERVER['HTTP_HOST'].$this->view->baseUrl().'/projects/index/details/project/' . $projUrl,
+                    'description'=>$episode->title,
+                    'content'=>$episode->title,
+                    'lastUpdate'=>strtotime($episode->released_at),
+            );
+        }
+        // generate and render RSS feed
+        $feed=Zend_Feed::importArray(array(
+                'title'   => $settings->page->group->name,
+                'link'    => 'http://' . $_SERVER['HTTP_HOST'] . $this->view->baseUrl() . '/projects/feed',
+                'charset' => 'UTF-8',
+                'entries' => $entries,
+                'author'=>$settings->page->group->name,
+                'email'=>$mailSettings->email->admin,
+                ), 'atom');
+        $feed->send();
+        die;
     }
 }
