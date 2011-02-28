@@ -70,6 +70,20 @@ abstract class Base_News_Model_News extends FansubCMS_Doctrine_Record
              'foreign' => 'news_id'));
 
         $timestampable0 = new Doctrine_Template_Timestampable();
+        $sluggable0 = new Doctrine_Template_Sluggable(array(
+             'name' => 'title_slug',
+             'unique' => true,
+             'fields' => 
+             array(
+              0 => 'title',
+             ),
+             'canUpdate' => true,
+             'type' => 'string',
+             'length' => 255,
+             ));
         $this->actAs($timestampable0);
+        $this->actAs($sluggable0);
     }
+    
+
 }

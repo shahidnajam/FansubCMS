@@ -38,7 +38,7 @@ class News_CommentController extends FansubCMS_Controller_Action {
         if ($id && !$envConf->news->usePermaLink) {
             $this->view->news = News_Model_News::getNewsById($id);
         } else if($year && $month && $day && $title && $envConf->news->usePermaLink) {
-            $this->view->news = News_Model_News::getNewsByDateAndTitle($day,$month,$year,  urldecode($title));
+            $this->view->news = News_Model_News::getNewsBySlug(urldecode($title));
         }
 
         if($this->view->news) {

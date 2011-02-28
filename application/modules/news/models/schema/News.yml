@@ -2,6 +2,13 @@ News_Model_News:
     tableName: news
     actAs: 
         Timestampable:
+        Sluggable:
+            name: title_slug
+            unique: true
+            fields: [title]
+            canUpdate: true
+            type: string
+            length: 255
     columns:
        id:
             type: integer

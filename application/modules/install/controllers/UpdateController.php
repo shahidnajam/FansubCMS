@@ -24,6 +24,11 @@ class Install_UpdateController extends FansubCMS_Controller_Action {
     }
 
     public function indexAction() {
+        $settings = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'database.ini', 'database');
+        if(strtolower($settings->db->dbms) == 'mysql') {
+            // mysql is not transaction safe in structure changes so we can't dry run ;)
+            $this->_helper->redirector->gotoSimple('migrate','update','install');
+        }
         $this->view->form = new FansubCMS_Form_Confirmation;
         if($this->request->isPost()) {
             $submit = $this->request->getParam('yes');
@@ -41,6 +46,11 @@ class Install_UpdateController extends FansubCMS_Controller_Action {
     }
 
     public function migrateAction() {
+        if(Install_Api_Migration::getInstance()->getCurrentVersion() >= Install_Api_Migration::getInstance()->getLatestVersion()) {
+            // nothing to migrate
+            $this->_helper->redirector->gotoSimple('index','index','install');
+            return;
+        }
         $this->view->form = new FansubCMS_Form_Confirmation;
         if($this->request->isPost()) {
             $submit = $this->request->getParam('yes');

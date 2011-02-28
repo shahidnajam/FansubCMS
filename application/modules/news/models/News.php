@@ -52,16 +52,11 @@ class News_Model_News extends Base_News_Model_News
      * @param string $title
      * @return string
      */
-    static function getNewsByDateAndTitle ($day, $month, $year, $title)
+    static function getNewsBySlug($slug)
     {
-        $time = strtotime($year . '-' . $month . '-' . $day);
-        $date = new Zend_Date($time);
         $q = Doctrine_Query::create();
         $q->from('News_Model_News n')
-            ->where('created_at BETWEEN ? AND ?', 
-        array($date->toString('YYYY-MM-dd') . ' 00:00:00', 
-        $date->toString('YYYY-MM-dd') . ' 23:59:59'))
-            ->andWhere('title = ?', $title);
+            ->where('title_slug = ?', $slug);
         return $q->fetchOne();
     }
     /**
@@ -72,10 +67,15 @@ class News_Model_News extends Base_News_Model_News
     {
         $conf = Zend_Registry::get('environmentSettings');
         if ($conf->news->usePermaLink) {
+            if(empty($this->title_slug)) {
+                $this->title_slug = Doctrine_Inflector::urlize($this->title);
+                $this->save();
+            }
+            
             $date = new Zend_Date(strtotime($this->created_at));
             return 'archive/' . $date->toString('YYYY') . '/' .
              $date->toString('MM') . '/' . $date->toString('dd') . '/' .
-             urlencode($this->title);
+             urlencode($this->title_slug);
         } else {
             return 'comment/index/id/' . $this->id;
         }
