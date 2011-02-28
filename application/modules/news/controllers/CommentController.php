@@ -36,9 +36,9 @@ class News_CommentController extends FansubCMS_Controller_Action {
         $this->view->paginator = false;
         $this->view->writeForm = new News_Form_Comment('#');
         if ($id && !$envConf->news->usePermaLink) {
-            $this->view->news = News::getNewsById($id);
+            $this->view->news = News_Model_News::getNewsById($id);
         } else if($year && $month && $day && $title && $envConf->news->usePermaLink) {
-            $this->view->news = News::getNewsByDateAndTitle($day,$month,$year,  urldecode($title));
+            $this->view->news = News_Model_News::getNewsByDateAndTitle($day,$month,$year,  urldecode($title));
         }
 
         if($this->view->news) {
@@ -52,7 +52,7 @@ class News_CommentController extends FansubCMS_Controller_Action {
         if ($req->isPost() && $this->view->news) {
             if ($this->view->writeForm->isValid($_POST)) {
                 $values = $this->view->writeForm->getValues();
-                $nc = new NewsComment();
+                $nc = new News_Model_Comment();
                 $nc->ip = getenv('REMOTE_ADDR');
                 $nc->email = User::isLoggedIn() ? Zend_Auth::getInstance()->getIdentity()->email : $values['email'];
                 $nc->news_id = $this->view->news->id;

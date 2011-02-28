@@ -2,8 +2,8 @@
 <div id="team-detail-avatar"><img src="<?=$this->gravatar($this->user->email,150)?>" alt="" /></div>
 <div class="float-left">
     <h2><?=$this->translate('member_detail_tasks_headline')?></h2>
-    <?php if(count($this->user->UserTask)): ?>
-        <?php foreach($this->user->UserTask as $task): ?>
+    <?php if(count($this->user->User_Model_UserTask)): ?>
+        <?php foreach($this->user->User_Model_UserTask as $task): ?>
             <?=$task->Task->name?><br />
         <?php endforeach; ?>
     <?php else: ?>

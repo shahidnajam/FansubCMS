@@ -19,7 +19,7 @@
 class Group_TeamController extends FansubCMS_Controller_Action {
     public function memberAction() {
         $this->_addDelegateType('Sorting');
-        $this->view->users = $this->invokeDelegate('Sorting', 'sortTeam', array(User::getTeam(false)));
+        $this->view->users = $this->invokeDelegate('Sorting', 'sortTeam', array(User_Model_User::getTeam(false)));
         $this->view->title = $this->translate('group_member_title');
     }
 
@@ -28,7 +28,7 @@ class Group_TeamController extends FansubCMS_Controller_Action {
         if($username == false) {
             return $this->_helper->redirector('member','team','group');
         }
-        $table = Doctrine::getTable('User');
+        $table = Doctrine::getTable('User_Model_User');
         $this->view->user = $table->getTeamMemberByName($username);
         if(!$this->view->user) {
             return $this->_helper->redirector('member','team','group');

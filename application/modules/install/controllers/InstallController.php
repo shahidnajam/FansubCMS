@@ -24,7 +24,7 @@ class Install_InstallController extends FansubCMS_Controller_Action {
     }
 
     public function indexAction() {
-        $t = Doctrine::getTable('User');
+        $t = Doctrine::getTable('User_Model_User');
         try {
             $t->count();
             $this->_helper->redirector->gotoSimple('createuser','install','install');
@@ -33,7 +33,7 @@ class Install_InstallController extends FansubCMS_Controller_Action {
             if($this->request->isPost()) {
                 $submit = $this->request->getParam('yes');
                 if(!empty($submit)) {
-                    Doctrine::createTablesFromModels();
+                    Install_Api_DoctrineTool::getInstance()->createTablesFromArray();
                     Install_Api_Migration::getInstance()->setCurrentVersion(Install_Api_Migration::getInstance()->getLatestVersion()); // we are on the top atm
                     $this->_helper->redirector->gotoSimple('createuser','install','install');
                 } else {
@@ -44,7 +44,7 @@ class Install_InstallController extends FansubCMS_Controller_Action {
     }
 
     public function createuserAction() {
-        $t = Doctrine::getTable('User');
+        $t = Doctrine::getTable('User_Model_User');
         try {
             $c = $t->count();
             if($c > 0) {
@@ -54,12 +54,12 @@ class Install_InstallController extends FansubCMS_Controller_Action {
                 if($this->request->isPost()) {
                     if($this->view->form->isValid($_POST)) {
                         $values = $this->view->form->getValues();
-                        $user = new User;
+                        $user = new User_Model_User;
                         $user->name = $values['username'];
                         $user->setPassword($values['password1']);
                         $user->email = $values['email'];
                         $user->save();
-                        $ur = new UserRole();
+                        $ur = new User_Model_Role();
                         $ur->User = $user;
                         $ur->role_name = 'admin_admin';
                         $ur->save();
@@ -73,7 +73,7 @@ class Install_InstallController extends FansubCMS_Controller_Action {
     }
 
     public function successAction() {
-        $t = Doctrine::getTable('User');
+        $t = Doctrine::getTable('User_Model_User');
         try {
             $c = $t->count();
             if($c < 1) {

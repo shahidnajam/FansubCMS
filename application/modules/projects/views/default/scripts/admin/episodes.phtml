@@ -13,7 +13,7 @@
     </tr>
         <?php $i = 0; foreach($this->episodes as $episode):?>
     <tr class="<?=$i % 2 ? 'specialOne' : 'specialTwo'?>">
-        <?php if(!empty($this->all)): ?><td><?=$episode->Project->name?></td><?php endif;?>
+        <?php if(!empty($this->all)): ?><td><?=$episode->Projects_Model_Project->name?></td><?php endif;?>
         <td><?=$episode->number?></td>
         <td><?=$episode->title?></td>
         <td><?=$episode->crc?></td>

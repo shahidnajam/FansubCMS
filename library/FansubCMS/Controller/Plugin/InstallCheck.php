@@ -24,13 +24,12 @@ class FansubCMS_Controller_Plugin_InstallCheck extends Zend_Controller_Plugin_Ab
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request) 
     {
-        
-        if($this->getRequest()->getModuleName() == 'install') {
+        if($this->getRequest()->getModuleName() == 'install' || $this->getRequest()->getModuleName() == 'devtools') {
             # we don't need to check while we are in the installer itself
             return;
         }
         # check whether the cms is installed or not
-        $t = Doctrine::getTable('User');
+        $t = Doctrine::getTable('User_Model_User');
         try {
             $t->count();
             $installed = true;

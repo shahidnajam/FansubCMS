@@ -33,7 +33,7 @@ class Install_Api_Migration {
     }
 
     private function __construct() {
-        $this->_migration = new Doctrine_Migration(realpath(APPLICATION_PATH.'/resource/migrations'));
+        $this->_migration = new Doctrine_Migration(realpath(APPLICATION_PATH.'/../migrations'));
     }
 
     /**

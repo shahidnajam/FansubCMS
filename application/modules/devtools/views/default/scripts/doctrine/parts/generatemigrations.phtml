@@ -1,0 +1,78 @@
+<?php
+if (! $this->data->generate) {
+    $hasChanges = false;
+    foreach ($this->data->changes as $changeType => $arr) {
+        if (count($arr) > 0) {
+            $hasChanges = true;
+            break;
+        }
+    }
+    ?>
+		
+		<?
+    if ($hasChanges) :
+        ?>
+<div style="font-weight: bold;">There are changed YAML model
+definitions.</div>
+<div style="padding-top: 20px;">Warning! Please make sure no one else of
+the development team is generating migrations at the moment and won't
+start until you commit and push them!</div>
+<br />
+<a href="/devtools/doctrine/generatemigrations/generate/1">Generate
+migration classes</a>
+<br />
+<br />
+<br />
+<?php 
+     else :
+        ?>
+			There are changed YAML model definitions.
+<br />
+
+    <? endif;
+    function dumpArrayRecursive ($array, $depth = 0)
+    {
+        $first = true;
+        foreach ($array as $key => $value) {
+            if (is_array($value) && ($depth <= 1 && ! $first)) {
+                echo "<br/>\n";
+            }
+            if (empty($value)) {
+                echo "<div style=\"padding-left: " . ($depth * 20) .
+                 "px;\">$key: <span style=\"color: #cccccc;\">Empty</span></div>\n";
+            } elseif (is_array($value) && count($value) > 0) {
+                echo "<div style=\"padding-left: " . ($depth * 20) .
+                 "px;\">$key:</div>\n";
+                dumpArrayRecursive($value, $depth + 1);
+            } elseif (is_numeric($value)) {
+                echo "<div style=\"padding-left: " . ($depth * 20) .
+                 "px;\">{$key}: <span style=\"color: #0000FF;\">{$value}</span></div>\n";
+            } elseif (is_string($value)) {
+                echo "<div style=\"padding-left: " . ($depth * 20) .
+                 "px;\">{$key}: <span style=\"color: #FF00FF;\">{$value}</span></div>\n";
+            } else {
+                echo "<div style=\"padding-left: " . ($depth * 20) .
+                 "px;\">{$key}: ";
+                var_dump($value);
+                echo "</div>\n";
+            }
+            $first = false;
+        }
+    }
+    ?>
+<div
+	style="padding: 10px; border: 1px solid black; background-color: #CCCCCC;">
+				<?
+    dumpArrayRecursive($this->data->changes);
+    ?>
+			</div>
+<?
+} else {
+    ?>
+			Migration classes were generated.
+<br />
+<br />
+<a href="/devtools/doctrine/migration">Proceed with migration</a>
+<?php
+}
+?>

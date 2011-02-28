@@ -23,7 +23,7 @@ class News_IndexController extends FansubCMS_Controller_Action {
     }
 
     public function indexAction() {
-        $newsTable = Doctrine::getTable('News');
+        $newsTable = Doctrine::getTable('News_Model_News');
         $this->view->news = $newsTable->getPaginator(true);
         $page = $this->getRequest()->getParam('page');
         $this->view->news->setItemCountPerPage($this->conf->news->front);

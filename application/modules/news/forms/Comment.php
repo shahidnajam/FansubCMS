@@ -27,7 +27,7 @@ class News_Form_Comment extends Zend_Form {
                 ->setAttrib('id', 'postcomment');
 
         # author
-        $authorValidatorDB = new FansubCMS_Validator_NoRecordExists('User', 'name');
+        $authorValidatorDB = new FansubCMS_Validator_NoRecordExists('User_Model_User', 'name');
         $authorValidatorDB->setMessages(array(FansubCMS_Validator_NoRecordExists::RECORD_EXISTS => 'news_comment_form_error_author_user_exists'));
 
         $author = $this->createElement('text', 'author');
@@ -101,7 +101,7 @@ class News_Form_Comment extends Zend_Form {
                 ->setLabel('news_comment_field_text');
 
         #captcha
-        if (!User::isLoggedIn()) {
+        if (!User_Model_User::isLoggedIn()) {
             $imgUrl = substr($_SERVER['PHP_SELF'], 0, -9) . '/images/captcha'; // little hack to have the correct baseurl
             $imgUrl = str_replace('//', '/', $imgUrl);
             $captcha = new Zend_Form_Element_Captcha('captcha', array(
@@ -123,13 +123,13 @@ class News_Form_Comment extends Zend_Form {
             $captcha->setRequired(true);
         }
         # add elements to the form
-        if (!User::isLoggedIn())
+        if (!User_Model_User::isLoggedIn())
             $this->addElement($author)
                  ->addElement($email);
         $this->addElement($url)
              ->addElement($comment);
 
-        if (!User::isLoggedIn())
+        if (!User_Model_User::isLoggedIn())
             $this->addElement($captcha);
 
         # commit button

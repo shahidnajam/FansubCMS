@@ -16,6 +16,8 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
+ini_set("short_open_tag", true);
+
 // Define path to application directory
 defined('APPLICATION_PATH')
         || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
@@ -42,7 +44,6 @@ $application = new Zend_Application(
         APPLICATION_ENV,
         APPLICATION_PATH . '/configs/application.ini'
 );
-
 try {
     $application->bootstrap()
             ->run();

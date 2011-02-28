@@ -18,7 +18,7 @@
 
 class News_AdminController extends FansubCMS_Controller_Action {
     public function indexAction() {
-        $table = Doctrine_Core::getTable('News');
+        $table = Doctrine_Core::getTable('News_Model_News');
         $this->view->news = $table->getPaginator('all');
         $page = $this->getRequest()->getParam('page');
         $this->view->news->setItemCountPerPage(25);
@@ -34,7 +34,7 @@ class News_AdminController extends FansubCMS_Controller_Action {
     public function editAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $table = Doctrine_Core::getTable('News');
+        $table = Doctrine_Core::getTable('News_Model_News');
         $n = $table->findOneBy('id', $id ? $id : 0);
         if(!$n) {
             $this->session->message = $this->translate('news_not_existent');
@@ -59,14 +59,14 @@ class News_AdminController extends FansubCMS_Controller_Action {
 
     public function spamAction()
     {
-        $table = Doctrine::getTable('NewsComment');
+        $table = Doctrine::getTable('News_Model_Comment');
         $this->view->spam = $table->getSpamPaginator();
     }
 
     public function deleteAction()
     {
         $id = $this->request->getParam('id');
-        $table = Doctrine_Core::getTable('News');
+        $table = Doctrine_Core::getTable('News_Model_News');
         if($id) {
             $news = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
@@ -90,7 +90,7 @@ class News_AdminController extends FansubCMS_Controller_Action {
         if($req->isPost()) { // there are profile updates
             if($this->view->form->isValid($_POST)) {
                 $values = $this->view->form->getValues();
-                $n = new News;
+                $n = new News_Model_News;
                 $n->title = $values['title'];
                 $n->text = $values['text'];
                 $public = $values['public'] == 'yes' ? 'yes' : 'no';
@@ -110,7 +110,7 @@ class News_AdminController extends FansubCMS_Controller_Action {
     {
         $this->view->role = $this->defaultUseRole;
         $id = $this->getRequest()->getParam('id');
-        $table = Doctrine_Core::getTable('News');
+        $table = Doctrine_Core::getTable('News_Model_News');
         $n = $table->findOneBy('id', $id ? $id : 0);
         if(!$n) {
             $this->session->message = $this->translate('news_not_existent');
@@ -125,7 +125,7 @@ class News_AdminController extends FansubCMS_Controller_Action {
 public function markhamAction()
     {
         $id = $this->request->getParam('id');
-        $table = Doctrine_Core::getTable('NewsComment');
+        $table = Doctrine_Core::getTable('News_Model_Comment');
         if($id) {
             $comment = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
@@ -155,7 +155,7 @@ public function markhamAction()
     public function markspamAction()
     {
         $id = $this->request->getParam('id');
-        $table = Doctrine_Core::getTable('NewsComment');
+        $table = Doctrine_Core::getTable('News_Model_Comment');
         if($id) {
             $comment = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
@@ -185,7 +185,7 @@ public function markhamAction()
     public function deletecommentAction()
     {
         $id = $this->request->getParam('id');
-        $table = Doctrine_Core::getTable('NewsComment');
+        $table = Doctrine_Core::getTable('News_Model_Comment');
         if($id) {
             $comment = $table->find($id);
             $spam = $comment->spam == 'yes' ? true : false;

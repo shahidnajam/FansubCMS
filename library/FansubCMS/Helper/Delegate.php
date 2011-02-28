@@ -20,8 +20,6 @@
  * Helps with delegates
  *
  * @author Hikaru-Shindo <hikaru@animeownage.de>
- * @package FansubCMS
- * @subpackage Helper
  */
 class FansubCMS_Helper_Delegate 
 {

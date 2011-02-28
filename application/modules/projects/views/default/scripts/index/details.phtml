@@ -15,8 +15,8 @@
 <div class="seperator"></div>
 <br class="clearfix" />
 <h3><?=$this->translate('project_screenshot')?></h3>
-    <?php if(count($this->project->ProjectScreenshot)):?>
-    <?php foreach($this->project->ProjectScreenshot as $screenshot):?>
+    <?php if(count($this->project->Projects_Model_Screenshot)):?>
+    <?php foreach($this->project->Projects_Model_Screenshot as $screenshot):?>
     <a href="<?=$screenshot->screenshot?>" rel="shadowbox[Screenshot]">
         <img class="screenshot" src="<?=$screenshot->screenshot?>" alt="" />
     </a>

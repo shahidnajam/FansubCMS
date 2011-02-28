@@ -52,7 +52,7 @@ class FansubCMS_Auth_Adapter implements Zend_Auth_Adapter_Interface {
    
         try {
             $q = Doctrine_Query::create()
-                ->from('User u')
+                ->from('User_Model_User u')
                 ->where('u.name = ?', $this->_username)
                 ->andWhere('u.activated = ?','yes');
             
