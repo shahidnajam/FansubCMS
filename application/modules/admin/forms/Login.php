@@ -33,7 +33,6 @@ class Admin_Form_Login extends Zend_Form {
                         Zend_Validate_NotEmpty::IS_EMPTY => 'default_form_error_empty_value'
                         )))
                 ->setRequired(true)
-                ->addFilter('StringToLower')
                 ->setLabel('admin_field_username');
 
         # password
