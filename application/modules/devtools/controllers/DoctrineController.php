@@ -124,20 +124,20 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
         $this->view->title = "Set the migration version of the databse";
         
         $version = $this->getRequest()->getParam('version', null);
-
+        $api = new Devtools_Api_DoctrineTool();
+        
         if(is_null($version)) {
             $this->view->partialData = new stdClass();
             $this->view->message = 'Please provide parameter "version". If you provide "current" it means latest version.';
             $this->_forward('index');
             return;
         }
-
         elseif($version == 'current') {
-            Devtools_Api_DoctrineTool::setMigrationVersionToCurrent();
+            $api->setMigrationVersionToCurrent();
             $this->view->message = 'Migration version was set to latest version available.';
         }
         else {
-            Devtools_Api_DoctrineTool::setMigrationVersion($version);
+            $api->setMigrationVersion($version);
             $this->view->message = "Migration version was set to $version.";
         }
 

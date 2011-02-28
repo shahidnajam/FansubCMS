@@ -234,6 +234,27 @@ class Devtools_Api_DoctrineTool
         }
     }
     
+    /**
+     * 
+     * Sets the migration version to $version
+     * @param integer $version
+     * @return void
+     */
+    public function setMigrationVersion($version)
+    {
+        $this->getMigration()->setCurrentVersion($version);
+    }
+    
+    /**
+     * 
+     * Sets the migration version to latest available. Bassically a wrapper for setMigrationVersion()
+     * @return void
+     */
+    public function setMigrationVersionToCurrent()
+    {
+        $this->setMigrationVersion($this->getMigration()->getLatestVersion());
+    }
+    
     /*
      * Helpers
      */
