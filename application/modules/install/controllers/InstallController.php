@@ -17,13 +17,15 @@
  */
 
 class Install_InstallController extends FansubCMS_Controller_Action {
-    public function init() {
+    public function init() 
+    {
         $envConf = Zend_Registry::get('environmentSettings');
         if(!$envConf->setup && APPLICATION_ENV != 'development') die('locked!');
         $this->_helper->layout()->disableLayout(); // no layout in the installer
     }
 
-    public function indexAction() {
+    public function indexAction() 
+    {
         $t = Doctrine::getTable('User_Model_User');
         try {
             $t->count();
@@ -43,7 +45,8 @@ class Install_InstallController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function createuserAction() {
+    public function createuserAction() 
+    {
         $t = Doctrine::getTable('User_Model_User');
         try {
             $c = $t->count();
@@ -72,7 +75,8 @@ class Install_InstallController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function successAction() {
+    public function successAction() 
+    {
         $t = Doctrine::getTable('User_Model_User');
         try {
             $c = $t->count();

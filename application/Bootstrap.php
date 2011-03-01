@@ -113,10 +113,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $conn = Doctrine_Manager::connection($dbDefaultDsn, $this->databasesettings->db->database, "defaultConnection");
         $conn->execute("SET NAMES 'UTF8'");
         $conn->setAttribute(Doctrine::ATTR_USE_NATIVE_ENUM, true);
-        
-        if (!empty($this->databasesettings->db->dbms) && $this->databasesettings->db->dbms == 'mysql') {
-            $conn->setAttribute(Doctrine::ATTR_AUTOCOMMIT, false);
-        }
 
         define("DATABASE_DATE_FORMAT", !empty($this->databasesettings->db->dateformat) ? $this->databasesettings->db->dateformat : "YYYY-MM-dd HH:mm:ss");
 
@@ -344,7 +340,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $this->frontController->registerPlugin($debug);
         }
         # init error handler
-        $this->frontController->throwExceptions(true);
+        $this->frontController->throwExceptions(false);
         $errorhandler = new Zend_Controller_Plugin_ErrorHandler();
         $errorhandler->setErrorHandler(array('module' => 'cms', 'controller' => 'error', 'action' => 'error'));
         $this->frontController->registerPlugin($errorhandler);

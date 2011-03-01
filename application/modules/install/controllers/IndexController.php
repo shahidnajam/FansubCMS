@@ -28,18 +28,17 @@ class Install_IndexController extends FansubCMS_Controller_Action {
         $this->view->databaseCurrent = Install_Api_Migration::getInstance()->getCurrentVersion();
         $this->view->databaseLatest = Install_Api_Migration::getInstance()->getLatestVersion();
 
-        if($this->view->databaseCurrent < $this->view->databaseLatest) {
-            $this->view->databaseUpdateNeeded = true;
+        $this->view->databaseUpdateNeeded = false;
+        $t = Doctrine::getTable('User_Model_User');
+        try {
+            $t->count();
             $this->view->databaseInitNeeded = false;
-        } else {
-            $this->view->databaseUpdateNeeded = false;
-            $t = Doctrine::getTable('User_Model_User');
-            try {
-                $t->count();
-                $this->view->databaseInitNeeded = false;
-            } catch(Doctrine_Exception $e) {
-                $this->view->databaseInitNeeded = true;
-            }
+        } catch(Doctrine_Exception $e) {
+            $this->view->databaseInitNeeded = true;
+        }
+        
+        if(!$this->view->databaseInitNeeded && $this->view->databaseCurrent < $this->view->databaseLatest) {
+            $this->view->databaseUpdateNeeded = true;
         }
 
         $status = new stdClass;
