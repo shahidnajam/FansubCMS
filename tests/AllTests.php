@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of phpUnderControl.
+ * This file is part of phpUnderControl. Modified by Hikaru-Shindo.
  *
  * Copyright (c) 2007-2009, Manuel Pichler <mapi@phpundercontrol.org>.
  * All rights reserved.
@@ -36,13 +36,25 @@
  * 
  * @package   phpUnderControl
  * @author    Manuel Pichler <mapi@phpundercontrol.org>
+ * @author 	  Hikaru-Shindo <hikaru@animeownage.de>
  * @copyright 2007-2009 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://www.phpundercontrol.org/
  */
+set_include_path(implode(PATH_SEPARATOR, array(
+        realpath(dirname(__FILE__) . '/../library'),
+        get_include_path(),
+)));
 
+// dependencies
+require_once 'Zend/Test/PHPUnit/ControllerTestCase.php';
+require_once 'Bootstrap.php';
+
+// test cases
 require_once dirname(__FILE__) . '/DummyTest.php';
+require_once dirname(__FILE__) . '/InitTests.php';
+require_once dirname(__FILE__) . '/Controllers/admin/AuthTest.php';
 
 /**
  * Main test suite for phpUnderControl.
@@ -76,7 +88,9 @@ class phpucAllTests
         $suite = new PHPUnit_Framework_TestSuite( 'phpUnderControl - AllTests' );
 
         $suite->addTestSuite('DummyTest');
-
+        $suite->addTestSuite('InitTests');
+        $suite->addTestSuite('Admin_AuthTest');
+        
         return $suite;
     }
 }
