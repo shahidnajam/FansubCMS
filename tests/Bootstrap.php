@@ -17,7 +17,7 @@ class UnitBootstrapHelper
         defined('APPLICATION_ENV')
                 || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'testing'));
         
-        define('UPLOAD_PATH', realpath(dirname(__FILE__).'/../public/upload'));
+        !defined('UPLOAD_PATH') ? define('UPLOAD_PATH', realpath(dirname(__FILE__).'/../public/upload')) : null;
         
         defined('HTTP_PATH')
                 || define('HTTP_PATH', realpath(dirname(__FILE__)).'/../public');
