@@ -114,7 +114,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $conn->execute("SET NAMES 'UTF8'");
         $conn->setAttribute(Doctrine::ATTR_USE_NATIVE_ENUM, true);
 
-        define("DATABASE_DATE_FORMAT", !empty($this->databasesettings->db->dateformat) ? $this->databasesettings->db->dateformat : "YYYY-MM-dd HH:mm:ss");
+        if(!defined('DATABASE_DATE_FORMAT')) {
+            define("DATABASE_DATE_FORMAT", !empty($this->databasesettings->db->dateformat) ? $this->databasesettings->db->dateformat : "YYYY-MM-dd HH:mm:ss");
+        }
 
         $manager = Doctrine_Manager::getInstance();
         $manager->setAttribute('model_loading', 'conservative');
@@ -275,7 +277,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initCache()
     {
-        define('CACHE_PATH', realpath(APPLICATION_PATH . '/data/cache'));
+        if(!defined('CACHE_PATH')) {
+            define('CACHE_PATH', realpath(APPLICATION_PATH . '/data/cache'));
+        }
         $cm = new Zend_Cache_Manager();
 
         $lifetime = APPLICATION_ENV == 'development' ? 30 : 3600; # in development keep cache 30 seconds otherwise one hour
