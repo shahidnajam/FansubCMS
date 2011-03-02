@@ -41,7 +41,6 @@ class Cms_ErrorController extends FansubCMS_Controller_Action {
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-
                 // 404 error -- controller or action not found
                 $this->getResponse()->setHttpResponseCode(404);
                 $this->view->error = $this->translate("notfound_error");
@@ -49,6 +48,7 @@ class Cms_ErrorController extends FansubCMS_Controller_Action {
                 break;
             default:
                 // application error
+                FansubCMS_Helper_Log::getInstance()->log($this->view->exception, Zend_Log::CRIT);
                 $this->getResponse()->setHttpResponseCode(500);
                 $this->view->error = $this->translate("application_error");
                 $this->renderScript('error/50x.phtml');
