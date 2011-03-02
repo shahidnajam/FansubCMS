@@ -21,6 +21,11 @@ class InitTests extends Zend_Test_PHPUnit_ControllerTestCase
     
     public function testDatabase()
     { 
+        // first migrate database if needed
+        if(Install_Api_Migration::getInstance()->getCurrentVersion() < Install_Api_Migration::getInstance()->getLatestVersion()) {
+            Install_Api_Migration::getInstance()->migrate();
+        }
+        
         $api = new Devtools_Api_DoctrineTool();
         // truncate all tables or import data if there is some
         $api->importFixtures(APPLICATION_PATH . '/resource/fixtures');
