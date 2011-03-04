@@ -225,6 +225,23 @@ class Devtools_Api_DoctrineTool
         $this->_getModels($this->getFromPath());
         $this->_getSchema($this->getToPath());
         
+        $files = glob($this->getFromPath() . DIRECTORY_SEPARATOR . '*.php');
+        
+        foreach($files as $file) {
+            $cleanname = str_replace($this->getFromPath() . DIRECTORY_SEPARATOR , '', $file);
+            $cleanname = str_replace('.php', '', $cleanname);
+            $cleanname = str_replace('models', 'model', $cleanname);
+            $classNameParts = explode('_', $cleanname);
+            $className = array();
+            foreach($classNameParts as $part) {
+                $part = ucfirst($part);
+                $className[] = $part;
+            }
+            $className = implode('_', $className);
+            
+            Doctrine::loadModel($className, $file);
+        }
+        
         $changes = new Doctrine_Migration_Diff($this->getFromPath(), $this->getToPath(), $this->getMigrationPath());
 
         if($changesOnly) {
@@ -349,7 +366,7 @@ class Devtools_Api_DoctrineTool
         
         foreach($models as $model) {
             $filename = str_replace($this->getModulePath() . DIRECTORY_SEPARATOR, '', $model);
-            $filenameParts = explode(DIRECTORY_SEPARATOR, strtolower($filename));
+            $filenameParts = explode(DIRECTORY_SEPARATOR, $filename);
             $filename = implode('_', $filenameParts);
             
             copy($model, $path . DIRECTORY_SEPARATOR . $filename);
