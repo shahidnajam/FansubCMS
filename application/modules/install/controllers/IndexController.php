@@ -55,6 +55,9 @@ class Install_IndexController extends FansubCMS_Controller_Action {
         if(is_writable(realpath(realpath(getenv('PHP_SELF')).'/upload'))) {
             $status->upload = true;
         }
+        if(is_writable(realpath(APPLICATION_PATH.'/resource/static'))) {
+            $status->resourceStatic = true;
+        }
         $this->view->requirements = $status;
     }
 }

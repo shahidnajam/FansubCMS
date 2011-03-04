@@ -22,8 +22,15 @@
  * @subpackage Controllers
  * @author Hikaru-Shindo <hikaru@animeownage.de>
  */
-class Cms_AdminController extends FansubCMS_Controller_Action {
+class Cms_AdminController extends FansubCMS_Controller_Action
+{
+    protected $_staticPath;
 
+    public function init()
+    {
+        $this->_staticPath = realpath(APPLICATION_PATH . '/resource/static');
+    }
+    
     public function liststaticAction() 
     {
         $this->view->pageTitle = $this->translate('cms_list_static_headline');
@@ -32,8 +39,8 @@ class Cms_AdminController extends FansubCMS_Controller_Action {
         if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'deletestatic'))
             $this->session->tableActions['cms_delete_static'] = array('module' => 'cms', 'controller' => 'admin', 'action' => 'deletestatic');
 
-        $pages = glob(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . '*.html');
-        $pages = str_replace(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR, '', $pages);
+            $pages = glob($this->_staticPath . DIRECTORY_SEPARATOR . '*.html');
+        $pages = str_replace($this->_staticPath . DIRECTORY_SEPARATOR, '', $pages);
         $pages = str_replace('.html','',$pages);
 
         $this->view->pages = $pages;
@@ -44,7 +51,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action {
         $this->view->pageTitle = $this->translate('cms_edit_static_headline');
         $this->session->markitup = 'html';
         $title = $this->request->getParam('title');
-        $file = realpath(UPLOAD_PATH . '/static'). DIRECTORY_SEPARATOR . $title.'.html';
+        $file = $this->_staticPath . DIRECTORY_SEPARATOR . $title.'.html';
         if(file_exists($file)) {
             $this->view->form = new Cms_Form_EditStatic(array('text'=>@file_get_contents($file)));
             $req = $this->getRequest();
@@ -74,7 +81,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action {
         if($req->isPost()) { // there are profile updates
             if($this->view->form->isValid($_POST)) {
                 $values = $this->view->form->getValues();
-                @file_put_contents(realpath(UPLOAD_PATH . '/static') . DIRECTORY_SEPARATOR . $values['title'] . '.html', $values['text']);
+                @file_put_contents($this->_staticPath . DIRECTORY_SEPARATOR . $values['title'] . '.html', $values['text']);
                 $this->session->message = $this->translate('cms_admin_addstatic_success');
                 $this->_helper->redirector->gotoRoute(array('action'=>'liststatic','controller'=>'admin','module'=>'cms'));
             } else {
@@ -87,7 +94,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action {
     {
         $this->view->pageTitle = $this->translate('cms_delete_static_headline');
         $title = $this->request->getParam('title');
-        $file = realpath(UPLOAD_PATH . '/static'). DIRECTORY_SEPARATOR . $title.'.html';
+        $file = $this->_staticPath . DIRECTORY_SEPARATOR . $title.'.html';
         if(file_exists($file)) {
             $this->view->confirmation = $this->translate('cms_admin_static_delete_confirmation',$title);
             $this->view->form = new FansubCMS_Form_Confirmation();

@@ -9,9 +9,9 @@
 
 # We don't need to version uploaded files
 /public/upload/*
-!/public/upload/static/
-/public/upload/static/*
-!/public/upload/static/delete.me
+!/application/resource/static/
+/application/resource/static/*
+!/application/resource/static/delete.me
 
 # Only allow default modules to be versioned
 /application/modules/*
