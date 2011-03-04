@@ -2,6 +2,7 @@
 setup = false
 locale = "de"
 page.layout = "default"
+page.adminLayout = "default"
 page.group.name = "ExampleSubs"
 page.group.short = "ES"
 page.timezone = "Europe/Berlin"

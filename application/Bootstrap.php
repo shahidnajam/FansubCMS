@@ -224,8 +224,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         if (!file_exists($layoutPath . DIRECTORY_SEPARATOR . 'frontend.phtml'))
             die('The layout does not exist or frontend.phtml is missing!');
-        if (!file_exists($layoutPath . DIRECTORY_SEPARATOR . 'admin.phtml'))
-            die('The layout does not exist or admin.phtml is missing!');
 
         if (!empty($layoutPath)) {
             # set the default view path
@@ -351,9 +349,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->frontController->registerPlugin($errorhandler);
         # set the admin layout using plugin
         $layoutPath = $this->settings->backend->layoutpath;
-        $layoutAdd = isset($this->environmentsettings->page->layout) ? $this->environmentsettings->page->layout : 'default';
+        $layoutAdd = isset($this->environmentsettings->page->adminLayout) ? $this->environmentsettings->page->adminLayout : 'default';
         $layoutPath .= DIRECTORY_SEPARATOR . $layoutAdd;
 
+        
+        
         if (!empty($layoutPath)) {
             $layoutPlugin = new FansubCMS_Controller_Plugin_Layout();
             $layoutPlugin->registerAdminLayout('admin', $layoutPath, 'admin');
