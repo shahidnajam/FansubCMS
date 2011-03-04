@@ -247,6 +247,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $this->layout = Zend_Layout::startMvc(array('layoutPath' => $layoutPath, 'layout' => 'frontend'));
 
             # assign layout variables
+            $this->layout->assign('language', $this->environmentsettings->locale);
             $this->layout->assign('group', $this->environmentsettings->page->group->name);
             $this->layout->assign('group_short', $this->environmentsettings->page->group->short);
         }

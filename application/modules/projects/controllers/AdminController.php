@@ -16,8 +16,11 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Projects_AdminController extends FansubCMS_Controller_Action {
-    public function indexAction() {
+class Projects_AdminController extends FansubCMS_Controller_Action 
+{
+    public function indexAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_list_headline');
         $table = Doctrine_Core::getTable('Projects_Model_Project');
         $this->view->projects = $table->findAll()->toArray();
         if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'edit'))
@@ -30,7 +33,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
             $this->session->tableActions['project_delete'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'delete');
     }
 
-    public function addAction() {
+    public function addAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_add_headline');
         $this->view->form = new Projects_Form_EditProject(array(), true);
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates
@@ -46,7 +51,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function deleteAction() {
+    public function deleteAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_delete_headline');
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('Projects_Model_Project');
         if($id) {
@@ -66,7 +73,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function editAction() {
+    public function editAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_edit_headline');
         $id = $this->getRequest()->getParam('id');
         $table = Doctrine_Core::getTable('Projects_Model_Project');
         $p = $table->findOneBy('id', $id ? $id : 0);
@@ -90,7 +99,8 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function episodesAction() {
+    public function episodesAction() 
+    {
         $id = $this->request->getParam('id');
 
         if(!empty($id)) {
@@ -117,7 +127,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
             $this->session->tableActions['project_delete_episode'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'deleteepisode');
     }
 
-    public function addepisodeAction() {
+    public function addepisodeAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_addepisode_headline');
         $this->view->form = new Projects_Form_EditProjectEpisode(array(), true);
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates
@@ -133,7 +145,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function deleteepisodeAction() {
+    public function deleteepisodeAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_deleteepisode_headline');
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('Projects_Model_Episode');
         if($id) {
@@ -153,7 +167,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function editepisodeAction() {
+    public function editepisodeAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_editepisode_headline');
         $id = $this->getRequest()->getParam('id');
         $table = Doctrine_Core::getTable('Projects_Model_Episode');
         $p = $table->findOneBy('id', $id ? $id : 0);
@@ -175,7 +191,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function screenshotsAction() {
+    public function screenshotsAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_screenshots_headline');
         $table = Doctrine_Core::getTable('Projects_Model_Screenshot');
         $this->view->screenshots = $table->getPaginator();
         $page = $this->getRequest()->getParam('page');
@@ -187,7 +205,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
             $this->session->tableActions['project_delete_screenshot'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'deletescreenshot');
     }
 
-    public function addscreenshotAction() {
+    public function addscreenshotAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_addscreenshot_headline');
         $this->view->form = new Projects_Form_EditProjectScreenshot(array(), true);
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates
@@ -206,7 +226,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function deletescreenshotAction() {
+    public function deletescreenshotAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_deletescreenshot_headline');
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('Projects_Model_Screenshot');
         if($id) {
@@ -226,7 +248,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function editscreenshotAction() {
+    public function editscreenshotAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_editscreenshot_headline');
         $id = $this->getRequest()->getParam('id');
         $table = Doctrine_Core::getTable('Projects_Model_Screenshot');
         $p = $table->findOneBy('id', $id ? $id : 0);

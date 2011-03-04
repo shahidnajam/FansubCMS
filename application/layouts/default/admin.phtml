@@ -1,8 +1,8 @@
 <?=$this->doctype()?>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?=$this->layout()->language?>" lang="<?=$this->layout()->language?>">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<title><?=$this->layout()->group?> - <?=$this->translate('administration')?></title>
+<title><?=$this->layout()->group?> - <?=$this->translate('administration')?> - <?=$this->pageTitle?></title>
         <?php
         $sess = Zend_Registry::get('applicationSessionNamespace');
         $this->headLink()
@@ -51,6 +51,7 @@
                     <?=$this->navigation()->setAcl(Zend_Registry::get('Zend_Acl'))->setRole('fansubcms_user_custom_role_logged_in_user')->menu()->renderMenu()?>
                 </div>
 <div id="content">
+<h1><?=$this->pageTitle?></h1>
                     <?php
                     if (isset($this->message)) :
                         ?>

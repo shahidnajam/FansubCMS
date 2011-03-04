@@ -24,7 +24,9 @@
  */
 class Cms_AdminController extends FansubCMS_Controller_Action {
 
-    public function liststaticAction() {
+    public function liststaticAction() 
+    {
+        $this->view->pageTitle = $this->translate('cms_list_static_headline');
         if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'editatic'))
             $this->session->tableActions['cms_edit_static'] = array('module' => 'cms', 'controller' => 'admin', 'action' => 'editstatic');
         if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'deletestatic'))
@@ -37,7 +39,9 @@ class Cms_AdminController extends FansubCMS_Controller_Action {
         $this->view->pages = $pages;
     }
 
-    public function editstaticAction() {
+    public function editstaticAction() 
+    {
+        $this->view->pageTitle = $this->translate('cms_edit_static_headline');
         $this->session->markitup = 'html';
         $title = $this->request->getParam('title');
         $file = realpath(UPLOAD_PATH . '/static'). DIRECTORY_SEPARATOR . $title.'.html';
@@ -61,7 +65,9 @@ class Cms_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function addstaticAction() {
+    public function addstaticAction() 
+    {
+        $this->view->pageTitle = $this->translate('cms_add_static_headline');
         $this->session->markitup = 'html';
         $this->view->form = new Cms_Form_EditStatic(array(),true);
         $req = $this->getRequest();
@@ -77,7 +83,9 @@ class Cms_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function deletestaticAction() {
+    public function deletestaticAction() 
+    {
+        $this->view->pageTitle = $this->translate('cms_delete_static_headline');
         $title = $this->request->getParam('title');
         $file = realpath(UPLOAD_PATH . '/static'). DIRECTORY_SEPARATOR . $title.'.html';
         if(file_exists($file)) {

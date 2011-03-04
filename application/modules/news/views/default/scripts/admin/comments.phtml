@@ -1,4 +1,3 @@
-<h1><?=$this->translate('news_admin_comments_headline')?></h1>
 <?php if(count($this->comments)): ?>
 <?=$this->partialLoop('partials/adminCommentLoop.phtml',$this->comments)?>
 <?= $this->paginationControl($this->comments, 'Sliding', 'partials/pagination.phtml')?>

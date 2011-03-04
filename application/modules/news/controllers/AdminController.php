@@ -16,8 +16,11 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class News_AdminController extends FansubCMS_Controller_Action {
-    public function indexAction() {
+class News_AdminController extends FansubCMS_Controller_Action 
+{
+    public function indexAction() 
+    {
+        $this->view->pageTitle = $this->translate('news_admin_index_headline');
         $table = Doctrine_Core::getTable('News_Model_News');
         $this->view->news = $table->getPaginator('all');
         $page = $this->getRequest()->getParam('page');
@@ -33,6 +36,7 @@ class News_AdminController extends FansubCMS_Controller_Action {
 
     public function editAction()
     {
+        $this->view->pageTitle = $this->translate('news_admin_edit_headline');
         $id = $this->getRequest()->getParam('id');
         $table = Doctrine_Core::getTable('News_Model_News');
         $n = $table->findOneBy('id', $id ? $id : 0);
@@ -59,12 +63,14 @@ class News_AdminController extends FansubCMS_Controller_Action {
 
     public function spamAction()
     {
+        $this->view->pageTitle = $this->translate('news_admin_spam_headline');
         $table = Doctrine::getTable('News_Model_Comment');
         $this->view->spam = $table->getSpamPaginator();
     }
 
     public function deleteAction()
     {
+        $this->view->pageTitle = $this->translate('news_admin_delete_headline');
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('News_Model_News');
         if($id) {
@@ -85,6 +91,7 @@ class News_AdminController extends FansubCMS_Controller_Action {
 
     public function addAction()
     {
+        $this->view->pageTitle = $this->translate('news_admin_add_headline');
         $this->view->form = new News_Form_EditNews(null, true);
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates
@@ -108,6 +115,7 @@ class News_AdminController extends FansubCMS_Controller_Action {
 
     public function commentsAction()
     {
+        $this->view->pageTitle = $this->translate('news_admin_comments_headline');
         $this->view->role = $this->defaultUseRole;
         $id = $this->getRequest()->getParam('id');
         $table = Doctrine_Core::getTable('News_Model_News');
@@ -122,8 +130,9 @@ class News_AdminController extends FansubCMS_Controller_Action {
         $this->view->comments->setCurrentPageNumber($page); 
     }
 
-public function markhamAction()
+    public function markhamAction()
     {
+        $this->view->pageTitle = $this->translate('news_admin_markham_headline');
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('News_Model_Comment');
         if($id) {
@@ -154,6 +163,7 @@ public function markhamAction()
     
     public function markspamAction()
     {
+        $this->view->pageTitle = $this->translate('news_admin_markspam_headline');
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('News_Model_Comment');
         if($id) {
@@ -184,6 +194,7 @@ public function markhamAction()
 
     public function deletecommentAction()
     {
+        $this->view->pageTitle = $this->translate('news_admin_deletecomment_headline');
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('News_Model_Comment');
         if($id) {

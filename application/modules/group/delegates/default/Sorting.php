@@ -27,11 +27,13 @@ class Group_Delegate_Default_Sorting
     {
         $active = array();
         $inactive = array();
-        foreach($team as $member) {
-            if($member['active'] == 'yes') {
-                $active[] = $member;
-            } else {
-                $inactive[] = $member;
+        if(!empty($team)) {
+            foreach($team as $member) {
+                if($member['active'] == 'yes') {
+                    $active[] = $member;
+                } else {
+                    $inactive[] = $member;
+                }
             }
         }
         return array('active'=>$active,'inactive'=>$inactive);

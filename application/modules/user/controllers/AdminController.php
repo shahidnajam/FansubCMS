@@ -16,8 +16,11 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class User_AdminController extends FansubCMS_Controller_Action {
-    public function indexAction() {
+class User_AdminController extends FansubCMS_Controller_Action 
+{
+    public function indexAction() 
+    {
+        $this->view->pageTitle = $this->translate('user_list_headline');
         $table = Doctrine_Core::getTable('User_Model_User');
         $this->view->users = $table->findAll()->toArray();
         if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'edit'))
@@ -26,7 +29,9 @@ class User_AdminController extends FansubCMS_Controller_Action {
             $this->session->tableActions['user_delete'] = array('module' => 'user', 'controller' => 'admin', 'action' => 'delete');
     }
 
-    public function addAction() {
+    public function addAction()
+    {
+        $this->view->pageTitle = $this->translate('user_add_headline');
         $this->view->form = new User_Form_EditUser(array(), true);
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates
@@ -42,7 +47,9 @@ class User_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function deleteAction() {
+    public function deleteAction() 
+    {
+        $this->view->pageTitle = $this->translate('user_delete_headline');
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('User_Model_User');
         if($id) {
@@ -62,7 +69,9 @@ class User_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function editAction() {
+    public function editAction()
+    {
+        $this->view->pageTitle = $this->translate('user_edit_headline');
         $id = $this->getRequest()->getParam('id');
         $table = Doctrine_Core::getTable('User_Model_User');
         $u = $table->findOneBy('id', $id ? $id : 0);
@@ -87,7 +96,9 @@ class User_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function profileAction() {
+    public function profileAction()
+    {
+        $this->view->pageTitle = $this->translate('user_profile_headline');
         $this->view->form = new User_Form_Profile('#');
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates
@@ -104,7 +115,9 @@ class User_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function tasksAction() {
+    public function tasksAction()
+    {
+        $thius->view->pageTitle = $this->translate('user_task_list_headline');
         $table = Doctrine_Core::getTable('User_Model_Task');
         $this->view->tasks = $table->findAll()->toArray();
         if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'taskedit'))
@@ -113,7 +126,9 @@ class User_AdminController extends FansubCMS_Controller_Action {
             $this->session->tableActions['user_delete_task'] = array('module' => 'user', 'controller' => 'admin', 'action' => 'deletetask');
     }
 
-    public function addtaskAction() {
+    public function addtaskAction()
+    {
+        $this->view->pageTitle = $this->translate('user_addtask_headline');
         $this->view->form = new User_Form_EditTask(array(),true);
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates
@@ -130,7 +145,9 @@ class User_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function deletetaskAction() {
+    public function deletetaskAction()
+    {
+        $this->view->pageTitle = $this->translate('user_deletetask_headline');
         $id = $this->request->getParam('id');
         $table = Doctrine_Core::getTable('User_Model_Task');
         if($id) {
@@ -150,7 +167,9 @@ class User_AdminController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function edittaskAction() {
+    public function edittaskAction()
+    {
+        $this->view->pageTitle = $this->translate('user_edittask_headline');
         $id = $this->getRequest()->getParam('id');
         $table = Doctrine_Core::getTable('User_Model_Task');
         $t = $table->findOneBy('id', $id ? $id : 0);
