@@ -1,0 +1,93 @@
+<?php 
+if(!($this->table instanceof Cms_Api_Table)) {
+    echo "No table class given.";
+    return;
+}
+$footerActions = empty($this->footerActions) ? array() : $this->footerActions;
+$acl = Zend_Registry::get('Zend_Acl');
+$role = 'fansubcms_user_custom_role_logged_in_user';
+$defaultPrefix = 'default_table_';
+$prefix = empty($this->prefix) ? $defaultPrefix : $this->prefix;
+$actions = $this->table->getActions();
+$paginator = $this->table->getPaginator();
+if(!count($paginator)) {
+    echo empty($this->noValuesText) ? $this->translate('default_message_no_values') : $this->translate($this->noValuesText);
+    return;   
+}
+
+$header = array();
+
+foreach($paginator->getItem(1)->toArray() as $field => $value) {
+    if(is_null($value)) {
+        continue;
+    }
+    $val = $this->translate($prefix . $field);
+    if($val == $prefix . $field) {
+        $val = $this->translate($defaultPrefix . $field);
+    }
+    $header[] = $val;
+}
+if(count($actions)) {
+    $header[] = $this->translate('default_table_actions');
+}
+?>
+<table class="admin-table">
+	<tr>
+    	<?php foreach($header as $value): ?>
+    	<th><?php echo $value; ?></th>
+    	<?php endforeach; ?>
+    </tr>
+    <?php foreach($paginator as $entry): ?>
+    <tr>
+    	<?php foreach($entry->toArray() as $value):
+    	if(is_null($value)) continue; ?>
+    	<td>
+    	<?php echo $value ?>
+    	</td>
+    	<?php endforeach; ?>
+    	<?php if(count($actions)): ?>
+    	<td class="table-actions">
+    		<?php foreach($actions as $action):
+    		$resource = $action['target']['module'].'_'.$action['target']['controller'];?>
+    		<?php if($acl->has($resource) && $acl->isAllowed($role, $resource, $action['target']['action'])): ?>
+    		<?php if($acl->has($entry) && $acl->isAllowed($role, $entry, $action['privilege'])): ?>
+    		<?php
+    		$url = $action['target']['module'] . '/' . $action['target']['controller'] . '/' . $action['target']['action'];
+    		foreach($action['target']['params'] as $key => $value) {
+    		    if(substr($value, 0, 2) == '__' && substr($value, -2) == '__') {
+    		        $value = $entry[substr($value, 2, -2)];
+    		    }
+    		    $url .= '/' . $key . '/' . urlencode($value);
+    		}
+    		$url = $this->baseUrl($url);
+    		
+    		$innerAction = $this->translate($action['label']);
+    		if(!empty($this->actions[$action['name']]) && !empty($this->actions[$action['name']]['image'])) {
+    		    $innerAction = '<img src="' . $this->baseUrl($this->actions[$action['name']]['image']) . '" alt=""/>';
+    		}
+    		?>
+    		<a href="<?php echo $url; ?>" title="<?php echo $this->translate($action['label']) ?>"><?php echo $innerAction; ?></a>
+    		<?php endif; ?>
+    		<?php endif; ?>
+    		<?php endforeach; ?>
+    	</td>
+    	<?php endif; ?>
+    </tr>
+    <?php endforeach; ?>
+</table>
+<?php if(count($footerActions)):?>
+<div class="table-footer-actions">
+<?php foreach($footerActions as $action):
+ unset($url);
+ $resource = $action['module'] . '_' . $action['controller'];
+ if($acl->has($resource) && $acl->isAllowed($role, $resource, $action['action'])):
+ $url['module'] = $action['module'];
+ $url['controller'] = $action['controller'];
+ $url['action'] = $action['action'];
+?>
+<a href="<?php echo $this->url($url,null,true)?>"><img src="<?php echo $this->baseUrl($action['image'])?>" alt=""/> <?php echo $action['label']?></a>
+<?php endif; ?>
+<?php endforeach; ?>
+</div>
+<?php endif; ?>
+<?php echo $this->paginationControl($paginator, 'Sliding', 'partials/pagination.phtml'); ?>
