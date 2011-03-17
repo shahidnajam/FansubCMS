@@ -63,7 +63,7 @@ class Install_InstallController extends FansubCMS_Controller_Action {
                         $user->email = $values['email'];
                         $user->save();
                         $ur = new User_Model_Role();
-                        $ur->User = $user;
+                        $ur->User_Model_User = $user;
                         $ur->role_name = 'admin_admin';
                         $ur->save();
                         $this->_helper->redirector->gotoSimple('success','install','install');
