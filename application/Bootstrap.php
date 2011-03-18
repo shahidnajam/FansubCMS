@@ -363,7 +363,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $installPlugin = new FansubCMS_Controller_Plugin_InstallCheck();
         $this->frontController->registerPlugin($installPlugin);
 
-        $layoutVersionPlugin = new FansubCMS_Controller_Plugin_LayoutVersion($layoutAdd);
+        $layoutVersionPlugin = new FansubCMS_Controller_Plugin_LayoutVersion($this->environmentsettings);
         $this->frontController->registerPlugin($layoutVersionPlugin);
 
         # the navigation plugin

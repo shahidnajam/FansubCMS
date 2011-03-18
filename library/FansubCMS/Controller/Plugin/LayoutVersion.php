@@ -23,16 +23,28 @@
  * @author Hikaru-Shindo <hikaru@animeownage.de>
  * @version SVN: $Id
  */
-class FansubCMS_Controller_Plugin_LayoutVersion extends Zend_Controller_Plugin_Abstract {
+class FansubCMS_Controller_Plugin_LayoutVersion extends Zend_Controller_Plugin_Abstract
+{
     private $_layout;
+    private $_settings;
     public $view;
 
-    public function __construct($layout) {
-        $this->_layout = $layout;
+    public function __construct($envSettings)
+    {
+        $this->_settings = $envSettings;
         $this->view = Zend_Layout::getMvcInstance()->getView();
     }
 
-    public function preDispatch(Zend_Controller_Request_Abstract $request) {
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    {
+        if($this->getRequest()->getModuleName() == 'admin' || $this->getRequest()->getControllerName() == 'admin') {
+            $layout = $this->_settings->page->adminLayout;
+        } else {
+            $layout = $this->_settings->page->layout;
+        }
+        
+        $this->_layout = $layout;
+        
         # add the paths for the gadgets
         $dir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' .
                 DIRECTORY_SEPARATOR . 'gadgets' . DIRECTORY_SEPARATOR .
