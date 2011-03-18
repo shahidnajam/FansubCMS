@@ -16,13 +16,17 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Admin_AuthController extends FansubCMS_Controller_Action {
-    public function loginAction() {
+class Admin_AuthController extends FansubCMS_Controller_Action
+{
+    public function loginAction()
+    {
+        $settings = Zend_Registry::get('environmentSettings');
+        $layoutVersion = $settings->page->layout;
+        
         # we don't need the admin menu
         $layout = Zend_Layout::getMvcInstance();
         $layout->setLayout('frontend');
-        # we won't show gadgets while logging in
-        $this->view->gadgets = '';
+        $layout->setLayoutPath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . $layoutVersion);
         # actually do the login stuff
         $form = new Admin_Form_Login();
         $req = $this->getRequest();
@@ -37,7 +41,8 @@ class Admin_AuthController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function logoutAction() {
+    public function logoutAction()
+    {
         Zend_Auth::getInstance()->clearIdentity();
         $this->_helper->redirector('login');
         die;
