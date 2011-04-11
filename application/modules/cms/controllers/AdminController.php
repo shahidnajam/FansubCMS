@@ -57,12 +57,14 @@ class Cms_AdminController extends FansubCMS_Controller_Action
 
         if(mkdir($tempDir)) {
             // create base dirs
-            mkdir($tempLayoutDir);
-            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application');
-            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'layouts');
-            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'modules');
-            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'public');
-            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'media');
+            $umask = umask();
+            umask(0777);
+            mkdir($tempLayoutDir, 0777);
+            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application', 0777);
+            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'layouts', 0777);
+            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'modules', 0777);
+            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'public', 0777);
+            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'media', 0777);
 
             // copy base
             $this->_recurseCopy($layoutPath, $tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . $layout);
@@ -84,6 +86,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action
             header('Content-Disposition: attachment; filename="'.$layout.'.zip"');
 
             readfile($tempDir . DIRECTORY_SEPARATOR . $layout . '.zip');
+            umask($umask);
         } else {
             die('could not create temporary dir');
         }
