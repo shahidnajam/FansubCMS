@@ -64,9 +64,11 @@ class Cms_AdminController extends FansubCMS_Controller_Action
             mkdir($tempLayoutDir);
             mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application');
             mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'layouts');
+            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . $layout);
             mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'modules');
             mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'public');
             mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'media');
+            mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $layout);
             
             // copy base
             $this->_recurseCopy($layoutPath, 
