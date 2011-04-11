@@ -1,0 +1,9 @@
+News_Model_News:
+  News_Model_News_3:
+    User_Model_User: User_Model_User_7
+    title: 'Fixtures importiert'
+    text: 'Die Fixtures wurden importiert.'
+    public: yes
+    created_at: '2011-03-03 09:37:26'
+    updated_at: '2011-03-03 09:37:26'
+    title_slug: fixtures-importiert

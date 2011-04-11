@@ -6,33 +6,33 @@
         <?php
         $sess = Zend_Registry::get('applicationSessionNamespace');
         $this->headLink()
-            ->appendStylesheet($this->baseUrl() . "/themes/shadowbox.css")
+            ->appendStylesheet($this->baseUrl() . "/media/common/css/shadowbox.css")
             ->appendStylesheet(
         $this->baseUrl() .
-         "/themes/default/jquery-ui/darkness/jquery-ui-1.8.7.css")
-            ->appendStylesheet($this->baseUrl() . "/themes/default/common.css")
-            ->appendStylesheet($this->baseUrl() . "/themes/default/admin.css");
+         "/media/common/css/jquery-ui/darkness/jquery-ui-1.8.7.css")
+            ->appendStylesheet($this->baseUrl() . "/media/default/css/common.css")
+            ->appendStylesheet($this->baseUrl() . "/media/default/css/admin.css");
         if ($sess->markitup == 'html') {
             $this->headLink()->appendStylesheet(
-            $this->baseUrl() . "/lib/markitup/sets/default/style.css");
+            $this->baseUrl() . "/media/common/js/markitup/sets/default/style.css");
         } else {
             $this->headLink()->appendStylesheet(
-            $this->baseUrl() . "/lib/markitup/sets/textile/style.css");
+            $this->baseUrl() . "/media/common/js/markitup/sets/textile/style.css");
         }
         echo $this->headLink()->appendStylesheet(
-        $this->baseUrl() . "/lib/markitup/skins/markitup/style.css");
+        $this->baseUrl() . "/media/common/js/markitup/skins/markitup/style.css");
         echo $this->headScript()
-            ->appendFile($this->baseUrl() . '/lib/jquery/jquery-1.4.4.min.js', 
+            ->appendFile($this->baseUrl() . '/media/common/js/jquery/jquery-1.4.4.min.js',
         'text/javascript', array())
             ->appendFile(
-        $this->baseUrl() . '/lib/jquery/jquery-ui-1.8.7.min.js', 
+        $this->baseUrl() . '/media/common/js/jquery/jquery-ui-1.8.7.min.js',
         'text/javascript', array())
             ->appendFile(
-        'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/i18n/jquery-ui-i18n.min.js', 
+        'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/i18n/jquery-ui-i18n.min.js',
         'text/javascript', array())
-            ->appendFile($this->baseUrl() . '/lib/jquery/shadowbox.js', 
+            ->appendFile($this->baseUrl() . '/media/common/js/jquery/shadowbox.js',
         'text/javascript', array())
-            ->appendFile($this->baseUrl() . '/lib/common.js', 'text/javascript', 
+            ->appendFile($this->baseUrl() . '/media/common/js/common.js', 'text/javascript',
         array());
         ?>
         <script type="text/javascript">

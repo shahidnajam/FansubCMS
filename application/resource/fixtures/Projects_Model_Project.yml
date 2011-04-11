@@ -1,0 +1,11 @@
+Projects_Model_Project:
+  Projects_Model_Project_3:
+    name: 'Kateikyôshi Hitman REBORN!'
+    name_jp: 家庭教師ヒットマンREBORN!
+    description: "Sawada Tsunayoshi, genannt “Tsuna” oder auch “No-Good-Tsuna”, ist ein Schüler mit unterdurchschnittlichen Eigenschaften. Seine Noten sind unter dem Durchschnitt, seine sportlichen Eigenschaften hängen denen der Mädchen sogar hinterher und Glück in der Liebe hat er sowieso nicht.\r\nDies alles sollte sich mit der Ankunft eines Hitmans, einer speziellen Mafiafamilie, ändern. Reborn sieht aus wie ein 5-jähriger, trägt aber einen Anzug und eine Waffe. Eingeflogen aus Italien soll er Tsuna zu einem respektablen Mann heranziehen. Denn Tsuna gehört zur 10ten Generation und größten Mafiafamilie der Welt und er ist auch noch der Anwärter des Titels “Boss”. Mit recht unkonventionellen Mitteln versucht Reborn von da an, Tsuna in die richtige Richtung zu lenken und ihn in Gefahrensituationen zu helfen. Was Tsuna unter anderem nicht nur Pluspunkte bei seiner Flamme Sasagawa Kyoko und Untergebene einbringt."
+    poster: 'http://img5.imagebanana.com/img/9yrtoasc/g2142.jpg'
+    mini_poster: 'http://img5.imagebanana.com/img/9yrtoasc/g2142.jpg'
+    status: pending
+    private: no
+    created_at: '2011-03-03 09:39:19'
+    updated_at: '2011-03-03 09:39:19'

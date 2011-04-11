@@ -1,0 +1,23 @@
+User_Model_User:
+  User_Model_User_7:
+    name: Hikaru-Shindo
+    password: dc28cfb856cda95a34508678c00e938d23f8eb31663e5943d70cf9174afe6671
+    email: hikaru@animeownage.de
+    description: ''
+    show_team: yes
+    active: yes
+    activated: yes
+    last_login: '2011-03-03 09:42:52'
+    created_at: '2011-03-02 14:23:35'
+    updated_at: '2011-03-03 09:42:52'
+  User_Model_User_8:
+    name: testi
+    password: ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f
+    email: test@mail.de
+    description: 'Testkonto mit eingeschränkten Rechten'
+    show_team: no
+    active: yes
+    activated: yes
+    last_login: null
+    created_at: '2011-03-03 09:36:39'
+    updated_at: '2011-03-03 09:36:39'

@@ -1,0 +1,15 @@
+User_Model_Task:
+  User_Model_Task_3:
+    name: Übersetzer
+  User_Model_Task_4:
+    name: Fehlerkorrekteur
+  User_Model_Task_5:
+    name: Typograph
+  User_Model_Task_6:
+    name: Zeitsetzer
+  User_Model_Task_7:
+    name: Karaokeeffektgestalter
+  User_Model_Task_8:
+    name: Medienersteller
+  User_Model_Task_9:
+    name: Qualitätsprüfer

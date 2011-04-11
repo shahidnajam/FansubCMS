@@ -1,0 +1,4 @@
+User_Model_Role:
+  User_Model_Role_7_admin_admin:
+    User_Model_User: User_Model_User_7
+    role_name: admin_admin
