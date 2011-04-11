@@ -211,7 +211,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action
         }
         if (is_dir($source)) {
             $oldmask = umask(0);
-            mkdir($destination, 0777);
+            @mkdir($destination, 0777, true);
             umask($oldmask); 
             $dir_handle = opendir($source);
             while ($files = readdir($dir_handle))
