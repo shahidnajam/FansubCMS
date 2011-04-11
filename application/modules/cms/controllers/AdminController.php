@@ -55,7 +55,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action
             die('layout media path does not exist');
         }
         
-        $tempPath = sys_get_temp_dir();
+        $tempPath = $this->_getTempPath();
         $tempDir = $tempPath . DIRECTORY_SEPARATOR . md5(time()) . '_style';
         $tempLayoutDir = $tempDir . DIRECTORY_SEPARATOR . 'layout';
         
@@ -67,7 +67,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action
             mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'modules');
             mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'public');
             mkdir($tempLayoutDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'media');
-
+            
             // copy base
             $this->_recurseCopy($layoutPath, 
             $tempLayoutDir . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR .
@@ -75,7 +75,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action
             $this->_recurseCopy($layoutMediaPath, 
             $tempLayoutDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR .
              $layout);
-             
+            
             foreach ($viewPaths as $vP) {
                 $cleanVP = str_replace(APPLICATION_PATH, '', $vP);
                 $this->_recurseCopy($vP, 
@@ -141,8 +141,8 @@ class Cms_AdminController extends FansubCMS_Controller_Action
             }
         } else {
             $this->session->message = $this->translate('cms_static_not_existent');
-            $this->_helper->redirector->gotoRoute(array('action' => 'liststatic', 'controller' => 'admin', 
-            'module' => 'cms'));
+            $this->_helper->redirector->gotoRoute(
+            array('action' => 'liststatic', 'controller' => 'admin', 'module' => 'cms'));
         }
     }
     
@@ -185,8 +185,8 @@ class Cms_AdminController extends FansubCMS_Controller_Action
             }
         } else {
             $this->session->message = $this->translate('cms_static_not_existent');
-            $this->_helper->redirector->gotoRoute(array('action' => 'liststatic', 'controller' => 'admin', 
-            'module' => 'cms'));
+            $this->_helper->redirector->gotoRoute(
+            array('action' => 'liststatic', 'controller' => 'admin', 'module' => 'cms'));
         }
     }
     
@@ -254,6 +254,27 @@ class Cms_AdminController extends FansubCMS_Controller_Action
         }
         
         return false;
+    }
+    
+    /**
+     * 
+     * Retuns the temp path
+     * @return string
+     */
+    protected function _getTempPath()
+    {
+        if ($temp = getenv('TMP'))
+            return $temp;
+        if ($temp = getenv('TEMP'))
+            return $temp;
+        if ($temp = getenv('TMPDIR'))
+            return $temp;
+        $temp = tempnam(__FILE__, '');
+        if (file_exists($temp)) {
+            unlink($temp);
+            return dirname($temp);
+        }
+        return null;
     }
 
 }
