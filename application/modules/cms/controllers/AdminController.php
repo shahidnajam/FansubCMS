@@ -263,6 +263,8 @@ class Cms_AdminController extends FansubCMS_Controller_Action
      */
     protected function _getTempPath()
     {
+        if($temp = ini_get('upload_tmp_dir'))
+            return $temp;
         if ($temp = getenv('TMP'))
             return $temp;
         if ($temp = getenv('TEMP'))
