@@ -29,7 +29,7 @@ class Projects_Delegate_Default_Sorting
         $return = array();
         # sort the projects according to their status
         foreach($projects as $project) {
-            if(empty($return[$project->status])) {
+            if(empty($result[$project->status])) {
                 $result[$project->status] = array();
             }
             $result[$project->status][] = $project;
