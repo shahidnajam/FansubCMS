@@ -25,14 +25,25 @@ class Projects_Delegate_Default_Sorting
     
     public function sortProjects($projects)
     {
+        $result = array();
         $return = array();
         # sort the projects according to their status
         foreach($projects as $project) {
             if(empty($return[$project->status])) {
-                $return[$project->status] = array();
+                $result[$project->status] = array();
             }
-            $return[$project->status][] = $project;
+            $result[$project->status][] = $project;
         }
+
+        $return = array(
+            'progress' => empty($result['progress']) ? array() : $result['progress'],
+            'planned' => empty($result['planned']) ? array() : $result['planned'],
+            'completed' => empty($result['completed']) ? array() : $result['completed'],
+            'pending' => empty($result['pending']) ? array() : $result['pending'],
+            'licensed' => empty($result['licensed']) ? array() : $result['licensed'],
+            'dropped' => empty($result['dropped']) ? array() : $result['dropped'],
+        );
+        
         return $return;
     }
 }

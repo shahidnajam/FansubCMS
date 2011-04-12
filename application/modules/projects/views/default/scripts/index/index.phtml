@@ -1,23 +1,12 @@
 <?php if(count($this->projects)):?>
 <?=$this->partial('partials/quickselect.phtml',$this->quickSelect)?>
 <div class="seperator"></div>
-<script>
-     $(function() {
-        $( "#tabs" ).tabs().find( ".ui-tabs-nav" ).sortable({ axis: "x" });
-    });
-</script>
-<div id="tabs">
-    <ul>
-        <?php foreach($this->projects as $status => $projects): ?>
-        <li><a href="#tab-<?=$status?>"><?=$this->translate('project_status_'.$status)?></a></li>
-        <?php endforeach; ?>
-    </ul>
-    <?php foreach($this->projects as $status => $projects): ?>
-    <div id="tab-<?=$status?>">
-        <?=$this->partialLoop('partials/projectLoop.phtml',$projects)?>
-    </div>
-    <?php endforeach; ?>
-</div>
+<?php foreach($this->projects as $status => $projects): ?>
+<?php if(empty($projects)) continue; ?>
+<h1><?=$this->translate('project_status_' . $status)?></h1>
+<br /><br />
+<?=$this->partialLoop('partials/projectLoop.phtml',$projects)?>
+<?php endforeach; ?>
 <?=$this->partial('partials/quickselect.phtml',$this->quickSelect)?>
 <?php else: ?>
 <?=$this->translate('project_no_projects')?>
