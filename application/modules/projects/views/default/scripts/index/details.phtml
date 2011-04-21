@@ -1,6 +1,6 @@
 <?=$this->partial('partials/quickselect.phtml',$this->quickSelect)?>
-<h1><?=$this->projectName?></h1>
 <?php if($this->project): ?>
+<h1><?=$this->project->name?></h1>
 <h2><?=$this->project->name_jp?></h2>
 <div class="poster">
     <img src="<?=$this->project->poster?>" alt="<?=$this->project->name?>" />

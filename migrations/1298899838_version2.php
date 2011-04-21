@@ -14,6 +14,20 @@ class Version2 extends Doctrine_Migration_Base
              'type' => 'unique',
              ));
     }
+    
+    public function postUp()
+    {
+        $table = Doctrine::getTable('News_Model_News');
+        
+        $records = $table->findAll();
+
+        foreach($records as $record) {
+            if(empty($record->title_slug)) {
+                $record->title_slug = Doctrine_Inflector::urlize($record->title);
+                $record->save();
+            }
+        }
+    }
 
     public function down()
     {

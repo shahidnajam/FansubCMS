@@ -9,7 +9,7 @@
     </div>
     <div class="content">
         <?=$this->textile($this->shortenText($this->description,250))?>
-        <a href="<?=$this->baseUrl()?>/projects/index/details/project/<?=urlencode($this->name)?>"><?=$this->translate('project_details')?></a>
+        <a href="<?=$this->baseUrl()?>/projects/index/details/project/<?=$this->name_slug?>"><?=$this->translate('project_details')?></a>
     </div>
 </div>
 <div class="seperator"></div>

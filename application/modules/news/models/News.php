@@ -67,11 +67,6 @@ class News_Model_News extends Base_News_Model_News
     {
         $conf = Zend_Registry::get('environmentSettings');
         if ($conf->news->usePermaLink) {
-            if(empty($this->title_slug)) {
-                $this->title_slug = Doctrine_Inflector::urlize($this->title);
-                $this->save();
-            }
-            
             $date = new Zend_Date(strtotime($this->created_at));
             return 'archive/' . $date->toString('YYYY') . '/' .
              $date->toString('MM') . '/' . $date->toString('dd') . '/' .

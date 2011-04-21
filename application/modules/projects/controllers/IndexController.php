@@ -37,8 +37,7 @@ class Projects_IndexController extends FansubCMS_Controller_Action {
     {
         $name = urldecode($this->getRequest()->getParam('project'));
         $project = Doctrine::getTable('Projects_Model_Project');
-        $this->view->projectName = $name;
-        $this->view->project = $project->findOneBy('name', $name);
+        $this->view->project = $project->findOneBy('name_slug', $name);
     }
     
     public function feedAction()
