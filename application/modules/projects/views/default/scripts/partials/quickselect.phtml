@@ -5,7 +5,7 @@
             <option value=""><?=$this->translate('project_quickselect_noselect')?></option>
 <?php foreach($this as $project):?>
             <?php if(isset($project['name'])):?>
-            <option value="<?=urlencode($project['name'])?>"><?=htmlspecialchars($project['name'])?></option>
+            <option value="<?=$project['name_slug']?>"><?=$this->escape($project['name'])?></option>
             <?php endif; ?>
 <?php endforeach;?>
         </select>
