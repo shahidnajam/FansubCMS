@@ -84,6 +84,4 @@ abstract class Base_News_Model_News extends FansubCMS_Doctrine_Record
         $this->actAs($timestampable0);
         $this->actAs($sluggable0);
     }
-    
-
 }

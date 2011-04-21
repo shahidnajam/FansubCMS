@@ -103,6 +103,18 @@ abstract class Base_Projects_Model_Project extends FansubCMS_Doctrine_Record
              'foreign' => 'project_id'));
 
         $timestampable0 = new Doctrine_Template_Timestampable();
+        $sluggable0 = new Doctrine_Template_Sluggable(array(
+             'name' => 'name_slug',
+             'unique' => true,
+             'fields' => 
+             array(
+              0 => 'name',
+             ),
+             'canUpdate' => true,
+             'type' => 'string',
+             'length' => 255,
+             ));
         $this->actAs($timestampable0);
+        $this->actAs($sluggable0);
     }
 }

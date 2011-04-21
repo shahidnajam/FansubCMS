@@ -2,6 +2,13 @@ Projects_Model_Project:
     tableName: projects
     actAs:
         Timestampable:
+        Sluggable:
+            name: name_slug
+            unique: true
+            fields: [name]
+            canUpdate: true
+            type: string
+            length: 255
     columns:
         id:
             type: integer
