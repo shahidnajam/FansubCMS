@@ -18,7 +18,7 @@ class FansubCMS_View_Helper_Gravatar extends Zend_View_Helper_Abstract {
 	 * @return string
 	 */
 	public function gravatar($email,$size=80,$default=null) {
-	    $avatar_url = 'http://www.gravatar.com/avatar.php?gravatar_id='.md5($email).'&amp;size='.$size;
+	    $avatar_url = 'http://www.gravatar.com/avatar.php?gravatar_id='.md5(strtolower($email)).'&amp;size='.$size;
 	    if($default !== null) $avatar_url .= '&amp;default='.urlencode($default);
 	    return $avatar_url;
 	}

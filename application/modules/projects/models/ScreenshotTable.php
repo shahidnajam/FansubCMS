@@ -16,18 +16,4 @@ class Projects_Model_ScreenshotTable extends Doctrine_Table
     {
         return Doctrine_Core::getTable('Projects_Model_Screenshot');
     }
-    
-    /**
-     * returns a Zend_Paginator_Object
-     * @see Zend_Paginator
-     * @return Zend_Paginator
-     */
-    public function getPaginator ()
-    {
-        $q = $this->createQuery();
-        $q->leftJoin('Projects_Model_Screenshot.Projects_Model_Project p')
-        ->orderBy('p.name ASC');
-        $adapter = new FansubCMS_Paginator_Adapter_Doctrine($q);
-        return new Zend_Paginator($adapter);
-    }
 }

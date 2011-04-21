@@ -22,16 +22,12 @@ class News_AdminController extends FansubCMS_Controller_Action
     {
         $this->view->pageTitle = $this->translate('news_admin_index_headline');
         $table = Doctrine_Core::getTable('News_Model_News');
-        $this->view->news = $table->getPaginator('all');
-        $page = $this->getRequest()->getParam('page');
-        $this->view->news->setItemCountPerPage(25);
-        $this->view->news->setCurrentPageNumber($page);
-        if($this->acl->isAllowed($this->defaultUseRole, 'news_admin', 'comments'))
-            $this->session->tableActions['news_comments'] = array('module' => 'news', 'controller' => 'admin', 'action' => 'comments');
-        if($this->acl->isAllowed($this->defaultUseRole, 'news_admin', 'edit'))
-            $this->session->tableActions['news_edit'] = array('module' => 'news', 'controller' => 'admin', 'action' => 'edit');
-        if($this->acl->isAllowed($this->defaultUseRole, 'news_admin', 'delete'))
-            $this->session->tableActions['news_delete'] = array('module' => 'news', 'controller' => 'admin', 'action' => 'delete');
+        
+        $query = $table->createQuery();
+        $query->select('*, id as comments, id as id, u.name as author')
+            ->leftJoin('User_Model_User u');
+            
+        $this->view->query = $query;     
     }
 
     public function editAction()

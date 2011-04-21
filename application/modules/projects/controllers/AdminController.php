@@ -22,15 +22,8 @@ class Projects_AdminController extends FansubCMS_Controller_Action
     {
         $this->view->pageTitle = $this->translate('project_list_headline');
         $table = Doctrine_Core::getTable('Projects_Model_Project');
-        $this->view->projects = $table->findAll()->toArray();
-        if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'edit'))
-            $this->session->tableActions['project_edit'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'edit');
-        if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'episodes'))
-            $this->session->tableActions['project_episodes'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'episodes');
-        if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'screenshots'))
-            $this->session->tableActions['project_screenshots'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'screenshots');
-        if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'delete'))
-            $this->session->tableActions['project_delete'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'delete');
+
+        $this->view->query = $table->createQuery();
     }
 
     public function addAction() 
@@ -105,26 +98,25 @@ class Projects_AdminController extends FansubCMS_Controller_Action
 
         if(!empty($id)) {
             $project = Doctrine_Query::create()->from('Projects_Model_Project p')->where('p.id = ?', $id)->fetchOne();
+            
             $this->view->pageTitle = sprintf($this->translate('project_admin_episodes_headline'),$project->name);
             $this->view->all = false;
         } else {
             $this->view->pageTitle = sprintf($this->translate('project_admin_episodes_headline_2'));
             $this->view->all = true;
         }
-
+        
         $table = Doctrine_Core::getTable('Projects_Model_Episode');
-        $paginator = $table->getPaginator(empty($id) ? null : $id);
-        if(!$paginator) {
-            $this->_helper->redirector->gotoSimple('index','admin','projects');
+        
+        $query = $table->createQuery();
+        $query->select('*, title as name, updated_by as updater, p.name as project')
+        ->leftJoin('Projects_Model_Episode.Projects_Model_Project p')
+        ->orderBy('p.name ASC, Projects_Model_Episode.number ASC, Projects_Model_Episode.container ASC');
+        if (! empty($id)) {
+            $query->where('Projects_Model_Episode.project_id = ?', $id);
         }
-        $this->view->episodes = $paginator;
-        $page = $this->getRequest()->getParam('page');
-        $this->view->episodes->setItemCountPerPage(25);
-        $this->view->episodes->setCurrentPageNumber($page);
-        if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'editepisode'))
-            $this->session->tableActions['project_edit_episode'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'editepisode');
-        if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'deleteepisode'))
-            $this->session->tableActions['project_delete_episode'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'deleteepisode');
+        
+        $this->view->query = $query;
     }
 
     public function addepisodeAction() 
@@ -195,14 +187,18 @@ class Projects_AdminController extends FansubCMS_Controller_Action
     {
         $this->view->pageTitle = $this->translate('project_screenshots_headline');
         $table = Doctrine_Core::getTable('Projects_Model_Screenshot');
-        $this->view->screenshots = $table->getPaginator();
-        $page = $this->getRequest()->getParam('page');
-        $this->view->screenshots->setItemCountPerPage(25);
-        $this->view->screenshots->setCurrentPageNumber($page);
-        if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'editscreenshot'))
-            $this->session->tableActions['project_edit_screenshot'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'editscreenshot');
-        if($this->acl->isAllowed($this->defaultUseRole, 'projects_admin', 'deletescreenshot'))
-            $this->session->tableActions['project_delete_screenshot'] = array('module' => 'projects', 'controller' => 'admin', 'action' => 'deletescreenshot');
+        $id = $this->request->getParam('id', false);
+        
+        $query = $table->createQuery()
+                ->select('screenshot as screen, p.name as project')
+                ->leftJoin('Projects_Model_Screenshot.Projects_Model_Project p')
+                ->orderBy('p.name ASC');
+                
+        if($id) {
+            $query->where('p.id = ?', $id);
+        }
+
+        $this->view->query = $query;
     }
 
     public function addscreenshotAction() 

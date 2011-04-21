@@ -19,6 +19,10 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
 {
     public $module;
     public $autoloader;
+    /**
+     * The front controller
+     * @var Zend_Controller_Front
+     */
     public $frontController;
     public $settings;
     public $moduleSettings;
@@ -31,7 +35,7 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
         $this->settings = Zend_Registry::get('settings');
 
         $this->bootstrap("FrontController");
-		$this->frontController = $this->getResource("FrontController");
+        $this->frontController = $this->getResource("FrontController");
         $this->envSettings = Zend_Registry::get('environmentSettings');
         $iniPath = $this->path . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'module.ini';
 

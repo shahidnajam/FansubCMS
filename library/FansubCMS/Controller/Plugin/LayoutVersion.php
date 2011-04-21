@@ -25,8 +25,20 @@
  */
 class FansubCMS_Controller_Plugin_LayoutVersion extends Zend_Controller_Plugin_Abstract
 {
+    /**
+     * The layout
+     * @var Zend_Layout
+     */
     private $_layout;
+    /**
+     * The application settings
+     * @var Zend_Config
+     */
     private $_settings;
+    /**
+     * The View
+     * @var Zend_View
+     */
     public $view;
 
     public function __construct($envSettings)
@@ -75,5 +87,14 @@ class FansubCMS_Controller_Plugin_LayoutVersion extends Zend_Controller_Plugin_A
             if(is_dir($dir)) # we should only add if it exists
                 $this->view->addScriptPath($dir);
         }
+
+        $helperPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR .
+                $request->getModuleName() . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'helpers';
+
+        $settings = Zend_Registry::get('settings');
+        $this->view->addHelperPath(
+                $helperPath,
+                (!empty($settings->view->helperNamespace) ? $settings->view->helperNamespace : "Zend_View_Helper_")
+        );
     }
 }

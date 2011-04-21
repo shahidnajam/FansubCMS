@@ -1,22 +1,45 @@
-<?php if(count($this->screenshots)): ?>
-<table id="episodes-admin-listing">
-    <tr>
-        <th><?=$this->translate('project_admin_screenshot_table_screen')?></th>
-        <th><?=$this->translate('project_admin_screenshot_table_project')?></th>
-        <th><?=$this->translate('table_action')?>
-    </tr>
-    <?php $i = 0; foreach($this->screenshots as $screen):?>
-    <tr class="<?=$i % 2 ? 'specialOne' : 'specialTwo'?>">
-        <td><?=$screen->screenshot?></td>
-        <td><?=$screen->Projects_Model_Project->name?></td>
-        <td><?=$this->partial('partials/tableActions.phtml',array('id'=>$screen->id))?></td>
-    </tr>
-        <?php $i++; endforeach;?>
-</table>
-    <?= $this->paginationControl($this->screenshots, 'Sliding', 'partials/pagination.phtml')?>
-<?php else: ?>
-<div class="info"><?=$this->translate('project_no_screenshot')?></div>
-<?php endif; ?>
-<?php if($this->isAllowed('projects_admin','addscreenshot')): ?>
-<div class="add"><a href="<?=$this->baseUrl()?>/projects/admin/addscreenshot/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/picture--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
-<?php endif; ?>
+<?=
+$this->modelList('Projects_Model_Screenshot', array(
+    'prefix' => 'project_admin_screenshot_table_',
+    'emptyListMessage' => 'project_no_screenshot',
+    'showFieldNames' => array(
+       'screen', 'project',
+    ),
+    'actions' => array(
+        'edit' => array(
+            'image' => '/media/common/images/icons/16/picture--pencil.png',
+            'label' => 'project_edit_table_action',
+            'privilege' => 'edit',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'editscreenshot',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'delete' => array(
+            'image' => '/media/common/images/icons/16/picture--minus.png',
+            'label' => 'project_delete_table_action',
+            'privilege' => 'delete',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'deletescreenshot',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        )
+    ),
+    'footerActions' => array(
+        'add' => array(
+            'module' => 'projects',
+            'controller' => 'admin',
+            'action' => 'addscreenshot',
+            'label' => $this->translate('add'),
+            'image' => '/media/common/images/icons/16/picture--plus.png'
+        )
+    )
+), $this->query);

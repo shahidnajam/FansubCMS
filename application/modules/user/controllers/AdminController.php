@@ -22,11 +22,8 @@ class User_AdminController extends FansubCMS_Controller_Action
     {
         $this->view->pageTitle = $this->translate('user_list_headline');
         $table = Doctrine_Core::getTable('User_Model_User');
-        $this->view->users = $table->findAll()->toArray();
-        if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'edit'))
-            $this->session->tableActions['user_edit'] = array('module' => 'user', 'controller' => 'admin', 'action' => 'edit');
-        if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'delete'))
-            $this->session->tableActions['user_delete'] = array('module' => 'user', 'controller' => 'admin', 'action' => 'delete');
+
+        $this->view->query = $table->createQuery();
     }
 
     public function addAction()
@@ -119,11 +116,8 @@ class User_AdminController extends FansubCMS_Controller_Action
     {
         $thius->view->pageTitle = $this->translate('user_task_list_headline');
         $table = Doctrine_Core::getTable('User_Model_Task');
-        $this->view->tasks = $table->findAll()->toArray();
-        if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'taskedit'))
-            $this->session->tableActions['user_edit_task'] = array('module' => 'user', 'controller' => 'admin', 'action' => 'edittask');
-        if($this->acl->isAllowed($this->defaultUseRole, 'user_admin', 'taskdelete'))
-            $this->session->tableActions['user_delete_task'] = array('module' => 'user', 'controller' => 'admin', 'action' => 'deletetask');
+
+        $this->view->query = $table->createQuery();
     }
 
     public function addtaskAction()

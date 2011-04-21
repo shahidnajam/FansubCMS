@@ -1,11 +1,41 @@
-<table>
-    <tr>
-        <th><?=$this->translate('user_task_list_table_id')?></th>
-        <th><?=$this->translate('user_task_list_table_name')?></th>
-        <th><?=$this->translate('table_action')?></th>
-    </tr>
-    <?=$this->partialLoop('partials/taskListLoop.phtml',$this->tasks)?>
-</table>
-<?php if($this->isAllowed('user_admin','addtask')): ?>
-<div class="add"><a href="<?=$this->baseUrl()?>/user/admin/addtask/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/wrench--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
-<?php endif; ?>
+<?=
+$this->modelList('User_Model_Task', array(
+    'prefix' => 'user_task_list_table_',
+    'actions' => array(
+        'edit' => array(
+            'image' => '/media/common/images/icons/16/wrench--pencil.png',
+            'label' => 'user_task_edit_table_action',
+            'privilege' => 'edit',
+            'target' => array(
+                'module' => 'user',
+                'controller' => 'admin',
+                'action' => 'edittask',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'delete' => array(
+            'image' => '/media/common/images/icons/16/wrench--minus.png',
+            'label' => 'user_task_delete_table_action',
+            'privilege' => 'delete',
+            'target' => array(
+                'module' => 'user',
+                'controller' => 'admin',
+                'action' => 'deletetask',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        )
+    ),
+    'footerActions' => array(
+        'add' => array(
+            'module' => 'user',
+            'controller' => 'admin',
+            'action' => 'addtask',
+            'label' => $this->translate('add'),
+            'image' => '/media/common/images/icons/16/wrench--plus.png'
+        )
+    )
+), $this->query);

@@ -224,52 +224,9 @@ body {
     float: left;
     background-repeat: no-repeat;
 }
-/* now the specific icons */
-.news_comments_table_action  {
-    background-image: url("../../common/images/icons/16/balloon.png");
-}
-.news_edit_table_action  {
-    background-image: url("../../common/images/icons/16/document--pencil.png");
-}
-.news_delete_table_action  {
-    background-image: url("../../common/images/icons/16/document--minus.png");
-}
-.user_edit_table_action  {
-    background-image: url("../../common/images/icons/16/user--pencil.png");
-}
-.user_delete_table_action  {
-    background-image: url("../../common/images/icons/16/user--minus.png");
-}
-.user_edit_task_table_action  {
-    background-image: url("../../common/images/icons/16/wrench--pencil.png");
-}
-.user_delete_task_table_action  {
-    background-image: url("../../common/images/icons/16/wrench--minus.png");
-}
-.project_edit_table_action  {
-    background-image: url("../../common/images/icons/16/folder--pencil.png");
-}
-.project_delete_table_action  {
-    background-image: url("../../common/images/icons/16/folder--minus.png");
-}
-.project_episodes_table_action  {
-    background-image: url("../../common/images/icons/16/monitor.png");
-}
-.project_screenshots_table_action  {
-    background-image: url("../../common/images/icons/16/picture.png");
-}
-.project_edit_episode_table_action  {
-    background-image: url("../../common/images/icons/16/monitor--pencil.png");
-}
-.project_delete_episode_table_action  {
-    background-image: url("../../common/images/icons/16/monitor--minus.png");
-}
-.project_edit_screenshot_table_action  {
-    background-image: url("../../common/images/icons/16/picture--pencil.png");
-}
-.project_delete_screenshot_table_action  {
-    background-image: url("../../common/images/icons/16/picture--minus.png");
-}
+
+/* table actions */
+
 .cms_edit_static_table_action  {
     background-image: url("../../common/images/icons/16/document--pencil.png");
 }

@@ -1,14 +1,60 @@
-<table>
-    <tr>
-        <th><?=$this->translate('user_list_table_id')?></th>
-        <th><?=$this->translate('user_list_table_name')?></th>
-        <th><?=$this->translate('user_list_table_email')?></th>
-        <th><?=$this->translate('user_list_table_date')?></th>
-        <th><?=$this->translate('user_list_table_last_login')?></th>
-        <th><?=$this->translate('table_action')?></th>
-    </tr>
-    <?=$this->partialLoop('partials/userListLoop.phtml',$this->users)?>
-</table>
-<?php if($this->isAllowed('user_admin','add')): ?>
-<div class="add"><a href="<?=$this->baseUrl()?>/user/admin/add/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/user--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
-<?php endif; ?>
+<?=
+$this->modelList('User_Model_User', array(
+    'prefix' => 'user_list_table_',
+    'emptyListMessage' => 'no_records',
+    'showFieldNames' => array(
+       'id', 'name', 'email', 'created_at', 'last_login'
+    ),
+    'filterFields' => array(
+        'email' => array(
+            'viewHelper' => 'addAvatar',
+            'params' => array(
+                false, 15
+            )
+        ),
+        'created_at' => array(
+            'viewHelper' => 'formatDate',
+        ),
+        'last_login' => array(
+            'viewHelper' => 'formatDate',
+            'emptyText' => 'user_not_logged_in_yet'
+        )
+    ),
+    'actions' => array(
+        'edit' => array(
+            'image' => '/media/common/images/icons/16/user--pencil.png',
+            'label' => 'user_edit_table_action',
+            'privilege' => 'edit',
+            'target' => array(
+                'module' => 'user',
+                'controller' => 'admin',
+                'action' => 'edit',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'delete' => array(
+            'image' => '/media/common/images/icons/16/user--minus.png',
+            'label' => 'user_delete_table_action',
+            'privilege' => 'delete',
+            'target' => array(
+                'module' => 'user',
+                'controller' => 'admin',
+                'action' => 'delete',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        )
+    ),
+    'footerActions' => array(
+        'add' => array(
+            'module' => 'user',
+            'controller' => 'admin',
+            'action' => 'add',
+            'label' => 'add',
+            'image' => '/media/common/images/icons/16/user--plus.png'
+        )
+    )
+), $this->query);

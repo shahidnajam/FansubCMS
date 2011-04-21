@@ -1,29 +1,71 @@
-<?php if(count($this->news)):?>
-<table id="news-admin-listing">
-    <tr>
-        <th><?=$this->translate('news_admin_index_table_title')?></th>
-        <th><?=$this->translate('news_admin_index_table_created_at')?></th>
-        <th><?=$this->translate('news_admin_index_table_comments')?></th>
-        <th><?=$this->translate('news_admin_index_table_public')?></th>
-        <th><?=$this->translate('news_admin_index_table_author')?></th>
-        <th><?=$this->translate('table_action')?></th>
-    </tr>
-        <?php $i = 0; foreach($this->news as $news):?>
-    <tr class="<?=$i % 2 ? 'specialOne' : 'specialTwo'?>">
-
-        <td><?=$news->title?></td>
-        <td><?=$this->formatDate($news->created_at)?></td>
-        <td><?=count($news->getComments())?></td>
-        <td><?=$this->translate($news->public.'_term')?></td>
-        <td><?=$news->User_Model_User->name?></td>
-        <td><?=$this->partial('partials/tableActions.phtml',array('id'=>$news->id))?></td>
-    </tr>
-        <?php $i++; endforeach;?>
-</table>
-    <?= $this->paginationControl($this->news, 'Sliding', 'partials/pagination.phtml')?>
-<?php else: ?>
-<div class="info"><?=$this->translate('news_no_news')?></div>
-<?php endif;?>
-<?php if($this->isAllowed('news_admin','add')): ?>
-<div class="add"><a href="<?=$this->baseUrl()?>/news/admin/add/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/document--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
-<?php endif; ?>
+<?=$this->modelList('News_Model_News', array(
+    'prefix' => 'news_admin_index_table_',
+    'emptyListMessage' => 'news_no_news',
+    'showFieldNames' => array(
+        'title', 'created_at', 'comments', 'public', 'author'
+    ),
+    'filterFields' => array(
+        'created_at' => array(
+            'viewHelper' => 'formatDate',
+        ),
+        'comments' => array(
+            'viewHelper' => 'count'  
+        ),
+        'public' => array(
+            'viewHelper' => 'prefixTranslate',
+            'params' => array(
+                '_term', true
+            )
+        )
+    ),
+    'actions' => array(
+    	'comments' => array(
+            'image' => '/media/common/images/icons/16/balloon.png',
+            'label' => 'news_comments_table_action',
+            'privilege' => 'edit',
+            'target' => array(
+                'module' => 'news',
+                'controller' => 'admin',
+                'action' => 'comments',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'edit' => array(
+            'image' => '/media/common/images/icons/16/document--pencil.png',
+            'label' => 'news_edit_table_action',
+            'privilege' => 'edit',
+            'target' => array(
+                'module' => 'news',
+                'controller' => 'admin',
+                'action' => 'edit',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'delete' => array(
+            'image' => '/media/common/images/icons/16/document--minus.png',
+            'label' => 'news_delete_table_action',
+            'privilege' => 'delete',
+            'target' => array(
+                'module' => 'news',
+                'controller' => 'admin',
+                'action' => 'delete',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        )
+    ),
+    'footerActions' => array(
+        'add' => array(
+            'module' => 'news',
+            'controller' => 'admin',
+            'action' => 'add',
+            'label' => $this->translate('add'),
+            'image' => '/media/common/images/icons/16/document--plus.png'
+        )
+    )
+), $this->query);?>

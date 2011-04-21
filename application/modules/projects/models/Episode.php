@@ -29,6 +29,7 @@ class Projects_Model_Episode extends Base_Projects_Model_Episode
         
         return $u->name;
     }
+    
     public function updateEpisode ($values)
     {
         if (! empty($values['project']))

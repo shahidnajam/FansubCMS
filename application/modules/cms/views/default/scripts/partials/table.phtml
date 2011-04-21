@@ -1,93 +1,101 @@
-<?php 
-if(!($this->table instanceof Cms_Api_Table)) {
-    echo "No table class given.";
-    return;
-}
-$footerActions = empty($this->footerActions) ? array() : $this->footerActions;
+<?php
 $acl = Zend_Registry::get('Zend_Acl');
 $role = 'fansubcms_user_custom_role_logged_in_user';
-$defaultPrefix = 'default_table_';
-$prefix = empty($this->prefix) ? $defaultPrefix : $this->prefix;
-$actions = $this->table->getActions();
-$paginator = $this->table->getPaginator();
-if(!count($paginator)) {
-    echo empty($this->noValuesText) ? $this->translate('default_message_no_values') : $this->translate($this->noValuesText);
-    return;   
-}
-
-$header = array();
-
-foreach($paginator->getItem(1)->toArray() as $field => $value) {
-    if(is_null($value)) {
-        continue;
-    }
-    $val = $this->translate($prefix . $field);
-    if($val == $prefix . $field) {
-        $val = $this->translate($defaultPrefix . $field);
-    }
-    $header[] = $val;
-}
-if(count($actions)) {
-    $header[] = $this->translate('default_table_actions');
-}
 ?>
+<?php if(count($this->paginator)): ?>
 <table class="admin-table">
-	<tr>
-    	<?php foreach($header as $value): ?>
-    	<th><?php echo $value; ?></th>
-    	<?php endforeach; ?>
-    </tr>
-    <?php foreach($paginator as $entry): ?>
-    <tr>
-    	<?php foreach($entry->toArray() as $value):
-    	if(is_null($value)) continue; ?>
-    	<td>
-    	<?php echo $value ?>
-    	</td>
-    	<?php endforeach; ?>
-    	<?php if(count($actions)): ?>
-    	<td class="table-actions">
-    		<?php foreach($actions as $action):
-    		$resource = $action['target']['module'].'_'.$action['target']['controller'];?>
-    		<?php if($acl->has($resource) && $acl->isAllowed($role, $resource, $action['target']['action'])): ?>
-    		<?php if($acl->has($entry) && $acl->isAllowed($role, $entry, $action['privilege'])): ?>
-    		<?php
-    		$url = $action['target']['module'] . '/' . $action['target']['controller'] . '/' . $action['target']['action'];
-    		foreach($action['target']['params'] as $key => $value) {
-    		    if(substr($value, 0, 2) == '__' && substr($value, -2) == '__') {
-    		        $value = $entry[substr($value, 2, -2)];
-    		    }
-    		    $url .= '/' . $key . '/' . urlencode($value);
-    		}
-    		$url = $this->baseUrl($url);
-    		
-    		$innerAction = $this->translate($action['label']);
-    		if(!empty($this->actions[$action['name']]) && !empty($this->actions[$action['name']]['image'])) {
-    		    $innerAction = '<img src="' . $this->baseUrl($this->actions[$action['name']]['image']) . '" alt=""/>';
-    		}
-    		?>
-    		<a href="<?php echo $url; ?>" title="<?php echo $this->translate($action['label']) ?>"><?php echo $innerAction; ?></a>
-    		<?php endif; ?>
-    		<?php endif; ?>
-    		<?php endforeach; ?>
-    	</td>
-    	<?php endif; ?>
-    </tr>
-    <?php endforeach; ?>
-</table>
-<?php if(count($footerActions)):?>
-<div class="table-footer-actions">
-<?php foreach($footerActions as $action):
- unset($url);
- $resource = $action['module'] . '_' . $action['controller'];
- if($acl->has($resource) && $acl->isAllowed($role, $resource, $action['action'])):
- $url['module'] = $action['module'];
- $url['controller'] = $action['controller'];
- $url['action'] = $action['action'];
+    <thead>
+        <tr>
+            <?php foreach ($this->fieldNames AS $name): ?>
+            <?php $label = $this->options['prefix'] . $name; ?>
+                <th><?php echo $this->escape($this->translate($label)); ?></th>
+            <?php endforeach; ?>
+            <?php if (count($this->options['actions'])): ?>
+                    <th><?php echo $this->translate('table_action') ?></th>
+            <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+        <?php $class = $this->cycle(array('specialOne', 'specialTwo')); ?>
+        <?php foreach ($this->paginator AS $record): ?>
+                        <tr class="<?php echo $class->next(); ?>">
+            <?php if (empty($this->options['rowScript'])): ?>
+            <?php foreach ($this->fieldNames AS $name): ?>
+            <?php
+                                 if(!empty($this->options['filterFields'][$name]) && !empty($this->options['filterFields'][$name]['passRecord'])) {
+                                     $filter = $this->options['filterFields'][$name];
+                                    $filteredField = call_user_func_array(array($this, $filter['viewHelper']), empty($filter['params']) ? array($record) : array_merge(array($record), $filter['params']));
+                                 } else if (!empty($this->options['filterFields'][$name]) && !empty($record->$name)) {
+                                    $filter = $this->options['filterFields'][$name];
+                                    $filteredField = call_user_func_array(array($this, $filter['viewHelper']), empty($filter['params']) ? array($record->$name) : array_merge(array($record->$name), $filter['params']));
+                                } else if(!empty($this->options['filterFields'][$name]) && empty($record->$name) && !empty($this->options['filterFields'][$name]['emptyText'])){
+                                    $filteredField = $this->translate($this->options['filterFields'][$name]['emptyText']);
+                                } else {
+                                    $filteredField = $record->$name;
+                                }
+            ?>
+                                <td class="admin-table-field"><?php echo $filteredField; ?></td>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <?php echo $this->partial($this->options['rowScript'], array('record' => $record)) ?>
+            <?php endif; ?>
+            <?php if (count($this->options['actions'])): ?>
+                                        <td class="table-actions">
+                <?php foreach ($this->options['actions'] as $action):
+                                            $resource = $action['target']['module'] . '_' . $action['target']['controller']; ?>
+                <?php if ($acl->has($resource) && $acl->isAllowed($role, $resource, $action['target']['action'])): ?>
+                <?php if (!$acl->has($record) || $acl->isAllowed($role, $record, $action['privilege'])): ?>
+                <?php
+                                                    $url = $action['target']['module'] . '/' . $action['target']['controller'] . '/' . $action['target']['action'];
+                                                    foreach ($action['target']['params'] as $key => $value) {
+                                                        if (substr($value, 0, 2) == '__' && substr($value, -2) == '__') {
+                                                            $paramField = substr($value, 2, -2);
+                                                            $value = $record->$paramField;
+                                                        }
+                                                        $url .= '/' . $key . '/' . urlencode($value);
+                                                    }
+                                                    $url = $this->baseUrl($url);
+
+                                                    $innerAction = $this->translate($action['label']);
+                                                    if (!empty($action['image'])) {
+                                                        $innerAction = '<img src="' . $this->baseUrl($action['image']) . '" alt=""/>';
+                                                    }
+                ?>
+                                                    <a href="<?php echo $url; ?>" title="<?php echo $this->translate($action['label']) ?>"><?php echo $innerAction; ?></a>
+                <?php endif; ?>
+                <?php endif; ?>
+                <?php endforeach; ?>
+                                                </td>
+            <?php endif; ?>
+                                                </tr>                                        
+        <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+<?php
+                                                                $paginationControl = $this->paginationControl(
+                                                                                $this->paginator, $this->options['paginationStyle'], $this->options['paginationScript']
+                                                                );
+                                                                echo $paginationControl;
 ?>
-<a href="<?php echo $this->url($url,null,true)?>"><img src="<?php echo $this->baseUrl($action['image'])?>" alt=""/> <?php echo $action['label']?></a>
-<?php endif; ?>
-<?php endforeach; ?>
+<?php else: ?>
+<div class="no-records-message">
+<?php echo empty($this->options['emptyListMessage']) ? $this->translate('no_records') : $this->translate($this->options['emptyListMessage']) ?> 
 </div>
 <?php endif; ?>
-<?php echo $this->paginationControl($paginator, 'Sliding', 'partials/pagination.phtml'); ?>
+<?php if (count($this->options['footerActions'])): ?>
+
+                                                        <div class="table-footer-actions">
+    <?php
+                                                        foreach ($this->options['footerActions'] as $action):
+                                                            unset($url);
+                                                            $resource = $action['module'] . '_' . $action['controller'];
+                                                            if ($acl->has($resource) && $acl->isAllowed($role, $resource, $action['action'])):
+                                                                $url['module'] = $action['module'];
+                                                                $url['controller'] = $action['controller'];
+                                                                $url['action'] = $action['action'];
+    ?>
+                                                                <a href="<?php echo $this->url($url, null, true) ?>"><img src="<?php echo $this->baseUrl($action['image']) ?>" alt=""/> <?php echo $this->escape($this->translate($action['label'])) ?></a>
+    <?php endif; ?>
+    <?php endforeach; ?>
+                                                            </div>
+<?php endif; ?>

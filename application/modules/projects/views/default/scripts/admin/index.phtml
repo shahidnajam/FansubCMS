@@ -1,19 +1,88 @@
-<?php if(count($this->projects)): ?>
-<table>
-    <tr>
-        <th><?=$this->translate('project_list_table_id')?></th>
-        <th><?=$this->translate('project_list_table_name')?></th>
-        <th><?=$this->translate('project_list_table_name_jp')?></th>
-        <th><?=$this->translate('project_list_table_status')?></th>
-        <th><?=$this->translate('project_list_table_private')?></th>
-        <th><?=$this->translate('project_list_table_date')?></th>
-        <th><?=$this->translate('table_action')?></th>
-    </tr>
-    <?=$this->partialLoop('partials/projectListLoop.phtml',$this->projects)?>
-</table>
-<?php else: ?>
-    <div class="info"><?=$this->translate('project_no_project')?></div>
-<?php endif; ?>
-<?php if($this->isAllowed('projects_admin','add')): ?>
-<div class="add"><a href="<?=$this->baseUrl()?>/projects/admin/add/" class="add2"><img src="<?=$this->baseUrl()?>/images/default/icons/16/folder--plus.png" alt=""/> <?=$this->translate('add')?></a></div>
-<?php endif; ?>
+<?=
+$this->modelList('Projects_Model_Project', array(
+    'prefix' => 'project_list_table_',
+    'emptyListMessage' => 'project_no_project',
+    'showFieldNames' => array(
+       'id', 'name', 'name_jp', 'status', 'private', 'created_at'
+    ),
+    'filterFields' => array(
+        'created_at' => array(
+            'viewHelper' => 'formatDate',
+        ),
+        'private' => array(
+            'viewHelper' => 'prefixTranslate',
+            'params' => array(
+                '_term', true
+            )
+        ),
+        'status' => array(
+            'viewHelper' => 'prefixTranslate',
+            'params' => array(
+                'project_status_'
+            )
+        )
+    ),
+    'actions' => array(
+        'edit' => array(
+            'image' => '/media/common/images/icons/16/folder--pencil.png',
+            'label' => 'project_edit_table_action',
+            'privilege' => 'edit',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'edit',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'episodes' => array(
+            'image' => '/media/common/images/icons/16/monitor.png',
+            'label' => 'project_episodes_table_action',
+            'privilege' => 'episodes',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'episodes',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'screenshots' => array(
+            'image' => '/media/common/images/icons/16/picture.png',
+            'label' => 'project_screenshots_table_action',
+            'privilege' => 'screenshots',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'screenshots',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'delete' => array(
+            'image' => '/media/common/images/icons/16/folder--minus.png',
+            'label' => 'project_delete_table_action',
+            'privilege' => 'delete',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'delete',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        )
+    ),
+    'footerActions' => array(
+        'add' => array(
+            'module' => 'projects',
+            'controller' => 'admin',
+            'action' => 'add',
+            'label' => 'add',
+            'image' => '/media/common/images/icons/16/folder--plus.png'
+        )
+    )
+), $this->query);

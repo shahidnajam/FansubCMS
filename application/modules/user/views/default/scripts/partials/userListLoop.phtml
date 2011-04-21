@@ -1,8 +1,0 @@
-<tr class="<?=$this->partialCounter % 2 ? 'specialOne' : 'specialTwo'; ?>">
-        <td><?=$this->id?></td>
-        <td><?=$this->name?></td>
-        <td><img src="<?=$this->gravatar($this->email,16)?>" alt="" /> <?=$this->email?></td>
-        <td><?=$this->formatDate($this->created_at)?></td>
-        <td><?=empty($this->last_login) ? $this->translate('user_not_logged_in_yet') : $this->formatDate($this->last_login)?></td>
-        <td><?=$this->partial('partials/tableActions.phtml',array('id'=>$this->id))?></td>
-</tr>
