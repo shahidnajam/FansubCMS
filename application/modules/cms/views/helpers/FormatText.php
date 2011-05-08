@@ -18,7 +18,7 @@ class FansubCMS_View_Helper_FormatText extends Zend_View_Helper_Abstract {
     	$text = str_replace("\xC2\xA0",' ',$text); // nbsp ersetzen durch normanel space
     	$text = trim($text,"\n"); // unnötige zeichen am anfang und ende entfernen
         $this->_wrapText($text);
-    	$text = htmlspecialchars($text); // erst mal alle html steuerzeichen escapen
+    	$text = $this->view->escape($text);
     	$text = nl2br($text); // Zeilenumbrüche hinzufügen
     	// URLs verlinken
         $pattern = "!\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))!";
