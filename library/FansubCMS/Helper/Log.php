@@ -47,18 +47,23 @@ class FansubCMS_Helper_Log
         } else {
             $mailConfig = Zend_Registry::get('emailSettings');
             
-            $mtconf = array(
-            'auth' => 'login',
-            'username' => $mailConfig->smtp->user,
-            'password' => $mailConfig->smtp->password,
-            'port' => $mailConfig->smtp->port,
-            );
+            if($mtconf->sendmail) { 
+                $mtconf = array(
+                'auth' => 'login',
+                'username' => $mailConfig->smtp->user,
+                'password' => $mailConfig->smtp->password,
+                'port' => $mailConfig->smtp->port,
+                );
+                
+                
+                if($mailConfig->smtp->ssl) {
+                    $mtconf['ssl'] = 'tls';
+                }
             
-            if($mailConfig->smtp->ssl) {
-                $mtconf['ssl'] = 'tls';
+                $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtp->host, $mtconf);
+            } else {
+                $transport = new Zend_Mail_Transport_Sendmail();    
             }
-            
-            $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtp->host, $mtconf);
             
             Zend_Mail::setDefaultTransport($transport);
             

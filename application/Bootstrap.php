@@ -178,17 +178,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('environmentSettings', $this->environmentsettings);
         Zend_Registry::set('emailSettings', $this->mailsettings);
     }
-
-    protected function _initLog()
-    {
-        $logger = new Zend_Log();
-        if(APPLICATION_ENV == 'development')
-        {
-            // just log to firebug
-            $writer = new Zend_Log_Writer_Firebug();
-        }
-    }
-    
+   
     /**
      * init router
      * @return void

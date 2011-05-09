@@ -27,12 +27,16 @@ class Group_ContactController extends FansubCMS_Controller_Action {
                 // we need the email settings from the registry
                 $this->mailsettings = Zend_Registry::get('emailSettings');
                 $values = $this->view->form->getValues();
-                $mtconf = array('auth' => 'login',
-                        'username' => $this->mailsettings->smtp->user,
-                        'password' => $this->mailsettings->smtp->password,
-                        'port' => $this->mailsettings->smtp->port);
-                if($this->mailsettings->smtp->ssl) $mtconf['ssl'] = 'tls';
-                $mtr = new Zend_Mail_Transport_Smtp($this->mailsettings->smtp->host,$mtconf);
+                if(!$this->mailsettings->sendmail) {
+                    $mtconf = array('auth' => 'login',
+                            'username' => $this->mailsettings->smtp->user,
+                            'password' => $this->mailsettings->smtp->password,
+                            'port' => $this->mailsettings->smtp->port);
+                    if($this->mailsettings->smtp->ssl) $mtconf['ssl'] = 'tls';
+                    $mtr = new Zend_Mail_Transport_Smtp($this->mailsettings->smtp->host,$mtconf);
+                } else {
+                    $mtr = new Zend_Mail_Sendmail();
+                }
                 $mailer = new Zend_Mail('UTF-8');
                 $mailer->setFrom($values['email'],$values['author']);
                 $mailer->addTo($this->mailsettings->email->admin,'FansubCMS Administration');
