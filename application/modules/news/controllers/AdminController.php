@@ -23,9 +23,9 @@ class News_AdminController extends FansubCMS_Controller_Action
         $this->view->pageTitle = $this->translate('news_admin_index_headline');
         $table = Doctrine_Core::getTable('News_Model_News');
         
-        $query = $table->createQuery();
-        $query->select('*, id as comments, id as id, u.name as author')
-            ->leftJoin('User_Model_User u');
+        $query = $table->createQuery('n');
+        $query->select('n.*, n.id as comments, n.id as id, u.name as author')
+            ->leftJoin('n.User_Model_User u');
             
         $this->view->query = $query;     
     }
