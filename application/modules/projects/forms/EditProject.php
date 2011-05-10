@@ -130,6 +130,14 @@ class Projects_Form_EditProject extends Zend_Form {
                 ->setValue(isset($values['mini_poster']) ? $values['mini_poster'] : null)
                 ->setLabel('project_admin_field_mini_poster');
 
+        $uTable = Doctrine::getTable('User_Model_User');
+        $users = $uTable->getMultiOptions();
+        
+        $leaders = $this->createElement('multiselect', 'leaders');
+        $leaders->setMultiOptions($users)
+                ->setLabel('project_admin_field_leader')
+                ->setValue(isset($values['Projects_Model_Leader']) ? $values['Projects_Model_Leader'] : array());
+        
         $private = $this->createElement('radio', 'private')
                 ->setMultiOptions(array(
                 'yes' => 'yes_term',
@@ -145,6 +153,7 @@ class Projects_Form_EditProject extends Zend_Form {
                 ->addElement($description)
                 ->addElement($poster)
                 ->addElement($miniposter)
+                ->addElement($leaders)
                 ->addElement($private)
                 # edit button
                 ->addElement('submit', $insert ? 'add' : 'update', array('label' => $insert ? 'add' : 'update', 'class' => 'button'));

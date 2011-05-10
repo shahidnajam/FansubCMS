@@ -26,6 +26,23 @@
     <?php endif; ?>
 <div class="seperator"></div>
 <br class="clearfix" />
+<?php if(count($this->project->Projects_Model_Leader) || count($this->project->Projects_Model_User)): ?>
+<h3><?=$this->translate('project_team')?></h3>
+<?php if(count($this->project->Projects_Model_Leader)): ?>
+<h4><?=$this->translate('project_team_management')?></h4>
+<?php foreach($this->project->Projects_Model_Leader as $leader): ?>
+<?=$leader->User_Model_User->name?><br />
+<?php endforeach; ?>
+<?php endif; ?>
+<?php if(count($this->project->Projects_Model_User)): ?>
+<h4><?=$this->translate('project_team_members')?></h4>
+<?php foreach($this->project->Projects_Model_User as $member): ?>
+<?=$member->User_Model_User->name?> - <?=$member->function?><br />
+<?php endforeach; ?>
+<?php endif; ?>
+<div class="seperator"></div>
+<br class="clearfix" />
+<?php endif; ?>
 <h3><?=$this->translate('project_episodes')?></h3>
 <table>
     <tr>

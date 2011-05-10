@@ -76,7 +76,10 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $this->session->message = $this->translate('project_not_existent');
             $this->_helper->redirector->gotoSimple('index','admin','projects');
         }
-        $this->view->form = new Projects_Form_EditProject($p->toArray());
+        $pArr = $p->toArray();
+        $pArr['Projects_Model_Leader'] = $p->getLeaders();
+        
+        $this->view->form = new Projects_Form_EditProject($pArr);
         $req = $this->getRequest();
         if($req->isPost()) { // there are profile updates
             if($this->view->form->isValid($_POST)) {

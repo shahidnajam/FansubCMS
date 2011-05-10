@@ -17,11 +17,36 @@ class User_Model_UserTable extends Doctrine_Table
         return Doctrine_Core::getTable('User_Model_User');
     }
     
+    /**
+     * Get a team member by name
+     * 
+     * @param string $username
+     * @return User_Model_User
+     */
     public function getTeamMemberByName ($username)
     {
         $user = $this->createQuery()
             ->where('name like ?', $username)
             ->andWhere('show_team = ?', 'yes');
         return $user->fetchOne();
+    }
+    
+    /**
+     * Get a list of all system users for multioption form elements
+     * 
+     * @return array
+     */
+    public function getMultiOptions()
+    {
+        $users = $this->findAll(Doctrine::HYDRATE_ARRAY);
+        
+        $return = array();
+        foreach($users as $user) {
+            $return[$user['id']] = $user['name'];
+        }
+        
+        // sort by alphabet
+        asort($return);
+        return $return;
     }
 }

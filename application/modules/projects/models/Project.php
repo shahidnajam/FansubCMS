@@ -13,6 +13,7 @@
 class Projects_Model_Project extends Base_Projects_Model_Project
 {
     private $_released;
+    
     public function getReleasedEpisodes ()
     {
         if (is_null($this->_released)) {
@@ -24,8 +25,11 @@ class Projects_Model_Project extends Base_Projects_Model_Project
         }
         return $this->_released;
     }
+    
     public function updateProject (array $values)
     {
+        $this->Projects_Model_Leader->delete();
+        
         if (! empty($values['name']))
             $this->name = $values['name'];
         if (! empty($values['name_jp']))
@@ -38,8 +42,24 @@ class Projects_Model_Project extends Base_Projects_Model_Project
             $this->description = $values['description'];
         if (! empty($values['status']))
             $this->status = $values['status'];
+        if (! empty($values['leaders'])) {
+            foreach($values['leaders'] as $leaderId) {
+                $model = new Projects_Model_Leader();
+                $model->project_id = $this->id;
+                $model->user_id = $leaderId;
+                $model->save();
+            }
+        }
         if (! empty($values['private']))
             $this->private = $values['private'];
         $this->save();
+    }
+    
+    public function getLeaders() {
+        $ret = array();
+        foreach($this->Projects_Model_Leader as $leader) {
+            $ret[] = $leader->user_id;
+        }
+        return $ret;
     }
 }
