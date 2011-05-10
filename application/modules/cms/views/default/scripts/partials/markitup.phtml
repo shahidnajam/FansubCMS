@@ -1,0 +1,7 @@
+<script type="text/javascript" src="<?=$this->baseUrl()?>/media/common/js/markitup/jquery.markitup.js"></script>
+<script type="text/javascript" src="<?=$this->baseUrl()?>/media/common/js/markitup/sets/<?=$this->data['type']?>/set.js"></script>
+<script type="text/javascript" >
+    $(document).ready(function() {
+        $("<?=$this->data['identifier']?>").markItUp(mySettings);
+    });
+</script>
