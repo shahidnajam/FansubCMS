@@ -16,10 +16,12 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Admin_CacheController extends FansubCMS_Controller_Action {
-    public function flushAction() {
+class Admin_CacheController extends FansubCMS_Controller_Action 
+{
+    public function flushAction() 
+    {
         $cm = Zend_Registry::get('Zend_Cache_Manager');
-        $cm = new Zend_Cache_Manager();
+
         $caches = $cm->getCaches();
         foreach($caches as $cache) {
             $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
