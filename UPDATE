@@ -1,0 +1,8 @@
+This file contains instructions for revision updates.
+
+Update from 0.8 to 0.9:
+
+* CHMOD 777 on /public/media/common/images/tmp
+* DELETE /public/images
+* DELETE /public/themes
+* DELETE /public/lib

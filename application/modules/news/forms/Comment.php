@@ -102,19 +102,20 @@ class News_Form_Comment extends Zend_Form {
 
         #captcha
         if (!User_Model_User::isLoggedIn()) {
-            $imgUrl = substr($_SERVER['PHP_SELF'], 0, -9) . '/images/captcha'; // little hack to have the correct baseurl
+            $imgUrl = substr($_SERVER['PHP_SELF'], 0, -9) . '/media/common/images/tmp'; // little hack to have the correct baseurl
             $imgUrl = str_replace('//', '/', $imgUrl);
             $captcha = new Zend_Form_Element_Captcha('captcha', array(
                             'label' => 'captcha',
                             'captcha' => array(
-                                    'captcha' => 'Image',
-                                    'wordLen' => 6,
-                                    'timeout' => 300,
-                                    'height' => 80,
-                                    'width' => 150,
-                                    'startImage' => null,
-                                    'font' => realpath(APPLICATION_PATH . '/data/ttf') . '/captcha.ttf',
-                                    'imgurl' => $imgUrl,
+                                'captcha' => 'Image',
+                                'wordLen' => 6,
+                                'timeout' => 300,
+                                'height' => 80,
+                                'width' => 150,
+                                'startImage' => null,
+                                'font' => realpath(APPLICATION_PATH . '/data/ttf') . '/captcha.ttf',
+                                'imgurl' => $imgUrl,
+                                'imgDir' => HTTP_PATH . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'tmp'
                             ),
                             'errorMessages'=>array(
                                     'default_form_error_captcha_wrong'

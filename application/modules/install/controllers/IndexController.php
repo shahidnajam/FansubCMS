@@ -49,7 +49,7 @@ class Install_IndexController extends FansubCMS_Controller_Action {
         if(is_writable(realpath(APPLICATION_PATH.'/data/sessions'))) {
             $status->sessions = true;
         }
-        if(is_writable(realpath(realpath(getenv('PHP_SELF')).'/images/captcha'))) {
+        if(is_writable(realpath(realpath(getenv('PHP_SELF')).'/media/common/images/tmp'))) {
             $status->captcha = true;
         }
         if(is_writable(realpath(realpath(getenv('PHP_SELF')).'/upload'))) {

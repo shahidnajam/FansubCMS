@@ -5,7 +5,8 @@
 /application/data/sessions/*
 
 # Captchas don't need to be versioned
-/public/images/captcha/*
+/public/media/common/images/tmp/*
+!/public/media/common/images/tmp/delete.me
 
 # We don't need to version uploaded files
 /public/upload/*

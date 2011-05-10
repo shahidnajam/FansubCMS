@@ -82,7 +82,7 @@ class Group_Form_Contact extends Zend_Form {
                 ->setLabel('contact_content');
 
         #captcha
-        $imgUrl = substr($_SERVER['PHP_SELF'], 0, -9) . '/images/captcha'; // little hack to have the correct baseurl
+        $imgUrl = substr($_SERVER['PHP_SELF'], 0, -9) . '/media/common/images/tmp'; // little hack to have the correct baseurl
         $imgUrl = str_replace('//', '/', $imgUrl);
         $captcha = new Zend_Form_Element_Captcha('captcha', array(
                         'label' => 'captcha',
@@ -94,7 +94,8 @@ class Group_Form_Contact extends Zend_Form {
                                 'width' => 150,
                                 'startImage' => null,
                                 'font' => realpath(APPLICATION_PATH . '/data/ttf') . '/captcha.ttf',
-                                'imgurl' => $imgUrl
+                                'imgurl' => $imgUrl,
+                                'imgDir' => HTTP_PATH . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'tmp'
                         ),
                         'errorMessages' => array(
                                 'default_form_error_captcha_wrong'
