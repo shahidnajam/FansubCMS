@@ -17,7 +17,7 @@
                 <?php foreach($actions as $action => $mvc): ?>
             <a title="<?=$this->translate($action.'_table_action')?>" href="<?=$this->baseUrl()?>/<?=$mvc['module']?>/<?=$mvc['controller']?>/<?=$mvc['action']?>/title/<?=$page?>" class="<?=$action.'_table_action'?> tableAction"><span><?=$this->translate($action.'_table_action')?></span></a>
                 <?php endforeach; ?>
-        </td>
+            <a title="<?=$this->translate('cms_preview_static_table_action')?>" href="<?=$this->baseUrl()?>/cms/page/<?=$page?>" class="tableAction"><img src="<?=$this->baseUrl()?>/media/common/images/icons/16/clapperboard.png" /> <span><?=$this->translate('cms_preview_static_table_action')?></span></a>        </td>
     </tr>
     <?php
     endforeach;
