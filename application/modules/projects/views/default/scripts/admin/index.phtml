@@ -62,6 +62,19 @@ $this->modelList('Projects_Model_Project', array(
                 )
             )
         ),
+        'team' => array(
+            'image' => '/media/common/images/icons/16/user-silhouette.png',
+            'label' => 'project_team_table_action',
+            'privilege' => 'team',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'team',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
         'delete' => array(
             'image' => '/media/common/images/icons/16/folder--minus.png',
             'label' => 'project_delete_table_action',

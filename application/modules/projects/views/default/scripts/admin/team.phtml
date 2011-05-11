@@ -1,0 +1,24 @@
+<h2><?=$this->translate('project_team_leaders')?></h2>
+<?php if(count($this->leaders)): ?>
+<?php foreach($this->leaders as $leader): ?>
+    <?=$leader->name?> &lt;<?=$leader->email?>&gt;<br />
+<?php endforeach; ?>
+<?php else: ?>
+    <?=$this->translate('project_team_no_leaders')?>
+<?php endif; ?>
+<h2><?=$this->translate('project_team_team')?></h2>
+<?php if(count($this->team)): ?>
+<?php foreach($this->team as $member): ?>
+<div class="project_member">
+    <?=$member->User_Model_User->name?> &lt;<?=$member->function?>&gt; 
+    <?=$this->partial('partials/teamMemberActions.phtml', array('member' => $member))?>
+</div>
+<?php endforeach; ?>
+<?php else: ?>
+<div><?=$this->translate('project_team_no_team')?></div>
+<?php endif; ?>
+<?php if($this->isAllowed($this->project, 'addteammember')): ?>
+    <a href="<?=$this->baseUrl()?>/projects/admin/addteammember/pid/<?=$this->project->id?>"><img src="<?=$this->baseUrl('/media/common/images/icons/16/plus.png')?>" alt=""/> <?php echo $this->escape($this->translate('add')) ?></a>
+<?php endif; ?>
+
+

@@ -271,4 +271,128 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             }
         }
     }
+    
+    public function teamAction()
+    {
+        $id = $this->getRequest()->getParam('id');
+        $table = Doctrine_Core::getTable('Projects_Model_Project');
+        $p = $table->findOneBy('id', $id ? $id : 0);
+        if(!$p) {
+            $this->session->message = $this->translate('project_not_existent');
+            $this->_helper->redirector->gotoSimple('index','admin','projects');
+        }
+        $this->view->pageTitle = sprintf($this->translate('project_team_headline'), $p->name);
+        
+        $leaders = array();
+        foreach($p->Projects_Model_Leader as $leader) {
+            $leaders[] = $leader->User_Model_User;
+        }
+        
+        $this->view->leaders = $leaders;
+        $this->view->team = $p->Projects_Model_User;
+        
+        $this->view->project = $p;
+    }
+    
+    public function addteammemberAction()
+    {
+        $id = $this->getRequest()->getParam('pid');
+        $table = Doctrine_Core::getTable('Projects_Model_Project');
+        $p = $table->findOneBy('id', $id ? $id : 0);
+        if(!$p) {
+            $this->session->message = $this->translate('project_not_existent');
+            $this->_helper->redirector->gotoSimple('team','admin','projects');
+        }
+        
+        $this->view->pageTitle = sprintf($this->translate('project_addteammember_headline'), $p->name);
+        
+        $form = new Projects_Form_EditTeamMember($p, array(), true);
+        
+        if($this->request->isPost()) {
+            if($form->isValid($_POST)) {
+                $values = $form->getValues();
+                
+                $pu = new Projects_Model_User();
+                $pu->project_id = $p->id;
+                $pu->user_id = $values['user'];
+                $pu->function = $values['function'];
+                $pu->save();
+                
+                $this->session->message = $this->translate('project_admin_addteammember_success');
+                $this->_helper->redirector->gotoSimple('team','admin','projects', array('id' => $id));
+            } else {
+                $this->view->message = $this->translate('project_admin_addteammember_failed');
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+    
+    public function editteammemberAction()
+    {
+        $pid = $this->getRequest()->getParam('pid', 0);
+        $uid = $this->request->getParam('uid', 0);
+        $table = Doctrine_Core::getTable('Projects_Model_User');
+        $pu = $table->createQuery('pu')
+                ->leftJoin('pu.Projects_Model_Project p')
+                ->leftJoin('pu.User_Model_User u')
+                ->where('pu.project_id = ?', $pid)
+                ->andWhere('pu.user_id = ?', $uid)
+                ->fetchOne();
+        if(!$pu) {
+            $this->session->message = $this->translate('project_not_existent');
+            $this->_helper->redirector->gotoSimple('team','admin','projects');
+        }
+        
+        $this->view->pageTitle = sprintf($this->translate('project_editteammember_headline'), $pu->Projects_Model_Project->name);
+        
+        $this->view->user = $pu->User_Model_User;
+        
+        $form = new Projects_Form_EditTeamMember($pu->Projects_Model_Project, $pu->toArray(), false);
+        
+        if($this->request->isPost()) {
+            if($form->isValid($_POST)) {
+                $values = $form->getValues();
+
+                $pu->function = $values['function'];
+                $pu->save();
+                
+                $this->session->message = $this->translate('project_admin_editteammember_success');
+                $this->_helper->redirector->gotoSimple('team','admin','projects', array('id' => $pid));
+            } else {
+                $this->view->message = $this->translate('project_admin_editteammember_failed');
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+    
+    public function deleteteammemberAction()
+    {
+        $pid = $this->getRequest()->getParam('pid', 0);
+        $uid = $this->request->getParam('uid', 0);
+        $table = Doctrine_Core::getTable('Projects_Model_User');
+        $pu = $table->createQuery('pu')
+                ->leftJoin('pu.Projects_Model_Project p')
+                ->leftJoin('pu.User_Model_User u')
+                ->where('pu.project_id = ?', $pid)
+                ->andWhere('pu.user_id = ?', $uid)
+                ->fetchOne();
+        if(!$pu) {
+            $this->session->message = $this->translate('project_not_existent');
+            $this->_helper->redirector->gotoSimple('index','admin','projects');
+        }
+        
+        $this->view->pageTitle = sprintf($this->translate('project_deleteteammember_headline'), $pu->Projects_Model_Project->name);
+
+        $this->view->form = new FansubCMS_Form_Confirmation();
+        $this->view->confirmation = sprintf($this->translate('project_admin_deleteteammember_confirmation'), $pu->Projects_Model_Project->name, $pu->User_Model_User->name);
+        if($this->request->getParam('yes') && $pu) {
+            $pu->delete();
+            $this->session->message = $this->translate('project_admin_deleteteammember_success');
+            $this->_helper->redirector->gotoSimple('team', 'admin', 'projects', array('id' => $pid));
+        } else if($this->request->getParam('no')) {
+             $this->_helper->redirector->gotoSimple('team','admin','projects', array('id' => $pid));
+        }
+    }
 }
