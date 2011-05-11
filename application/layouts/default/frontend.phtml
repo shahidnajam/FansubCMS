@@ -60,19 +60,16 @@
                 // show the gadgets, that were configured
                 if (is_array($this->gadgets)) {
                     foreach ($this->gadgets as $gadget) {
-                        echo $this->action($gadget['action'], $gadget['name'], 
+                        $content = $this->action($gadget['action'], $gadget['name'], 
                         'gadgets', $gadget['params']);
-                    }
+                        
+                        echo $this->partial('partials/gadgetLayout.phtml', array(
+                            'label' => $gadget['label'],
+                            'content' => $content
+                        ));
+                    } 
                 }
                 ?>
-                <div class="gadget">
-<div class="gadget-head">
-                        <?=$this->translate('default-links-navigation-headline')?>
-                    </div>
-<div class="gadget-body"><a href="<?=$this->baseUrl()?>/news/feed"><?=$this->translate('default-news-rss')?></a><br />
-                        <a href="<?=$this->baseUrl()?>/projects/feed"><?=$this->translate('default-project-rss')?></a>
-</div>
-</div>
 </div>
 <br class="clearfix" />
 <div id="footer"><a href="<?=$this->baseUrl()?>/group/imprint/"><?=$this->translate('imprint_disclaimer')?></a><br />

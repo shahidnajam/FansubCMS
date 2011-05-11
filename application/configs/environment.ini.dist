@@ -13,8 +13,19 @@ news.comments.numpage = 10
 news.usePermaLink = true
 
 [gadgets]
+gadget.randomproject.label = "gadget_project_random_title"
 gadget.randomproject.action = "random"
 gadget.randomproject.name = "project"
 gadget.randomproject.params.num = 1
+gadget.latestrelease.label = "gadget_project_latest_title"
 gadget.latestrelease.action = "latest"
 gadget.latestrelease.name = "project"
+gadget.feedmenu.action = "menu"
+gadget.feedmenu.name = "dynamic"
+gadget.feedmenu.label = "default-links-navigation-headline"
+gadget.feedmenu.params.links.news.label = "default-news-rss"
+gadget.feedmenu.params.links.news.url = "/news/feed"
+gadget.feedmenu.params.links.news.intern = true
+gadget.feedmenu.params.links.projects.label = "default-project-rss"
+gadget.feedmenu.params.links.projects.url = "/projects/feed"
+gadget.feedmenu.params.links.projects.intern = true

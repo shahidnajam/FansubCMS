@@ -19,7 +19,7 @@ class Gadgets_ProjectController extends FansubCMS_Controller_Action
 {
     public function randomAction ()
     {
-        $num = $this->getRequest()->getParam('num', 50);
+        $num = $this->getRequest()->getParam('num', 5);
         $pt = Doctrine::getTable('Projects_Model_Project');
         $projects = $pt->createQuery()
             ->where('private = ?', 'no')
