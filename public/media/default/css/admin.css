@@ -233,3 +233,30 @@ body {
 .cms_delete_static_table_action  {
     background-image: url("../../common/images/icons/16/document--minus.png");
 }
+
+/* Forms */
+
+.zend_form dt {
+    margin: 3px 3px;
+}
+
+.zend_form input {
+    width: 400px;
+}
+
+.zend_form select {
+    min-width: 150px;
+}
+
+.zend_form .button {
+    width: auto;
+}
+
+#editproject .zend_form #leaders {
+    width: 200px;
+    height: 100px;
+}
+
+#editproject .zend_form #leaders option {
+    padding: 0px 5px;
+}

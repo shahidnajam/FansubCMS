@@ -321,24 +321,6 @@ team_member .member-info {
     margin-top: 10px;
 }
 
-/* Contact */
-
-#contact_form {
-    width: 700px;
-}
-
-#author {
-    color:black;
-}
-
-#email {
-    color:black;
-}
-
-#content {
-    color:black;
-}
-
 /* Login form */
 
 #login .required:after {
@@ -353,3 +335,35 @@ team_member .member-info {
     color:black;
 }
 
+/* Contact form */
+
+#contact_form input {
+    width: 300px;
+    color: #000;
+}
+
+#contact_form textarea {
+    width: 300px;
+    color: #000;
+}
+
+#contact_form #captcha-input {
+    width: 150px;
+}
+
+#contact_form .button {
+    width: auto;
+}
+
+#contact_form {
+    float: left;
+    width: 330px;
+}
+
+#contact_description {
+    background: #747474;
+    border: #a4a4a4 solid 1px;
+    float: right;
+    padding: 5px;
+    width: 350px;
+}
