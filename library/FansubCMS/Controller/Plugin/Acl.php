@@ -43,6 +43,8 @@ class FansubCMS_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
+        $this->_initAcl();
+        
         if($this->_auth->hasIdentity()) {
             $ident = $this->_auth->getIdentity();
             $date = new Zend_Date();
@@ -56,9 +58,7 @@ class FansubCMS_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         }
         if($request->getModuleName() == 'user' && $request->getControllerName() == 'admin' && $request->getActionName() == 'profile') return; // the profile is a free resource
         $resource = $request->getModuleName().'_'.$request->getControllerName();
-        
-        $this->_initAcl();
-        
+
         $hasResource = $this->_acl->has($resource);
         if($hasResource && !$this->_acl->isAllowed('fansubcms_user_custom_role_logged_in_user',$resource, $request->getActionName())) {
             throw new FansubCMS_Exception_Denied('The user is not allowd to do this');
