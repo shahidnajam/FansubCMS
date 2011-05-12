@@ -49,7 +49,8 @@ class Projects_Form_EditTeamMember extends Zend_Form
                 ->select('u.id, u.name')
                 ->from('User_Model_User u')
                 ->leftJoin('u.Projects_Model_User pu')
-                ->where('pu.user_id IS NULL')
+                ->where('pu.project_id <> ?', $project->id)
+                ->orWhere('pu.project_id IS NULL')                
                 ->orderBy('u.name ASC');
         $users = $q->fetchArray();
         
