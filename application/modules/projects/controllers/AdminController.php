@@ -281,6 +281,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $this->session->message = $this->translate('project_not_existent');
             $this->_helper->redirector->gotoSimple('index','admin','projects');
         }
+        
+        $this->checkAllowed($p, 'team');
+        
         $this->view->pageTitle = sprintf($this->translate('project_team_headline'), $p->name);
         
         $leaders = array();
@@ -304,6 +307,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $this->_helper->redirector->gotoSimple('team','admin','projects');
         }
         
+        $this->checkAllowed($p, 'addteammember');
         $this->view->pageTitle = sprintf($this->translate('project_addteammember_headline'), $p->name);
         
         $form = new Projects_Form_EditTeamMember($p, array(), true);
@@ -343,7 +347,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $this->session->message = $this->translate('project_not_existent');
             $this->_helper->redirector->gotoSimple('team','admin','projects');
         }
-        
+        $this->checkAllowed($pu->Projects_Model_Project, 'editteammember');
         $this->view->pageTitle = sprintf($this->translate('project_editteammember_headline'), $pu->Projects_Model_Project->name);
         
         $this->view->user = $pu->User_Model_User;
@@ -369,6 +373,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
     
     public function deleteteammemberAction()
     {
+        
         $pid = $this->getRequest()->getParam('pid', 0);
         $uid = $this->request->getParam('uid', 0);
         $table = Doctrine_Core::getTable('Projects_Model_User');
@@ -382,6 +387,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $this->session->message = $this->translate('project_not_existent');
             $this->_helper->redirector->gotoSimple('index','admin','projects');
         }
+        $this->checkAllowed($pu->Projects_Model_Project, 'deleteteammember');
         
         $this->view->pageTitle = sprintf($this->translate('project_deleteteammember_headline'), $pu->Projects_Model_Project->name);
 

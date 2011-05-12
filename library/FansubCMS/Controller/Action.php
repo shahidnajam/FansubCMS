@@ -26,12 +26,33 @@
  * @subpackage Controller
  * @version 1.0
  */
-class FansubCMS_Controller_Action extends Zend_Controller_Action {
-    public $acl,
-            $session,
-            $request,
-            $defaultUseRole;
-    private $_delegateHelper;
+class FansubCMS_Controller_Action extends Zend_Controller_Action
+{
+    /**
+     *
+     * @var Zend_Acl
+     */
+    public $acl;
+    /**
+     *
+     * @var Zend_Session_Namespace
+     */
+    public $session;
+    /**
+     *
+     * @var Zend_Controller_Request_Abstract
+     */
+    public $request;
+    /**
+     *
+     * @var string
+     */
+    public $defaultUseRole;
+    /**
+     *
+     * @var FansubCMS_Helper_Delegate
+     */
+    protected $_delegateHelper;
 
     /**
      * The class constructor
@@ -39,14 +60,15 @@ class FansubCMS_Controller_Action extends Zend_Controller_Action {
      * @param Zend_Controller_Response_Abstract $response
      * @param array $invokeArgs
      */
-    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
+    {
         $this->_delegateHelper = new FansubCMS_Helper_Delegate($request->getModuleName());
         parent::__construct($request, $response, $invokeArgs);
         $this->defaultUseRole = 'fansubcms_user_custom_role_logged_in_user';
         $this->request = $request;
         $this->session = Zend_Registry::get('applicationSessionNamespace');
         $this->session->tableActions = array();
-        $this->acl = Zend_Registry::get('Zend_Acl');
+        $this->acl = Zend_Registry::get('Zend_Acl');        
         $envSettings = Zend_Registry::get('environmentSettings');
         
         if(!empty($this->session->message)) {
@@ -58,14 +80,45 @@ class FansubCMS_Controller_Action extends Zend_Controller_Action {
 
         $this->session->markitup = '';
     }
-
+    
+    /**
+     * Checks if user has the right to do privilege on resource
+     * 
+     * @param Zend_Acl_Resource $resource
+     * @param string $privilege
+     * @return boolean
+     */
+    public function isAllowed($resource, $privilege)
+    {
+        if(!$this->acl->has($resource)) {
+            return true;
+        }
+        
+        return $this->acl->isAllowed('fansubcms_user_custom_role_logged_in_user', $resource, $privilege);
+    }
+    
+    /**
+     * Checks if the user is allowd to do something and throws exception if not
+     * 
+     * @param Zend_Acl_Resource $resource
+     * @param string $privilege 
+     * @throws FansubCMS_Exception_Denied
+     */
+    public function checkAllowed($resource, $privilege)
+    {
+        if(!$this->isAllowed($resource, $privilege)) {
+            throw new FansubCMS_Exception_Denied('The user is not allowed to do this');
+        }
+    }
+    
     /**
      * translates the given key
      * @param string $key
      * @param array $params
      * @return string
      */
-    public function translate($key,$params = array()) {
+    public function translate($key,$params = array())
+    {
         return $this->view->translate($key,$params);
     }
     

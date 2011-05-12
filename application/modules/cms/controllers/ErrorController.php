@@ -22,12 +22,14 @@
  * @subpackage Controllers
  * @author Hikaru-Shindo <hikaru@animeownage.de>
  */
-class Cms_ErrorController extends FansubCMS_Controller_Action {
+class Cms_ErrorController extends FansubCMS_Controller_Action
+{
     /**
      * This function handles all the general errors.
      * @return void
      */
-    public function errorAction() {
+    public function errorAction()
+    {
         $errors = $this->_getParam('error_handler');
         $this->view->title = $this->translate("error_encountered");
         if($errors == null) {
@@ -38,6 +40,17 @@ class Cms_ErrorController extends FansubCMS_Controller_Action {
         }
         $this->view->exception = $errors->exception;
         $this->view->request   = $errors->request;
+        
+        if($errors->exception instanceof FansubCMS_Exception_Denied) {
+            $this->view->title = $this->translate("error_encountered");
+            $this->view->error = $this->translate("denied_error");
+            $this->getResponse()->setHttpResponseCode(403); // forbidden, 
+    	                                                // alternative 401 unauthorized 
+    	                                                // s. http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            $this->renderScript('error/denied.phtml');
+            return;
+        }
+        
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
@@ -54,18 +67,5 @@ class Cms_ErrorController extends FansubCMS_Controller_Action {
                 $this->renderScript('error/50x.phtml');
                 break;
         }
-    }
-
-    /**
-     * This method will be called if the user does not have access to the resource
-     * specified.
-     * @return void
-     */
-    public function deniedAction() {
-    	$this->view->title = $this->translate("error_encountered");
-    	$this->view->error = $this->translate("denied_error");
-    	$this->getResponse()->setHttpResponseCode(403); // forbidden, 
-    	                                                // alternative 401 unauthorized 
-    	                                                // s. http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
     }
 }

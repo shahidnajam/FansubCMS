@@ -26,17 +26,18 @@
  */
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-
-    public
-    $frontController,
-    $applicationStatus,
-    $settings,
-    $mailsettings,
-    $databasesettings,
-    $environmentsettings,
-    $routes,
-    $layout,
-    $cacheManager;
+    /**
+     * @var Zend_Controller_Front
+     */
+    public $frontController;
+    public $applicationStatus;
+    public $settings;
+    public $mailsettings;
+    public $databasesettings;
+    public $environmentsettings;
+    public $routes;
+    public $layout;
+    public $cacheManager;
 
 
     /**
@@ -334,6 +335,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         # init error handler
         $this->frontController->throwExceptions(false);
+        # not-logged-in-so-go-to-login plugin
+        $aclPlugin = new FansubCMS_Controller_Plugin_Acl(Zend_Auth::getInstance()->setStorage(new FansubCMS_Auth_Storage_DoctrineSession));
+        $this->frontController->registerPlugin($aclPlugin);
         $errorhandler = new Zend_Controller_Plugin_ErrorHandler();
         $errorhandler->setErrorHandler(array('module' => 'cms', 'controller' => 'error', 'action' => 'error'));
         $this->frontController->registerPlugin($errorhandler);

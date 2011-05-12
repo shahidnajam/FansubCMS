@@ -19,14 +19,25 @@
 class FansubCMS_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 {
 
+    /**
+     *
+     * @var Zend_Auth
+     */
     protected $_auth = null;
+    /**
+     *
+     * @var Zend_Acl
+     */
     protected $_acl;
+    /**
+     *
+     * @var Zend_Session_Namespace
+     */
     protected $_session;
 
-    public function __construct(Zend_Auth $auth, Zend_Acl $acl)
+    public function __construct(Zend_Auth $auth)
     {
         $this->_auth = $auth;
-        $this->_acl = $acl;
         $this->_session = Zend_Registry::get('applicationSessionNamespace');
     }
 
@@ -45,16 +56,61 @@ class FansubCMS_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         }
         if($request->getModuleName() == 'user' && $request->getControllerName() == 'admin' && $request->getActionName() == 'profile') return; // the profile is a free resource
         $resource = $request->getModuleName().'_'.$request->getControllerName();
-        try {
-            $this->_acl->get($resource);
-            $hasResource = true;
-        } catch (Zend_Acl_Exception $e) {
-            $hasResource = false;
-        }
+        
+        $this->_initAcl();
+        
+        $hasResource = $this->_acl->has($resource);
         if($hasResource && !$this->_acl->isAllowed('fansubcms_user_custom_role_logged_in_user',$resource, $request->getActionName())) {
-            $request->setActionName('denied');
-            $request->setControllerName('error');
-            $request->setModuleName('cms');
+            throw new FansubCMS_Exception_Denied('The user is not allowd to do this');
         }
+    }
+    
+    /**
+     * init acl
+     * @return void
+     */
+    protected function _initAcl()
+    {
+        $cm = Zend_Registry::get('Zend_Cache_Manager');
+        $cache = $cm->getCache('FansubCMS');
+        $config = $cache->load('Acl_Settings');
+        if (!$config) {
+            $config = array();
+            $modules = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'module.ini');
+            foreach ($modules as $module) {
+                $cleanName = str_replace(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR, '', $module);
+                $cleanName = str_replace(DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'module.ini', '', $cleanName);
+
+                try {
+                    $ini = new Zend_Config_Ini($module, 'acl');
+                    $config[$cleanName] = $ini->toArray();
+                } catch (Zend_Config_Exception $e) {
+                    // there is just no config or no acl block
+                }
+            }
+            $cache->save($config);
+        }
+
+        $acl = new FansubCMS_Acl();
+        foreach ($config as $options) {
+            $acl->setOptions($options);
+        }
+        if ($this->_auth->hasIdentity()) {
+            $ident = $this->_auth->getIdentity();
+
+            $role = new Zend_Acl_Role('fansubcms_user_custom_role_logged_in_user');
+            $inherit = $ident->getRoles();
+            $inherit[] = 'fansubcms_custom_role_default'; // every user is in this role
+            
+            foreach ($inherit as $key => $value) {
+                if (!$acl->hasRole($value)) {
+                    unset($inherit[$key]);
+                }
+            }
+
+            $acl->addRole($role, $inherit);
+        }
+        Zend_Registry::set('Zend_Acl', $acl);
+        $this->_acl = $acl;
     }
 }

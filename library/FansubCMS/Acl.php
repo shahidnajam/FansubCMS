@@ -16,8 +16,11 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class FansubCMS_Acl extends Zend_Acl {
-    public function __construct( $options = null ) {
+class FansubCMS_Acl extends Zend_Acl
+{
+    public function __construct( $options = null )
+    {
+        $this->addRole('fansubcms_custom_role_default');
         if (is_array($options)) {
             $this->setOptions($options);
         } elseif ($options instanceof Zend_Config) {
@@ -25,12 +28,14 @@ class FansubCMS_Acl extends Zend_Acl {
         }
     }
 
-    public function setConfig( Zend_Config $config ) {
+    public function setConfig( Zend_Config $config )
+    {
         $this->setOptions($config->toArray());
     }
 
 
-    public function setOptions( array $options ) {
+    public function setOptions( array $options )
+    {
         if ( isset($options['resources']) ) {
             $this->addResources( $options['resources'] );
             unset( $options['resources'] );
@@ -58,8 +63,9 @@ class FansubCMS_Acl extends Zend_Acl {
             }
         }
     }
-
-    public function addResources( array $resources ) {
+    
+    public function addResources( array $resources )
+    {
         foreach( $resources as $source ) {
             $resource = $source['resource'];
             $parent   = isset($source['parent']) ? $source['parent'] : null;
@@ -67,7 +73,8 @@ class FansubCMS_Acl extends Zend_Acl {
         }
     }
 
-    public function addRoles( array $roles ) {
+    public function addRoles( array $roles )
+    {
         foreach( $roles as $source) {
             $role    = $source['role'];
             $inherit = isset($source['inherit']) ? $source['inherit'] : null;
@@ -75,7 +82,8 @@ class FansubCMS_Acl extends Zend_Acl {
         }
     }
 
-    public function setAllow( array $allow ) {
+    public function setAllow( array $allow )
+    {
         foreach( $allow as $source ) {
             $role       = (array) $source['role'];
             $resource   = isset($source['resource']) ? (array)$source['resource'] : null;
@@ -84,7 +92,8 @@ class FansubCMS_Acl extends Zend_Acl {
             $class = null;
             if( array_key_exists('assert', $source) ) {
                 if( $class  = $source['assert'] ) {
-                    if( !class_exists( $assert ) ) {
+                    
+                    if( !class_exists( $class ) ) {
                         throw new Zend_Acl_Exception(sprintf('Class %s does not exist', $class));
                     }
                 }
@@ -95,7 +104,8 @@ class FansubCMS_Acl extends Zend_Acl {
         }
     }
 
-    public function setDeny( array $deny ) {
+    public function setDeny( array $deny )
+    {
         foreach( $deny as $source ) {
             $role       = (array) $source['role'];
             $resource   = $source['resource'] ? (array) $source['resource'] : null;
@@ -104,7 +114,7 @@ class FansubCMS_Acl extends Zend_Acl {
             $class = null;
             if( array_key_exists('assert', $source) ) {
                 if( $class  = $source['assert'] ) {
-                    if( !class_exists( $assert ) ) {
+                    if( !class_exists( $class ) ) {
                         throw new Zend_Acl_Exception(sprintf('Class %s does not exist', $class));
                     }
                 }
