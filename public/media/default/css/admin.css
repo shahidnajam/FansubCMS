@@ -244,6 +244,11 @@ body {
     width: 400px;
 }
 
+.zend_form input[type="radio"] { 
+    width: auto;
+    margin: auto 5px;
+}
+
 .zend_form select {
     min-width: 150px;
 }
