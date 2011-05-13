@@ -28,7 +28,8 @@ class Projects_Model_Project extends Base_Projects_Model_Project
     
     public function updateProject (array $values)
     {
-        $this->Projects_Model_Leader->delete();
+        if(!empty($this->Projects_Model_Leader))
+            $this->Projects_Model_Leader->delete();
         
         if (! empty($values['name']))
             $this->name = $values['name'];
@@ -42,6 +43,10 @@ class Projects_Model_Project extends Base_Projects_Model_Project
             $this->description = $values['description'];
         if (! empty($values['status']))
             $this->status = $values['status'];
+        if (! empty($values['private']))
+            $this->private = $values['private'];
+        $this->save();
+        
         if (! empty($values['leaders'])) {
             foreach($values['leaders'] as $leaderId) {
                 $model = new Projects_Model_Leader();
@@ -50,9 +55,6 @@ class Projects_Model_Project extends Base_Projects_Model_Project
                 $model->save();
             }
         }
-        if (! empty($values['private']))
-            $this->private = $values['private'];
-        $this->save();
     }
     
     public function getLeaders() {
