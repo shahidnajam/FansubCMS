@@ -27,6 +27,9 @@ $percentSpace = round($freeSpace / $totalSpace * 100, 1);
     </tr>
     <?php if($this->isAdmin): ?>
         <tr>
+            <th><?=$this->translate('admin-system-version')?></th><td><?=$this->version?></td>
+        </tr>
+        <tr>
             <th><?=$this->translate('admin-system-cache')?></th><td><a href="<?=$this->baseUrl()?>/admin/cache/flush/"><?=$this->translate('admin-system-flushCache')?></a></td>
         </tr>
     <?php endif; ?>
