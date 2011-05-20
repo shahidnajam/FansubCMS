@@ -16,6 +16,7 @@
  * @property enum $private
  * @property Doctrine_Collection $Projects_Model_User
  * @property Doctrine_Collection $Projects_Model_Leader
+ * @property Doctrine_Collection $Projects_Model_TaskType
  * @property Doctrine_Collection $Projects_Model_Screenshot
  * @property Doctrine_Collection $Projects_Model_Episode
  * @property Doctrine_Collection $Projects_Model_Chapter
@@ -103,6 +104,10 @@ abstract class Base_Projects_Model_Project extends FansubCMS_Doctrine_Record
              'foreign' => 'project_id'));
 
         $this->hasMany('Projects_Model_Leader', array(
+             'local' => 'id',
+             'foreign' => 'project_id'));
+
+        $this->hasMany('Projects_Model_TaskType', array(
              'local' => 'id',
              'foreign' => 'project_id'));
 

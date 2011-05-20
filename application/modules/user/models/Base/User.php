@@ -16,6 +16,7 @@
  * @property timestamp $last_login
  * @property Doctrine_Collection $Projects_Model_User
  * @property Doctrine_Collection $Projects_Model_Leader
+ * @property Doctrine_Collection $Projects_Model_Task
  * @property Doctrine_Collection $User_Model_Role
  * @property Doctrine_Collection $User_Model_UserTask
  * @property Doctrine_Collection $News_Model_News
@@ -102,6 +103,10 @@ abstract class Base_User_Model_User extends FansubCMS_Doctrine_Record
              'foreign' => 'user_id'));
 
         $this->hasMany('Projects_Model_Leader', array(
+             'local' => 'id',
+             'foreign' => 'user_id'));
+
+        $this->hasMany('Projects_Model_Task', array(
              'local' => 'id',
              'foreign' => 'user_id'));
 
