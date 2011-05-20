@@ -48,7 +48,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
     public function migrationAction ()
     {
         $pdata = new stdClass();
-        $api = new Devtools_Api_DoctrineTool();
+        $api = Install_Api_DoctrineTool::getInstance();
         $changes = $api->generateMigration(true);
         $changeCount = 0;
         $migration = $api->getMigration();
@@ -73,7 +73,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
     
     public function generatemigrationsAction ()
     {
-        $api = new Devtools_Api_DoctrineTool();
+        $api = Install_Api_DoctrineTool::getInstance();
         $pdata = new stdClass();
         $this->view->title = "Generate Migration";
         $generate = ($this->getRequest()->getParam('generate', 0) == 1);
@@ -102,7 +102,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
     {
         $this->view->partialData = new stdClass();
         $this->view->title = "Generate models";
-        $api = new Devtools_Api_DoctrineTool();
+        $api = Install_Api_DoctrineTool::getInstance();
         $submit = $this->getRequest()->getParam('submit', NULL);
         if (is_null($submit)) {
             $this->view->partialData->state = 1;
@@ -124,7 +124,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
     public function fixtureAction ()
     {
         $pdata = new stdClass();
-        $api = new Devtools_Api_DoctrineTool();
+        $api = Install_Api_DoctrineTool::getInstance();
         
         $fixtures = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'resource' . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . '*.yml');
         if(count($fixtures)) {
@@ -141,7 +141,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
     {
         $this->view->partialData = new stdClass();
         $this->view->title = "Import fixtures";
-        $api = new Devtools_Api_DoctrineTool();
+        $api = Install_Api_DoctrineTool::getInstance();
         $submit = $this->getRequest()->getParam('submit', NULL);
         if (is_null($submit)) {
             $this->view->partialData->state = 1;
@@ -171,7 +171,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
     {
         $this->view->partialData = new stdClass();
         $this->view->title = "Dump fixtures";
-        $api = new Devtools_Api_DoctrineTool();
+        $api = Install_Api_DoctrineTool::getInstance();
         $submit = $this->getRequest()->getParam('submit', NULL);
         if (is_null($submit)) {
             $this->view->partialData->state = 1;
@@ -195,7 +195,7 @@ class Devtools_DoctrineController extends FansubCMS_Controller_Action
         $this->view->title = "Set the migration version of the databse";
         
         $version = $this->getRequest()->getParam('version', null);
-        $api = new Devtools_Api_DoctrineTool();
+        $api = Install_Api_DoctrineTool::getInstance();
         
         if(is_null($version)) {
             $this->view->partialData = new stdClass();

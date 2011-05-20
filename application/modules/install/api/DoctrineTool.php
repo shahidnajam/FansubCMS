@@ -57,9 +57,35 @@ class Install_Api_DoctrineTool
     protected static $_instance;
        
     /*
+     * magic methods
+     */
+
+    /**
+     * The class constructor
+     * 
+     * @return void
+     */
+    protected function __construct ()
+    {
+        mkdir($this->getTempPath());
+        mkdir($this->getFromPath());
+        mkdir($this->getToPath());
+    }
+    
+    /**
+     * The classes destructor
+     * 
+     * @return void
+     */
+    public function __destruct ()
+    {
+        $this->_rrmdir($this->getTempPath());
+    }
+    
+    /*
      * main methods
      */
-    
+       
     /**
      * 
      * Get an instance of the API
@@ -71,6 +97,38 @@ class Install_Api_DoctrineTool
             self::$_instance = new self;
         }
         return self::$_instance;
+    }
+    
+        /**
+     * 
+     * Returns the temporary path
+     * @return string
+     */
+    public function getTempPath ()
+    {
+        if (empty($this->_tmpPath)) {
+            $this->_tmpPath = realpath(sys_get_temp_dir()) . DIRECTORY_SEPARATOR .
+             'fcms_mig_' . md5(microtime() . 'migration');
+        }
+        return $this->_tmpPath;
+    }
+    /**
+     * 
+     * Returns the from-path
+     * @return string
+     */
+    public function getFromPath ()
+    {
+        return $this->getTempPath() . DIRECTORY_SEPARATOR . 'from';
+    }
+    /**
+     * 
+     * Returns the to-path
+     * @return string
+     */
+    public function getToPath ()
+    {
+        return $this->getTempPath() . DIRECTORY_SEPARATOR . 'to';
     }
     
     /**
@@ -109,39 +167,358 @@ class Install_Api_DoctrineTool
         Doctrine::createTablesFromArray($models);
     }
     
+    /**
+     * 
+     * Get the path where the migrations reside
+     * @return string
+     */
+    public function getMigrationPath()
+    {
+        return realpath(APPLICATION_PATH . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR . 'migrations';
+    }
+    
+    /**
+     * 
+     * Get the migration object
+     * @return Doctrine_Migration
+     */
+    public function getMigration()
+    {
+        if(empty($this->_migration)) {
+            $this->_migration = new Doctrine_Migration($this->getMigrationPath());    
+        }
+        
+        return $this->_migration;
+    }
+    
+    /**
+     * Sets the migration version to $version
+     * 
+     * @param integer $version
+     * @return void
+     */
+    public function setMigrationVersion($version)
+    {
+        $this->getMigration()->setCurrentVersion($version);
+    }
+    
+    /**
+     * Sets the migration version to latest available. Bassically a wrapper for setMigrationVersion()
+     * 
+     * @return void
+     */
+    public function setMigrationVersionToCurrent()
+    {
+        $this->setMigrationVersion($this->getMigration()->getLatestVersion());
+    }
+    
+    
+    /**
+     * Export fixture files to $path
+     * 
+     * @param string $path
+     * @return void
+     */
+    public function exportFixtures($path)
+    {
+        $this->_loadDoctrineModels();
+        Doctrine::dumpData($path, true);
+    }
+    
+    /**
+     * Import fixtures from $path. If $append is true the database will not be purged 
+     * before importing.
+     * 
+     * @param string $path
+     * @param boolean $append
+     * @return void
+     */
+    public function importFixtures($path, $append = false)
+    {
+        $this->_loadDoctrineModels();
+        Doctrine::loadData($path, $append);
+    }
+    
+    /**
+     * 
+     * Generate the models to the module folder
+     * @return void
+     */
+    public function generateModels ()
+    {
+        $this->_getSchema($this->getFromPath());
+        $this->_generateModels($this->getFromPath(), $this->getToPath());
+        $models = glob($this->getToPath() . DIRECTORY_SEPARATOR . '*.php');
+        
+        foreach ($models as $model) {
+            $filename = str_replace($this->getToPath() . DIRECTORY_SEPARATOR, 
+            '', $model);
+            $filenameParts = explode('_', $filename);
+            
+            $module = strtolower($filenameParts[0]);
+            $modelDir = $this->getModulePath() . DIRECTORY_SEPARATOR . $module .
+             DIRECTORY_SEPARATOR . 'models';
+             
+            if (! is_dir($modelDir)) {
+                mkdir($modelDir);
+            }
+            
+            if (! is_dir($modelDir . DIRECTORY_SEPARATOR . 'Base')) {
+                mkdir($modelDir . DIRECTORY_SEPARATOR . 'Base');
+            }
+            
+            if (! file_exists(
+            $modelDir . DIRECTORY_SEPARATOR . $filenameParts[2])) {
+                copy($model, 
+                $modelDir . DIRECTORY_SEPARATOR . $filenameParts[2]);
+            }
+            
+            unlink($model);
+        }
+        
+        $baseModels = glob(
+        $this->getToPath() . DIRECTORY_SEPARATOR . 'Base' . DIRECTORY_SEPARATOR .
+         '*.php');
+        foreach ($baseModels as $model) {
+            $filename = str_replace($this->getToPath() . DIRECTORY_SEPARATOR, 
+            '', $model);
+            $filenameParts = explode('_', $filename);
+            $module = strtolower($filenameParts[1]);
+            $modelDir = $this->getModulePath() . DIRECTORY_SEPARATOR . $module .
+             DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Base';
+            if (file_exists($modelDir . DIRECTORY_SEPARATOR . $filenameParts[3])) {
+                unlink($modelDir . DIRECTORY_SEPARATOR . $filenameParts[3]);
+            }
+            copy($model, $modelDir . DIRECTORY_SEPARATOR . $filenameParts[3]);
+            unlink($model);
+        }
+        rmdir($this->getToPath() . DIRECTORY_SEPARATOR . 'Base');
+        $garbage = glob($this->getFromPath() . DIRECTORY_SEPARATOR . '*');
+        foreach ($garbage as $del) {
+            if (is_file($del)) {
+                unlink($del);
+            } else {
+                $this->_rrmdir($dirname);
+            }
+        }
+    }
+    
+    /**
+     * Generates the migration classes
+     * 
+     * @param boolean $changesOnly
+     * @return array
+     */
+    public function generateMigration($changesOnly = false)
+    {
+        $dm = Doctrine_Manager::getInstance();
+
+        if(!$changesOnly && $dm->getAttribute(Doctrine_Core::ATTR_TBLNAME_FORMAT) != '%s') {
+            throw new Exception("You can not create migrations from diff with a custom Doctrine attribute 'ATTR_TBLNAME_FORMAT'");
+        }
+        if(!$changesOnly && $dm->getAttribute(Doctrine_Core::ATTR_IDXNAME_FORMAT) != '%s_idx') {
+            throw new Exception("You can not create migrations from diff with a custom Doctrine attribute 'ATTR_IDXNAME_FORMAT'");
+        }
+        if(!$changesOnly && $dm->getAttribute(Doctrine_Core::ATTR_SEQNAME_FORMAT) != '%s_seq') {
+            throw new Exception("You can not create migrations from diff with a custom Doctrine attribute 'ATTR_SEQNAME_FORMAT'");
+        }
+        
+        $this->_getModels($this->getFromPath());
+        $this->_getSchema($this->getToPath());
+        
+        $files = glob($this->getFromPath() . DIRECTORY_SEPARATOR . '*.php');
+        
+        foreach($files as $file) {
+            $cleanname = str_replace($this->getFromPath() . DIRECTORY_SEPARATOR , '', $file);
+            $cleanname = str_replace('.php', '', $cleanname);
+            $cleanname = str_replace('models', 'model', $cleanname);
+            $classNameParts = explode('_', $cleanname);
+            $className = array();
+            foreach($classNameParts as $part) {
+                $part = ucfirst($part);
+                $className[] = $part;
+            }
+            $className = implode('_', $className);
+            
+            if(strpos($className, 'Table')) {
+                continue;
+            }
+            
+            if(!($className instanceof Doctrine_Record)) {
+                continue;
+            }
+
+        }
+        
+        $changes = new Doctrine_Migration_Diff($this->getFromPath(), $this->getToPath(), $this->getMigrationPath());
+
+        if($changesOnly) {
+            return $changes->generateChanges();
+        } else {
+            return $changes->generateMigrationClasses();
+        }
+    }
     
     /*
      * Helpers
      */
     
     /**
+     * Let doctrine load its models
      * 
-     * Get an array of all model class names
-     * @return array
+     * @return void
      */
-    protected function _getModels ()
+    protected function _loadDoctrineModels()
     {
+        $models = $this->_getModels();
+        
+        foreach($models as $model) {
+            $cleanModel = str_replace($this->getModulePath() . DIRECTORY_SEPARATOR, '', $model);
+            $cleanModel = str_replace('.php', '', $cleanModel);
+            /*
+             * 0 => modulename
+             * 1 => models
+             * 2 => model base name
+             */
+            $classnameParts = explode(DIRECTORY_SEPARATOR, $cleanModel);
+            $classname = ucfirst($classnameParts[0]) . '_Model_' . $classnameParts[2];
+            if(class_exists($classname) && is_subclass_of($classname, 'Doctrine_Record')) {
+                Doctrine::loadModel($classname, $model);
+            }
+        }
+    }
+    
+    /**
+     * Get the schema files and save them to $path
+     * 
+     * @param string $path
+     * @return void
+     */
+    protected function _getSchema ($path)
+    {
+        $schema = glob(
+        $this->getModulePath() . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR .
+         'models' . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR .
+         '*.yml');
+
+        foreach ($schema as $yml) {
+            $filename =  explode(
+            DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'schema' .
+             DIRECTORY_SEPARATOR, 
+            str_replace($this->getModulePath() . DIRECTORY_SEPARATOR, '', $yml));  
+            copy($yml, $path . DIRECTORY_SEPARATOR . implode('_',$filename));
+        }
+    }
+    
+    /**
+     * Copies all models to $path, returns a list of models if path is empty
+     * 
+     * @param string $path
+     * @return void|array
+     */
+    protected function _getModels ($path)
+    {
+        if(empty($path)) {
+            $models = glob($this->getModulePath() . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR .
+            'models' . DIRECTORY_SEPARATOR . '*.php');
+
+            $classNames = array();
+
+            foreach($models as $model) {
+                $filename = str_replace($this->getModulePath() . DIRECTORY_SEPARATOR, '', $model);
+                $filenameParts = explode(DIRECTORY_SEPARATOR, $filename);
+                $className = ucfirst($filenameParts[0]).'_Model_'.str_replace('.php', '', $filenameParts[2]);
+
+                if(!class_exists($className)) {
+                    // can't be an doctrine model
+                    continue;
+                }
+
+                if(is_subclass_of($className, 'FansubCMS_Doctrine_Record')) {
+                    // ignore models which are not doctrine models
+                    $classNames[] = $className;
+                }
+            }
+
+            return $classNames;
+        }
+        
         $models = glob($this->getModulePath() . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR .
         'models' . DIRECTORY_SEPARATOR . '*.php');
+        $baseModels = glob($this->getModulePath() . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR .
+        'models' . DIRECTORY_SEPARATOR . 'Base' . DIRECTORY_SEPARATOR . '*.php');
         
-        $classNames = array();
+        $models = array_merge($models, $baseModels);
         
         foreach($models as $model) {
             $filename = str_replace($this->getModulePath() . DIRECTORY_SEPARATOR, '', $model);
             $filenameParts = explode(DIRECTORY_SEPARATOR, $filename);
-            $className = ucfirst($filenameParts[0]).'_Model_'.str_replace('.php', '', $filenameParts[2]);
-            
-            if(!class_exists($className)) {
-                // can't be an doctrine model
-                continue;
+            $module = $filenameParts[0];
+            array_shift($filenameParts); // module name
+            array_shift($filenameParts); // 'models'
+
+            $filename = '';
+            if($filenameParts[0] == 'Base') {
+                array_shift($filenameParts); // Base
+                $filename = 'Base_';
             }
             
-            if(in_array('FansubCMS_Doctrine_Record', class_parents($className))) {
-                // ignore models which are not doctrine models
-                $classNames[] = $className;
-            }
+            $filename .= ucfirst($module) . '_Model_';
+            
+            $filename .= implode('_', $filenameParts);
+            copy($model, $path . DIRECTORY_SEPARATOR . $filename);
+        }
+    }
+    
+    /**
+     * Generate models from $yaml to $path
+     * 
+     * @param string $yaml
+     * @param string $path
+     * @param array $options
+     * @return void
+     */
+    protected function _generateModels ($yaml, $path, $classPrefix = null, array $options = array())
+    {
+        if (! count($options)) {
+            $options = array(
+            'baseClassName' => 'FansubCMS_Doctrine_Record', 
+            'suffix' => '.php', 'baseClassesDirectory' => 'Base', 
+            'baseClassPrefix' => 'Base_', 'generateTableClasses' => true, 
+            'generateBaseClasses' => true, 'phpDocPackage' => 'FansubCMS', 
+            'phpDocSubpackage' => 'Models', 'phpDocName' => 'FansubCMS Dev Team', 
+            'phpDocEmail' => 'hikaru@fansubcode.org');
         }
         
-        return $classNames;
+        if(!empty($classPrefix)) {
+            $options['classPrefix'] = $classPrefix;
+        }
+        
+        Doctrine::generateModelsFromYaml($yaml, $path, $options);
+    }
+    
+    /**
+     * Removes a directory recursivly
+     * 
+     * @param string $dir
+     * @return void
+     */
+    protected function _rrmdir ($dir)
+    {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir . "/" . $object) == "dir") {
+                        $this->_rrmdir($dir . "/" . $object); 
+                    } else {
+                        unlink($dir . "/" . $object);
+                    }
+                }
+            }
+            
+            reset($objects);
+            rmdir($dir);
+        }
     }
 }

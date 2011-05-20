@@ -12,11 +12,13 @@
  * @property string $poster
  * @property string $mini_poster
  * @property enum $status
+ * @property enum $project_type
  * @property enum $private
  * @property Doctrine_Collection $Projects_Model_User
  * @property Doctrine_Collection $Projects_Model_Leader
  * @property Doctrine_Collection $Projects_Model_Screenshot
  * @property Doctrine_Collection $Projects_Model_Episode
+ * @property Doctrine_Collection $Projects_Model_Chapter
  * 
  * @package    FansubCMS
  * @subpackage Models
@@ -67,6 +69,16 @@ abstract class Base_Projects_Model_Project extends FansubCMS_Doctrine_Record
              ),
              'notnull' => true,
              ));
+        $this->hasColumn('project_type', 'enum', null, array(
+             'type' => 'enum',
+             'values' => 
+             array(
+              0 => 'fansub',
+              1 => 'scanlation',
+             ),
+             'default' => 'fansub',
+             'notnull' => true,
+             ));
         $this->hasColumn('private', 'enum', null, array(
              'type' => 'enum',
              'values' => 
@@ -99,6 +111,10 @@ abstract class Base_Projects_Model_Project extends FansubCMS_Doctrine_Record
              'foreign' => 'project_id'));
 
         $this->hasMany('Projects_Model_Episode', array(
+             'local' => 'id',
+             'foreign' => 'project_id'));
+
+        $this->hasMany('Projects_Model_Chapter', array(
              'local' => 'id',
              'foreign' => 'project_id'));
 

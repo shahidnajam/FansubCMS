@@ -16,14 +16,17 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Install_UpdateController extends FansubCMS_Controller_Action {
-    public function init() {
+class Install_UpdateController extends FansubCMS_Controller_Action
+{
+    public function init()
+    {
         $envConf = Zend_Registry::get('environmentSettings');
         if(!$envConf->setup && APPLICATION_ENV != 'development') die('locked!');
         $this->_helper->layout()->disableLayout(); // no layout in the installer
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $settings = new Zend_Config_Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'database.ini', 'database');
         if(strtolower($settings->db->dbms) == 'mysql') {
             // mysql is not transaction safe in structure changes so we can't dry run ;)
@@ -45,7 +48,8 @@ class Install_UpdateController extends FansubCMS_Controller_Action {
         }
     }
 
-    public function migrateAction() {
+    public function migrateAction()
+    {
         if(Install_Api_Migration::getInstance()->getCurrentVersion() >= Install_Api_Migration::getInstance()->getLatestVersion()) {
             // nothing to migrate
             $this->_helper->redirector->gotoSimple('index','index','install');

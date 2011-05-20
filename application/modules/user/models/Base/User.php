@@ -14,12 +14,11 @@
  * @property enum $active
  * @property enum $activated
  * @property timestamp $last_login
- * @property Doctrine_Collection $News_Model_News
  * @property Doctrine_Collection $Projects_Model_User
  * @property Doctrine_Collection $Projects_Model_Leader
- * @property Doctrine_Collection $Projects_Model_UserTask
  * @property Doctrine_Collection $User_Model_Role
  * @property Doctrine_Collection $User_Model_UserTask
+ * @property Doctrine_Collection $News_Model_News
  * 
  * @package    FansubCMS
  * @subpackage Models
@@ -98,10 +97,6 @@ abstract class Base_User_Model_User extends FansubCMS_Doctrine_Record
     public function setUp()
     {
         parent::setUp();
-        $this->hasMany('News_Model_News', array(
-             'local' => 'id',
-             'foreign' => 'user_id'));
-
         $this->hasMany('Projects_Model_User', array(
              'local' => 'id',
              'foreign' => 'user_id'));
@@ -110,15 +105,15 @@ abstract class Base_User_Model_User extends FansubCMS_Doctrine_Record
              'local' => 'id',
              'foreign' => 'user_id'));
 
-        $this->hasMany('Projects_Model_UserTask', array(
-             'local' => 'id',
-             'foreign' => 'user_id'));
-
         $this->hasMany('User_Model_Role', array(
              'local' => 'id',
              'foreign' => 'user_id'));
 
         $this->hasMany('User_Model_UserTask', array(
+             'local' => 'id',
+             'foreign' => 'user_id'));
+
+        $this->hasMany('News_Model_News', array(
              'local' => 'id',
              'foreign' => 'user_id'));
 

@@ -16,8 +16,19 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Install_Api_Migration {
-    private static $_instance;
+class Install_Api_Migration 
+{
+    /**
+     * Instance of this class
+     * 
+     * @var Install_Api_Migration
+     */
+    protected static $_instance;
+    /**
+     * The migration object
+     * 
+     * @var Doctrine_Migration
+     */
     private $_migration;
 
     /**
@@ -25,14 +36,16 @@ class Install_Api_Migration {
      * 
      * @return Install_Api_Migration
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if(empty(self::$_instance)) {
             self::$_instance = new self;
         }
         return self::$_instance;
     }
 
-    private function __construct() {
+    private function __construct()
+    {
         $this->_migration = new Doctrine_Migration(realpath(APPLICATION_PATH.'/../migrations'));
     }
 
@@ -61,8 +74,9 @@ class Install_Api_Migration {
      * @param  string  $to
      * @return boolean $success
      */
-    public function migrateDryRun($to = null) {
-        return $this->_migration->migrateDryRun($to);
+    public function migrateDryRun($to = null)
+    {die('dry');
+        return $this->_migration->migrateDryRun($to); 
     }
 
     /**
@@ -75,7 +89,8 @@ class Install_Api_Migration {
      * @return integer $to       Version number migrated to
      * @throws Doctrine_Exception
      */
-    public function migrate($to = null, $dryRun = false) {
+    public function migrate($to = null, $dryRun = false)
+    {
         return $this->_migration->migrate($to, $dryRun);
     }
 
@@ -85,7 +100,8 @@ class Install_Api_Migration {
      * @param integer $number
      * @return void
      */
-    public function setCurrentVersion($number) {
+    public function setCurrentVersion($number)
+    {
         $this->_migration->setCurrentVersion($number);
     }
 
@@ -94,7 +110,8 @@ class Install_Api_Migration {
      *
      * @return Doctrine_Migration
      */
-    public function getMigrationObject() {
+    public function getMigrationObject()
+    {
         return $this->_migration;
     }
 }

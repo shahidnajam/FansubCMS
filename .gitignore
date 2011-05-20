@@ -16,6 +16,7 @@
 
 # Only allow default modules to be versioned
 /application/modules/*
+!/application/modules/devtools/
 !/application/modules/admin/
 !/application/modules/cms/
 !/application/modules/gadgets/

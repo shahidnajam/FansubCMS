@@ -35,6 +35,11 @@ Projects_Model_Project:
             type: enum
             values: ['planned','progress','pending','completed','dropped','licensed']
             notnull: true
+        project_type:
+            type: enum
+            values: ['fansub','scanlation']
+            default: 'fansub'
+            notnull: true
         private:
             type: enum
             values: ['yes','no']
@@ -133,65 +138,7 @@ Projects_Model_Screenshot:
        type: InnoDB
        collate: utf8_unicode_ci
        charset: utf8
-
-Projects_Model_Task:
-    tableName: project_task_types
-    columns:
-        id:
-            type: integer
-            primary: true
-            autoincrement: true
-            notnull: true
-        name:
-            type: string
-            length: 128
-        description:
-            type: string
-            length: 255
-    options:
-       type: InnoDB
-       collate: utf8_unicode_ci
-       charset: utf8
-
-Projects_Model_UserTask:
-    tableName: project_tasks
-    columns:
-        project_episode_id:
-            type: integer
-            primary: true
-            notnull: true
-        user_id:
-            type: integer
-            primary: true
-            notnull: true
-        project_task_id:
-            type: integer
-            primary: true
-            notnull: true
-    relations:
-        Projects_Model_Episode:
-            local: project_episode_id
-            foreign: id
-            type: one
-            onDelete: CASCADE
-            onUpdate: CASCADE
-        User_Model_User:
-            local: user_id
-            foreign: id
-            type: one
-            onDelete: CASCADE
-            onUpdate: CASCADE
-        Projects_Model_Task:
-            local: project_task_id
-            foreign: id
-            type: one
-            onDelete: CASCADE
-            onUpdate: CASCADE
-    options:
-       type: InnoDB
-       collate: utf8_unicode_ci
-       charset: utf8
-
+       
 Projects_Model_Episode:
     tableName: project_episodes
     actAs: [Timestampable]
@@ -222,6 +169,50 @@ Projects_Model_Episode:
         crc:
             type: string
             length: 8
+        title:
+            type: string
+            length: 255
+        updated_by:
+            type: string
+            length: 32
+        released_at:
+            type: timestamp
+    relations:
+        Projects_Model_Project:
+            local: project_id
+            foreign: id
+            type: one
+            onDelete: CASCADE
+            onUpdate: CASCADE
+    options:
+       type: InnoDB
+       collate: utf8_unicode_ci
+       charset: utf8
+       
+Projects_Model_Chapter:
+    tableName: project_chapters
+    actAs: [Timestampable]
+    columns:
+        id:
+            type: integer
+            primary: true
+            autoincrement: true
+            notnull: true
+        project_id:
+            type: integer
+            notnull: true
+        number:
+            type: integer
+            length: 5
+        version:
+            type: integer
+            length: 2
+        format:
+            type: string
+            length: 10
+        resolution:
+            type: string
+            length: 10
         title:
             type: string
             length: 255
