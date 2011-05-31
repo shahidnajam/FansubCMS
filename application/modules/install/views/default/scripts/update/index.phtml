@@ -10,4 +10,9 @@
 <?=$this->translate('install_update_dry_run_question')?>
 <?=$this->form?>
 </div>
+<?php if(!empty($this->additional) && APPLICATION_ENV == 'development'): ?>
+<div style="width: 650px; margin: 15px auto;">
+    <?=$this->additional?>
+</div>
+<?php endif;?>
 <?=$this->partial('partials/footer.phtml')?>

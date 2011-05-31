@@ -75,7 +75,7 @@ class Install_Api_Migration
      * @return boolean $success
      */
     public function migrateDryRun($to = null)
-    {die('dry');
+    {
         return $this->_migration->migrateDryRun($to); 
     }
 

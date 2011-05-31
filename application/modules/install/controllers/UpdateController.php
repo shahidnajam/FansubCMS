@@ -39,7 +39,23 @@ class Install_UpdateController extends FansubCMS_Controller_Action
                 if(Install_Api_Migration::getInstance()->migrateDryRun()) {
                    $this->_helper->redirector->gotoSimple('migrate','update','install');
                 } else {
+                    $errors = Install_Api_Migration::getInstance()->getMigrationObject()->getErrors();
+                    $messages = array();
+                    foreach($errors as $error) {
+                       $messages[] = $error->getMessage();
+                    }
+                    if(count($messages)) {
+                        $msg = '<ul>';
+                        foreach($messages as $message) {
+                            $msg .= '<li>' . $message . '</li>';
+                        }
+                        $msg .= '</ul>';
+                    } else {
+                       $msg = '';
+                    }
+                    $this->view->additional = $msg;
                     $this->view->error = $this->translate('install_migrate_error_in_dry_run');
+                    
                 }
                 
             } else {
