@@ -23,6 +23,12 @@ $percentSpace = round($freeSpace / $totalSpace * 100, 1);
         <th><?=$this->translate('admin-system-phpVersion')?></th><td><?=phpversion()?></td>
     </tr>
     <tr>
+        <th><?=$this->translate('admin-system-zendVersion')?></th><td><?=$this->zendVersion?></td>
+    </tr>
+    <tr>
+        <th><?=$this->translate('admin-system-doctrineVersion')?></th><td><?=$this->doctrineVersion?></td>
+    </tr>
+    <tr>
         <th><?=$this->translate('admin-system-environment')?></th><td><?=APPLICATION_ENV?></td>
     </tr>
     <?php if($this->isAdmin): ?>

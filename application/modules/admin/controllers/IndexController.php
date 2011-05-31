@@ -28,5 +28,7 @@ class Admin_IndexController extends FansubCMS_Controller_Action {
         $this->view->system = $server;
         $this->view->isAdmin = Zend_Auth::getInstance()->getIdentity()->hasRole('admin_admin');
         $this->view->version = Zend_Registry::get('applicationVersion');
+        $this->view->zendVersion = Zend_Version::VERSION;
+        $this->view->doctrineVersion = Doctrine_Core::VERSION;
     }
 }
