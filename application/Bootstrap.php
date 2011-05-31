@@ -38,8 +38,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public $routes;
     public $layout;
     public $cacheManager;
-    public static $version = '0.9-git';
-
 
     /**
      * init
@@ -175,7 +173,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->settings->applicationStatus = $this->applicationStatus;
         
         # hook needed objects/values to the zend registry
-        Zend_Registry::set('applicationVersion', self::$version);
         Zend_Registry::set('settings', $this->settings);
         Zend_Registry::set('applicationStatus', $this->applicationStatus);
         Zend_Registry::set('environmentSettings', $this->environmentsettings);
