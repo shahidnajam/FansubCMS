@@ -91,7 +91,18 @@ class Install_Api_Migration
      */
     public function migrate($to = null, $dryRun = false)
     {
-        return $this->_migration->migrate($to, $dryRun);
+        if(empty($to)) {
+            $to = $this->_migration->getLatestVersion();
+        }
+        
+        $result = $this->_migration->migrate($to, $dryRun);
+        
+        // TODO: This is a dirty fix for problems... if we get here migration was successful
+        if(!$dryRun && $result) {
+            $this->_migration->setCurrentVersion($to);
+        }
+        
+        return $result;
     }
 
     /**
