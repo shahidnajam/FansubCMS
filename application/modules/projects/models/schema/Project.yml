@@ -152,6 +152,10 @@ Projects_Model_Task:
             type: integer
         user_id:
             type: integer
+        chapter_id:
+            type: integer
+        episode_id:
+            type: integer
         done:
             type: integer
             length: 3
@@ -167,6 +171,18 @@ Projects_Model_Task:
             onUpdate: CASCADE
         User_Model_User:
             local: user_id
+            foreign: id
+            type: one
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        Projects_Model_Episode:
+            local: episode_id
+            foreign: id
+            type: one
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        Projects_Model_Chapter:
+            local: chapter_id
             foreign: id
             type: one
             onDelete: CASCADE
@@ -192,6 +208,9 @@ Projects_Model_Screenshot:
             length: 255
             unique: true
             notnull: true
+        description:
+            type: string
+            length: 6000
     relations:
         Projects_Model_Project:
             local: project_id
