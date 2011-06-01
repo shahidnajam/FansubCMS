@@ -41,7 +41,19 @@ class FansubCMS_Version
      * @var string
      */
     const DOCTRINE = 'doctrine';
-       
+    /**
+     * The latest stable version Zend Framework available
+     *
+     * @var string
+     */
+    protected static $_lastestVersion;
+    /**
+     * 
+     * The url to get current versions from
+     * @var string
+     */
+    protected static $_updateUrl = 'http://fansubcode.org/fancmsVersion';
+    
     /**
      * 
      * Get the current version
@@ -70,12 +82,48 @@ class FansubCMS_Version
     }
     
     /**
-     * 
-     * This function will check for new releases.
-     * Not implemented yet.
+     * Compare the specified Zend Framework version string $version
+     * with the current Zend_Version::VERSION of Zend Framework.
+     *
+     * @param  string  $version  A version string (e.g. "0.7.1").
+     * @return int           -1 if the $version is older,
+     *                           0 if they are the same,
+     *                           and +1 if $version is newer.
+     *
      */
-    public static function getLatestVersion()
+    public static function compareVersion($version)
     {
-        return false;
+        $version = strtolower($version);
+               
+        return version_compare($version, strtolower(self::VERSION));
+    }
+    
+	/**
+     * Fetches the version of the latest stable release
+     *
+     * @return string
+     */
+    public static function getLatest()
+    {
+        if (null === self::$_lastestVersion) {
+            self::$_lastestVersion = 'not available';
+
+            $handle = fopen(self::$_updateUrl, 'r');
+            if (false !== $handle) {
+                $versions = stream_get_contents($handle);
+                $versions = explode("\n", $versions);
+
+                foreach($versions as $version) {
+                    if(substr($version, 0, 7) == 'latest=') {
+                        self::$_lastestVersion = trim(str_replace('latest=', '', $version));
+                        break;
+                    }
+                }
+                
+                fclose($handle);
+            }
+        }
+
+        return self::$_lastestVersion;
     }
 }

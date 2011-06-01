@@ -16,7 +16,8 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class Admin_IndexController extends FansubCMS_Controller_Action {
+class Admin_IndexController extends FansubCMS_Controller_Action
+{
     public function indexAction()
     {
         $server = new stdClass;
@@ -28,6 +29,10 @@ class Admin_IndexController extends FansubCMS_Controller_Action {
         $this->view->system = $server;
         $this->view->isAdmin = Zend_Auth::getInstance()->getIdentity()->hasRole('admin_admin');
         $this->view->version = FansubCMS_Version::getCurrentVersion();
+        if($this->request->getParam('checkLatest')) {
+            $this->view->latestVersion = FansubCMS_Version::getLatest();
+            $this->view->update = FansubCMS_Version::compareVersion(FansubCMS_Version::getLatest());
+        }
         $this->view->zendVersion = FansubCMS_Version::getFrameworkVersion(FansubCMS_Version::ZEND);
         $this->view->doctrineVersion = FansubCMS_Version::getFrameworkVersion(FansubCMS_Version::DOCTRINE);
     }

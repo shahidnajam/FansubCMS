@@ -2,6 +2,18 @@
 $freeSpace = disk_free_space(dirname(__FILE__));
 $totalSpace = disk_total_space(dirname(__FILE__));
 $percentSpace = round($freeSpace / $totalSpace * 100, 1);
+
+$latest = '';
+if(!empty($this->latestVersion)) {
+    $latest .= ' ('.$this->latestVersion.')';
+}
+if(isset($this->update)) {
+    if($this->update < 0) {
+        $latest .= ' '.$this->translate('admin-system-versionNewer');
+    } else if($this->update > 0) {
+        $latest .= ' '.$this->translate('admin-system-versionOlder');
+    }
+}
 ?>
 <table class="systemInfo">
 	<tr>
@@ -24,7 +36,7 @@ $percentSpace = round($freeSpace / $totalSpace * 100, 1);
     </tr>
     <?php if($this->isAdmin): ?>
         <tr>
-            <th><?=$this->translate('admin-system-version')?></th><td><?=$this->version?></td>
+            <th><?=$this->translate('admin-system-version')?></th><td><a href="<?=$this->baseUrl('admin/index/index/checkLatest/yes')?>"><?=$this->version?></a><?=$latest?></td>
         </tr>
         <tr>
         <th><?=$this->translate('admin-system-phpVersion')?></th><td><?=phpversion()?></td>
