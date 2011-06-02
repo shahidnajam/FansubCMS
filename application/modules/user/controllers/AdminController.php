@@ -114,7 +114,7 @@ class User_AdminController extends FansubCMS_Controller_Action
 
     public function tasksAction()
     {
-        $thius->view->pageTitle = $this->translate('user_task_list_headline');
+        $this->view->pageTitle = $this->translate('user_task_list_headline');
         $table = Doctrine_Core::getTable('User_Model_Task');
 
         $this->view->query = $table->createQuery();
