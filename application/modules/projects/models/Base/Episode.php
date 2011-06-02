@@ -17,6 +17,7 @@
  * @property string $updated_by
  * @property timestamp $released_at
  * @property Projects_Model_Project $Projects_Model_Project
+ * @property Doctrine_Collection $Projects_Model_Task
  * 
  * @package    FansubCMS
  * @subpackage Models
@@ -86,6 +87,10 @@ abstract class Base_Projects_Model_Episode extends FansubCMS_Doctrine_Record
              'foreign' => 'id',
              'onDelete' => 'CASCADE',
              'onUpdate' => 'CASCADE'));
+
+        $this->hasMany('Projects_Model_Task', array(
+             'local' => 'id',
+             'foreign' => 'episode_id'));
 
         $timestampable0 = new Doctrine_Template_Timestampable();
         $this->actAs($timestampable0);

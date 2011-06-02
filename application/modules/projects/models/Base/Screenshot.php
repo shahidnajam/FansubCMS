@@ -8,6 +8,7 @@
  * @property integer $id
  * @property integer $project_id
  * @property string $screenshot
+ * @property string $description
  * @property Projects_Model_Project $Projects_Model_Project
  * 
  * @package    FansubCMS
@@ -34,6 +35,10 @@ abstract class Base_Projects_Model_Screenshot extends FansubCMS_Doctrine_Record
              'length' => 255,
              'unique' => true,
              'notnull' => true,
+             ));
+        $this->hasColumn('description', 'string', 6000, array(
+             'type' => 'string',
+             'length' => 6000,
              ));
 
         $this->option('type', 'InnoDB');

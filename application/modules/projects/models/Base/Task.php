@@ -8,10 +8,14 @@
  * @property integer $id
  * @property integer $task_id
  * @property integer $user_id
+ * @property integer $chapter_id
+ * @property integer $episode_id
  * @property integer $done
  * @property string $comment
  * @property Projects_Model_TaskType $Projects_Model_TaskType
  * @property User_Model_User $User_Model_User
+ * @property Projects_Model_Episode $Projects_Model_Episode
+ * @property Projects_Model_Chapter $Projects_Model_Chapter
  * 
  * @package    FansubCMS
  * @subpackage Models
@@ -32,6 +36,12 @@ abstract class Base_Projects_Model_Task extends FansubCMS_Doctrine_Record
              'type' => 'integer',
              ));
         $this->hasColumn('user_id', 'integer', null, array(
+             'type' => 'integer',
+             ));
+        $this->hasColumn('chapter_id', 'integer', null, array(
+             'type' => 'integer',
+             ));
+        $this->hasColumn('episode_id', 'integer', null, array(
              'type' => 'integer',
              ));
         $this->hasColumn('done', 'integer', 3, array(
@@ -59,6 +69,18 @@ abstract class Base_Projects_Model_Task extends FansubCMS_Doctrine_Record
 
         $this->hasOne('User_Model_User', array(
              'local' => 'user_id',
+             'foreign' => 'id',
+             'onDelete' => 'CASCADE',
+             'onUpdate' => 'CASCADE'));
+
+        $this->hasOne('Projects_Model_Episode', array(
+             'local' => 'episode_id',
+             'foreign' => 'id',
+             'onDelete' => 'CASCADE',
+             'onUpdate' => 'CASCADE'));
+
+        $this->hasOne('Projects_Model_Chapter', array(
+             'local' => 'chapter_id',
              'foreign' => 'id',
              'onDelete' => 'CASCADE',
              'onUpdate' => 'CASCADE'));
