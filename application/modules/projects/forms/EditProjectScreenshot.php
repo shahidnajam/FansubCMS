@@ -38,6 +38,13 @@ class Projects_Form_EditProjectScreenshot extends Zend_Form {
                         ->addValidator('IsImage', false, array('jpeg,jpg,png,gif'))
                         ->setLabel('project_admin_field_screenshot_screen');
 
+        # description
+        $description = $this->createElement('textarea', 'description');
+        $description->addFilter('stringTrim')
+                    ->addFilter('stripTags')
+                    ->setLabel('project_admin_field_screenshot_description')
+                    ->setValue(isset($values['description']) ? $values['description'] : null);
+                    
         # projects
         $table = Doctrine::getTable('Projects_Model_Project');
         $project = $this->createElement('select', 'project')
@@ -53,6 +60,7 @@ class Projects_Form_EditProjectScreenshot extends Zend_Form {
         # add elements to the form
         $this->addElement($screen)
                 ->addElement($project)
+                ->addElement($description)
                 # edit button
                 ->addElement('submit', $insert ? 'add' : 'update', array('label' => $insert ? 'add' : 'update', 'class' => 'button'));
     }

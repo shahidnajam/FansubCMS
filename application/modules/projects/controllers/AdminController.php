@@ -193,9 +193,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         $id = $this->request->getParam('id', false);
         
         $query = $table->createQuery()
-                ->select('screenshot as screen, p.name as project')
+                ->select('id, description, screenshot as screen, p.name as project')
                 ->leftJoin('Projects_Model_Screenshot.Projects_Model_Project p')
-                ->orderBy('p.name ASC');
+                ->orderBy('p.name ASC, id ASC');
                 
         if($id) {
             $query->where('p.id = ?', $id);

@@ -16,12 +16,15 @@ class Projects_Model_Screenshot extends Base_Projects_Model_Screenshot
     {
         if (! empty($values['project']))
             $this->project_id = $values['project'];
+        if (! empty($values['description']))
+            $this->description = $values['description'];
         if ($values['file'] instanceof Zend_Form_Element_File) {
             $file = $values['file']->receive();
             if (! $file) {
                 throw new Zend_Exception(
                 'There was an error with the file upload.');
             }
+            
             if (! empty($this->screenshot)) {
                 $file = explode('/', $this->screenshot);
                 $file = $file[count($file) - 1];
