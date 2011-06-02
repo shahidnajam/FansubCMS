@@ -75,7 +75,25 @@ class Install_UpdateController extends FansubCMS_Controller_Action
         if($this->request->isPost()) {
             $submit = $this->request->getParam('yes');
             if(!empty($submit)) {
-                if(Install_Api_Migration::getInstance()->migrate()) {
+                try {
+                    $success = Install_Api_Migration::getInstance()->migrate();
+                } catch (Doctrine_Migration_Exception $e) {
+                    if(!headers_sent()) {
+                        header('Content-Type: text/plain');
+                    }
+                    
+                    echo "The migration has failed. Please provide the info below if filing in a bug report.\n\n";
+                    echo "Error information:\n";
+                    echo $e->getMessage() . "(Code " . $e->getCode() . ")\n";
+                    echo "File: " . $e->getFile() . ", Line: " . $e->getLine() . "\n\n";
+                    echo "Trace:\n";
+                    echo $e->getTraceAsString();
+                    echo "\n\n";
+                    echo "Extended Trace:\n";
+                    print_r($e->getTrace());
+                    die();
+                } 
+                if($success) {
                    $this->_helper->redirector->gotoSimple('index','index','install');
                 } else {
                     $this->view->error = $this->translate('install_migrate_error_in_migrate_run');
