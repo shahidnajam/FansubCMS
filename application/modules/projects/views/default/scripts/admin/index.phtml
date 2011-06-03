@@ -75,6 +75,19 @@ $this->modelList('Projects_Model_Project', array(
                 )
             )
         ),
+        'task_type' => array(
+            'image' => '/media/common/images/icons/16/wrench.png',
+            'label' => 'project_task_type_table_action',
+            'privilege' => 'task-type',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'task-type',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
         'delete' => array(
             'image' => '/media/common/images/icons/16/folder--minus.png',
             'label' => 'project_delete_table_action',

@@ -1,0 +1,51 @@
+<?=
+$this->modelList('Projects_Model_TaskType', array(
+    'prefix' => 'project_admin_task-type_table_',
+    'emptyListMessage' => 'project_no_task_types',
+    'showFieldNames' => array(
+       'id', 'title', 'description'
+    ),
+    'filterFields' => array(
+
+    ),
+    'actions' => array(
+        'edit' => array(
+            'image' => '/media/common/images/icons/16/wrench--pencil.png',
+            'label' => 'project_edit_table_action',
+            'privilege' => 'edit',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'edit-task-type',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'delete' => array(
+            'image' => '/media/common/images/icons/16/wrench--minus.png',
+            'label' => 'project_delete_table_action',
+            'privilege' => 'delete',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'delete-task-type',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        )
+    ),
+    'footerActions' => array(
+        'add' => array(
+            'module' => 'projects',
+            'controller' => 'admin',
+            'action' => 'add-task-type',
+            'label' => 'add',
+            'image' => '/media/common/images/icons/16/wrench--plus.png',
+            'params' => array(
+                'pid' => $this->project->id
+            )
+        )
+    )
+), $this->query);
