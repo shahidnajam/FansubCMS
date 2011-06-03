@@ -88,6 +88,19 @@ $this->modelList('Projects_Model_Project', array(
                 )
             )
         ),
+        'tasks' => array(
+            'image' => '/media/common/images/icons/16/user-worker.png',
+            'label' => 'project_tasks_table_action',
+            'privilege' => 'tasks',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'tasks',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
         'delete' => array(
             'image' => '/media/common/images/icons/16/folder--minus.png',
             'label' => 'project_delete_table_action',
