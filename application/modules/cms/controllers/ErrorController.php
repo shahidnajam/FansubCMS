@@ -31,7 +31,7 @@ class Cms_ErrorController extends FansubCMS_Controller_Action
     public function errorAction()
     {
         $errors = $this->_getParam('error_handler');
-        $this->view->title = $this->translate("error_encountered");
+        $this->view->pageTitle = $this->translate("error_encountered");
         if($errors == null) {
         	$errors = new stdClass();
         	$errors->type = Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER;
@@ -42,7 +42,6 @@ class Cms_ErrorController extends FansubCMS_Controller_Action
         $this->view->request   = $errors->request;
         
         if($errors->exception instanceof FansubCMS_Exception_Denied) {
-            $this->view->title = $this->translate("error_encountered");
             $this->view->error = $this->translate("denied_error");
             $this->getResponse()->setHttpResponseCode(403); // forbidden, 
     	                                                // alternative 401 unauthorized 
