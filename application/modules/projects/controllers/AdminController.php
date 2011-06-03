@@ -521,4 +521,158 @@ class Projects_AdminController extends FansubCMS_Controller_Action
              $this->_helper->redirector->gotoSimple('task-type','admin','projects', array('id' => $ptt->project_id));
         }
     }
+    
+    public function tasksAction()
+    {
+        $id = $this->getRequest()->getParam('id');
+        $table = Doctrine_Core::getTable('Projects_Model_Project');
+        $p = $table->findOneBy('id', $id ? $id : 0);
+        if(!$p) {
+            $this->session->message = $this->translate('project_not_existent');
+            $this->_helper->redirector->gotoSimple('index','admin','projects');
+        }
+        
+        $this->checkAllowed($p, 'tasks');
+        
+        $this->view->pageTitle = sprintf($this->translate('project_tasks_headline'), $p->name);
+
+        $select = 'pt.id, ptt.title as type_title, pt.done, pt.comment, u.name as username, r.number as number, r.version as version';
+
+        $query = Doctrine_Query::create();
+        $query->select($select)
+              ->from('Projects_Model_Task pt')
+              ->leftJoin('pt.Projects_Model_TaskType ptt')
+              ->leftJoin('pt.User_Model_User u');
+        
+        if($p->project_type == Projects_Model_Project::TYPE_SCANLATION) {
+            $query->leftJoin('pt.Projects_Model_Chapter r');
+        } else {
+            $query->leftJoin('pt.Projects_Model_Episode r');
+        }
+        $query->where('ptt.project_id = ?', $id)
+              ->orderBy('pt.done ASC');
+        
+        $this->view->query = $query;
+        $this->view->project = $p;
+    }
+    
+    public function addTaskAction()
+    {
+        $id = $this->getRequest()->getParam('pid');
+        $table = Doctrine_Core::getTable('Projects_Model_Project');
+        $p = $table->findOneBy('id', $id ? $id : 0);
+        if(!$p) {
+            $this->session->message = $this->translate('project_not_existent');
+            $this->_helper->redirector->gotoSimple('index','admin','projects');
+        }
+        
+        $this->checkAllowed($p, 'add-task');
+        $this->view->pageTitle = sprintf($this->translate('project_add-task_headline'), $p->name);
+        
+        $form = new Projects_Form_EditTask($p, array(), true);
+        
+        if($this->request->isPost()) {
+            if($form->isValid($this->request->getPost())) {
+                $values = $form->getValues();
+                
+                $pt = new Projects_Model_Task();
+                
+                $pt->user_id = $values['user'];
+                $pt->task_id = $values['type'];
+                $pt->done = $values['done'];
+                $pt->comment = $values['comment'];
+                if($p->project_type == Projects_Model_Project::TYPE_SCANLATION) {
+                    $pt->chapter_id = $values['release'];
+                } else {
+                    $pt->episode_id = $values['release'];
+                }
+                
+                $pt->save();
+                
+                $this->session->message = $this->translate('project_admin_add-task_success');
+                $this->_helper->redirector->gotoSimple('tasks','admin','projects', array('id' => $id));
+            } else {
+                $this->view->message = $this->translate('project_admin_add-task_failed');
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+    
+    public function editTaskAction()
+    {
+        $id = $this->request->getParam('id', 0);
+        $table = Doctrine_Core::getTable('Projects_Model_Task');
+        $pt = $table->createQuery('pt')
+                ->leftJoin('pt.Projects_Model_TaskType ptt')
+                ->leftJoin('ptt.Projects_Model_Project p')
+                ->where('pt.id = ?', $id)
+                ->fetchOne();
+        if(!$pt) {
+            $this->session->message = $this->translate('project_task_not_existent');
+            $this->_helper->redirector->gotoSimple('index','admin','projects');
+        }
+        $this->checkAllowed($pt->Projects_Model_TaskType->Projects_Model_Project, 'edit-task');
+        $this->view->pageTitle = sprintf($this->translate('project_edit-task_headline'), $pt->Projects_Model_TaskType->Projects_Model_Project->name);
+        
+        $form = new Projects_Form_EditTask($pt->Projects_Model_TaskType->Projects_Model_Project, $pt->toArray(), false);
+        
+        if($this->request->isPost()) {
+            if($form->isValid($this->request->getPost())) {
+                $values = $form->getValues();
+                
+                $pt->task_id = $values['type'];
+                $pt->user_id = $values['user'];
+                $pt->done = $values['done'];
+                $pt->comment = $values['comment'];
+                
+                switch($pt->Projects_Model_TaskType->Projects_Model_Project) {
+                    case Projects_Model_Project::TYPE_SCANLATION:
+                        $pt->chapter_id = $values['release'];
+                        break;
+                    case Projects_Model_Project::TYPE_SCANLATION:
+                    default:
+                        $pt->episode_id = $values['release'];
+                }
+                
+                $pt->save();
+                
+                $this->session->message = $this->translate('project_admin_edit-task_success');
+                $this->_helper->redirector->gotoSimple('tasks','admin','projects', array('id' => $pt->Projects_Model_TaskType->project_id));
+            } else {
+                $this->view->message = $this->translate('project_admin_edit-task_failed');
+            }
+        }
+        
+        $this->view->form = $form;
+    }
+    
+    public function deleteTaskAction()
+    {
+        $id = $this->request->getParam('id', 0);
+        $table = Doctrine_Core::getTable('Projects_Model_Task');
+        $table = Doctrine_Core::getTable('Projects_Model_Task');
+        $pt = $table->createQuery('pt')
+                ->leftJoin('pt.Projects_Model_TaskType ptt')
+                ->leftJoin('ptt.Projects_Model_Project p')
+                ->where('pt.id = ?', $id)
+                ->fetchOne();
+        if(!$pt) {
+            $this->session->message = $this->translate('project_task_type_not_existent');
+            $this->_helper->redirector->gotoSimple('index','admin','projects');
+        }
+        $this->checkAllowed($pt->Projects_Model_TaskType->Projects_Model_Project, 'delete-task');
+        
+        $this->view->pageTitle = sprintf($this->translate('project_delete-task_headline'), $pt->Projects_Model_TaskType->Projects_Model_Project->name);
+
+        $this->view->form = new FansubCMS_Form_Confirmation();
+        $this->view->confirmation = sprintf($this->translate('project_admin_delete-task_confirmation'), $pt->Projects_Model_TaskType->title, $pt->User_Model_User->name);
+        if($this->request->getParam('yes') && $pt) {
+            $pt->delete();
+            $this->session->message = $this->translate('project_admin_delete-task_success');
+            $this->_helper->redirector->gotoSimple('tasks', 'admin', 'projects', array('id' => $pt->Projects_Model_TaskType->project_id));
+        } else if($this->request->getParam('no')) {
+             $this->_helper->redirector->gotoSimple('tasks','admin','projects', array('id' => $pt->Projects_Model_TaskType->project_id));
+        }
+    }
 }

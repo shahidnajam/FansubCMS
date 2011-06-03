@@ -1,22 +1,27 @@
 <?=
-$this->modelList('Projects_Model_TaskType', array(
-    'prefix' => 'project_admin_task-type_table_',
-    'emptyListMessage' => 'project_no_task_types',
+$this->modelList('Projects_Model_Task', array(
+    'prefix' => 'project_admin_task_table_',
+    'emptyListMessage' => 'project_no_tasks',
     'showFieldNames' => array(
-       'id', 'title', 'description'
+       'id', 'type_title', 'comment', 'done', 'username', 'number', 'version'
     ),
     'filterFields' => array(
-
+        'done' => array(
+            'viewHelper' => 'prefixTranslate',
+            'params' => array(
+                '%', true
+            )
+        ),
     ),
     'actions' => array(
         'edit' => array(
             'image' => '/media/common/images/icons/16/wrench--pencil.png',
             'label' => 'project_edit_table_action',
-            'privilege' => 'edit-task-type',
+            'privilege' => 'edit-task',
             'target' => array(
                 'module' => 'projects',
                 'controller' => 'admin',
-                'action' => 'edit-task-type',
+                'action' => 'edit-task',
                 'params' => array(
                     'id' => '__id__'
                 )
@@ -25,11 +30,11 @@ $this->modelList('Projects_Model_TaskType', array(
         'delete' => array(
             'image' => '/media/common/images/icons/16/wrench--minus.png',
             'label' => 'project_delete_table_action',
-            'privilege' => 'delet-task-typee',
+            'privilege' => 'delete-task',
             'target' => array(
                 'module' => 'projects',
                 'controller' => 'admin',
-                'action' => 'delete-task-type',
+                'action' => 'delete-task',
                 'params' => array(
                     'id' => '__id__'
                 )
@@ -40,7 +45,7 @@ $this->modelList('Projects_Model_TaskType', array(
         'add' => array(
             'module' => 'projects',
             'controller' => 'admin',
-            'action' => 'add-task-type',
+            'action' => 'add-task',
             'label' => 'add',
             'image' => '/media/common/images/icons/16/wrench--plus.png',
             'params' => array(

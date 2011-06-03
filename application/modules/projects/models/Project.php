@@ -12,6 +12,9 @@
  */
 class Projects_Model_Project extends Base_Projects_Model_Project
 {
+    const TYPE_SCANLATION = 'scanlation';
+    const TYPE_FANSUB = 'fansub';
+    
     private $_released;
     
     public function getReleasedEpisodes ()

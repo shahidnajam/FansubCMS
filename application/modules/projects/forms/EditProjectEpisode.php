@@ -67,7 +67,7 @@ class Projects_Form_EditProjectEpisode extends Zend_Form {
                         Zend_Validate_StringLength::TOO_SHORT => 'project_episode_form_error_crc_length'
                 )))
                 ->setRequired(true)
-                ->setValue(isset($values['crc']) ? $values['crc'] : null)
+                ->setValue(isset($values['crc']) ? $values['crc'] : '00000000')
                 ->setLabel('project_admin_field_episode_crc');
 
         # number
