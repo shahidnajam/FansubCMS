@@ -1,9 +1,16 @@
 <?php
 $acl = Zend_Registry::get('Zend_Acl');
 $role = 'fansubcms_user_custom_role_logged_in_user';
+$id = 'table-' . md5(mt_rand() . mt_rand() . mt_rand());
 ?>
 <?php if(count($this->paginator)): ?>
-<table class="admin-table">
+<script type="text/javascript">
+$(document).ready(function() { 
+    // call the tablesorter plugin, the magic happens in the markup 
+    $("#<?php echo $id ?>").tablesorter(); 
+}); 
+</script>
+<table class="admin-table tablesorter" id="<?php echo $id ?>">
     <thead>
         <tr>
             <?php foreach ($this->fieldNames AS $name): ?>
@@ -11,7 +18,7 @@ $role = 'fansubcms_user_custom_role_logged_in_user';
                 <th><?php echo $this->escape($this->translate($label)); ?></th>
             <?php endforeach; ?>
             <?php if (count($this->options['actions'])): ?>
-                    <th><?php echo $this->translate('table_action') ?></th>
+                    <th class="{sorter: false}"><?php echo $this->translate('table_action') ?></th>
             <?php endif; ?>
                 </tr>
             </thead>
