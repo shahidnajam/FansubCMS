@@ -1,0 +1,32 @@
+<?php
+if(count($this->result)):
+?>
+<ul>
+<?php foreach($this->result as $task): ?>
+    <?php
+        switch($task['Projects_Model_TaskType']['Projects_Model_Project']['project_type']) {
+            case Projects_Model_Project::TYPE_SCANLATION:
+                $ptype = 'Projects_Model_Chapter';
+                break;
+            case Projects_Model_Project::TYPE_FANSUB:
+            default:
+                $ptype = 'Projects_Model_Episode';
+                break;
+        }
+        $vadd = $task[$ptype]['version'] > 1 ? 'v'.$task[$ptype]['version'] : '';
+    ?>
+    <li>
+        <a href="<?=$this->baseUrl('/projects/index/details/project/'.$task['Projects_Model_TaskType']['Projects_Model_Project']['name_slug'])?>"
+           alt="<?=$task['Projects_Model_TaskType']['Projects_Model_Project']['name']?>">
+            <?=$task['Projects_Model_TaskType']['Projects_Model_Project']['name']?>
+        </a>
+        <?=$task[$ptype]['number'] . $vadd?> - 
+        <?=$task['Projects_Model_TaskType']['title']?> - <?=$task['done']?>%
+    </li>
+<?php endforeach; ?>
+</ul>
+<?php else: ?>
+<?=$this->translate('gadget_project_status_none')?>
+<?php
+endif;
+?>

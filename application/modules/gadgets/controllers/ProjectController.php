@@ -17,6 +17,9 @@
  */
 class Gadgets_ProjectController extends FansubCMS_Controller_Action
 {
+    /**
+     * Show a number of random projects
+     */
     public function randomAction ()
     {
         $num = $this->getRequest()->getParam('num', 5);
@@ -28,6 +31,10 @@ class Gadgets_ProjectController extends FansubCMS_Controller_Action
             ->execute();
         $this->view->random = $projects;
     }
+    
+    /**
+     * Show a number of latest releases
+     */
     public function latestAction ()
     {
         $num = $this->getRequest()->getParam('num', 5);
@@ -37,5 +44,26 @@ class Gadgets_ProjectController extends FansubCMS_Controller_Action
             ->limit($num)
             ->where('released_at IS NOT NULL');
         $this->view->latest = $q->execute();
+    }
+    
+    /**
+     * Show current project status
+     */
+    public function statusAction()
+    {
+        $num = $this->getRequest()->getParam('num', 5);
+        $q = Doctrine_Query::create();
+        $q->from('Projects_Model_Task pt')
+          ->select('p.name, p.name_slug, p.name_jp, p.project_type, ptt.title, pt.done, pc.*, pe.*')
+          ->leftJoin('pt.Projects_Model_TaskType ptt')
+          ->leftJoin('ptt.Projects_Model_Project p')
+          ->leftJoin('pt.Projects_Model_Episode pe')
+          ->leftJoin('pt.Projects_Model_Chapter pc')
+          ->where('p.private = ?', 'no')
+          ->limit($num)
+          ->orderBy('pt.updated_at DESC')
+          ->groupBy('p.id');
+        
+        $this->view->result = $q->fetchArray();
     }
 }
