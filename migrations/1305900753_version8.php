@@ -6,14 +6,6 @@ class Version8 extends Doctrine_Migration_Base
 {
     public function up()
     {
-        $this->createForeignKey('project_tasks', 'project_tasks_project_id_projects_id', array(
-             'name' => 'project_tasks_project_id_projects_id',
-             'local' => 'project_id',
-             'foreign' => 'id',
-             'foreignTable' => 'projects',
-             'onUpdate' => 'CASCADE',
-             'onDelete' => 'CASCADE',
-             ));
         $this->createForeignKey('project_task_types', 'project_task_types_project_id_projects_id', array(
              'name' => 'project_task_types_project_id_projects_id',
              'local' => 'project_id',
@@ -21,12 +13,6 @@ class Version8 extends Doctrine_Migration_Base
              'foreignTable' => 'projects',
              'onUpdate' => 'CASCADE',
              'onDelete' => 'CASCADE',
-             ));
-        $this->addIndex('project_tasks', 'project_tasks_project_id', array(
-             'fields' => 
-             array(
-              0 => 'project_id',
-             ),
              ));
         $this->addIndex('project_task_types', 'project_task_types_project_id', array(
              'fields' => 
@@ -39,13 +25,6 @@ class Version8 extends Doctrine_Migration_Base
     public function down()
     {
         $this->dropForeignKey('project_tasks', 'project_tasks_project_id_projects_id');
-        $this->dropForeignKey('project_task_types', 'project_task_types_project_id_projects_id');
-        $this->removeIndex('project_tasks', 'project_tasks_project_id', array(
-             'fields' => 
-             array(
-              0 => 'project_id',
-             ),
-             ));
         $this->removeIndex('project_task_types', 'project_task_types_project_id', array(
              'fields' => 
              array(
