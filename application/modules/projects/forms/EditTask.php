@@ -39,7 +39,7 @@ class Projects_Form_EditTask extends Zend_Form
         $release = $this->_getReleaseElement($project);
         
         $val = $project->project_type == Projects_Model_Project::TYPE_SCANLATION ? $values['chapter_id'] : null;
-        $val = empty($val) ? $values['episode_id'] : $val;
+        $val = !$insert && empty($val) ? $values['episode_id'] : $val;
         
         $release->setValue($val);
         
