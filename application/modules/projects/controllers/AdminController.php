@@ -613,6 +613,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $this->_helper->redirector->gotoSimple('index','admin','projects');
         }
         $this->checkAllowed($pt->Projects_Model_TaskType->Projects_Model_Project, 'edit-task');
+        $this->checkAllowed($pt, 'edit');
         $this->view->pageTitle = sprintf($this->translate('project_edit-task_headline'), $pt->Projects_Model_TaskType->Projects_Model_Project->name);
         
         $form = new Projects_Form_EditTask($pt->Projects_Model_TaskType->Projects_Model_Project, $pt->toArray(), false);
@@ -674,5 +675,34 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         } else if($this->request->getParam('no')) {
              $this->_helper->redirector->gotoSimple('tasks','admin','projects', array('id' => $pt->Projects_Model_TaskType->project_id));
         }
+    }
+    
+    public function myTasksAction()
+    {
+        $this->view->pageTitle = $this->translate('project_my-tasks_headline');
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        
+        $q = Doctrine_Query::create()
+                ->select('id,
+                    comment,
+                    done,
+                    updated_at,
+                    created_at,
+                    p.name as project, 
+                    p.name_jp as project_jp, 
+                    e.number as number, 
+                    e.version as version, 
+                    tt.title as task')
+                ->from('Projects_Model_Task t')
+                ->leftJoin('t.Projects_Model_TaskType tt')
+                ->leftJoin('tt.Projects_Model_Project p')
+                ->leftJoin('t.Projects_Model_Chapter c')
+                ->leftJoin('t.Projects_Model_Episode e')
+                ->where('t.user_id = ?', $identity->id)
+                ->andWhere('c.released_at IS NULL')
+                ->andWhere('e.released_at IS NULL')
+                ->orderBy('p.name, c.number ASC, e.number ASC');
+        
+        $this->view->query = $q;
     }
 }

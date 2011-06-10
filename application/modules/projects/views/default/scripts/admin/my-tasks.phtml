@@ -1,0 +1,40 @@
+<?php
+echo $this->modelList('Projects_Model_Task', array(
+    'prefix' => 'project_admin_my-tasks_table_',
+    'emptyListMessage' => 'project_no_tasks',
+    'showFieldNames' => array(
+        'id', 'project' ,'number', 'version', 'task', 'comment', 'done', 'updated_at'
+    ),
+    'filterFields' => array(
+        'updated_at' => array(
+            'viewHelper' => 'formatDate',
+            'params' => array(
+                'date'
+            )
+        ),
+        'done' => array(
+            'viewHelper' => 'prefixTranslate',
+            'params' => array(
+                '%', true
+            )
+        ),
+    ),
+    'actions' => array(
+        'edit' => array(
+            'image' => '/media/common/images/icons/16/wrench--pencil.png',
+            'label' => 'project_edit_table_action',
+            'privilege' => 'edit-task',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'edit-task',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+    ),
+    'footerActions' => array(
+
+    )
+), $this->query);
