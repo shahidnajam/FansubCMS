@@ -24,7 +24,7 @@ class Version8 extends Doctrine_Migration_Base
 
     public function down()
     {
-        $this->dropForeignKey('project_tasks', 'project_tasks_project_id_projects_id');
+        $this->dropForeignKey('project_tasks_types', 'project_task_types_project_id_projects_id');
         $this->removeIndex('project_task_types', 'project_task_types_project_id', array(
              'fields' => 
              array(

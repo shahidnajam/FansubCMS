@@ -6,7 +6,6 @@ class Version9 extends Doctrine_Migration_Base
 {
     public function up()
     {
-        $this->dropForeignKey('project_tasks', 'project_tasks_project_id_projects_id');
         $this->createForeignKey('project_tasks', 'project_tasks_task_id_project_task_types_id', array(
              'name' => 'project_tasks_task_id_project_task_types_id',
              'local' => 'task_id',
@@ -39,14 +38,6 @@ class Version9 extends Doctrine_Migration_Base
 
     public function down()
     {
-        $this->createForeignKey('project_tasks', 'project_tasks_project_id_projects_id', array(
-             'name' => 'project_tasks_project_id_projects_id',
-             'local' => 'project_id',
-             'foreign' => 'id',
-             'foreignTable' => 'projects',
-             'onUpdate' => 'CASCADE',
-             'onDelete' => 'CASCADE',
-             ));
         $this->dropForeignKey('project_tasks', 'project_tasks_task_id_project_task_types_id');
         $this->dropForeignKey('project_tasks', 'project_tasks_user_id_users_id');
         $this->removeIndex('project_tasks', 'project_tasks_task_id', array(

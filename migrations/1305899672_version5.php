@@ -6,8 +6,9 @@ class Version5 extends Doctrine_Migration_Base
 {
     public function up()
     {
-        $this->dropTable('project_task_types');
+        
         $this->dropTable('project_tasks');
+        $this->dropTable('project_task_types');
         $this->createTable('project_chapters', array(
              'id' => 
              array(
