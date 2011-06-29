@@ -16,9 +16,9 @@ class User_Model_Role extends Base_User_Model_Role
     public static function getRoles ()
     {
         if (! isset(self::$_roles)) {
-            $cm = Zend_Registry::get('Zend_Cache_Manager');
-            $cache = $cm->getCache('FansubCMS');
-            $config = $cache->load('Acl_Settings');
+            $ch = FansubCMS_Cache_Helper::getInstance();
+            $cache = $ch->getCache('Acl_Settings');
+            $config = $cache->load('Acl');
             foreach ($config as $module => $modconf) {
                 if (empty($modconf['roles'])) {
                     continue;

@@ -271,26 +271,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         $cm = new Zend_Cache_Manager();
 
-        $lifetime = APPLICATION_ENV == 'development' ? 30 : 3600; # in development keep cache 30 seconds otherwise one hour
-
-        $options = array(
-            'frontend' => array(
-                'name' => 'Core',
-                'options' => array(
-                    'lifetime' => $lifetime,
-                    'automatic_serialization' => true
-                )
-            ),
-            'backend' => array(
-                'name' => 'File',
-                'options' => array(
-                    'cache_dir' => CACHE_PATH
-                )
-                ));
-
-
-        $cm->setCacheTemplate('FansubCMS', $options);
-
         Zend_Registry::set('Zend_Cache_Manager', $cm);
         $this->cacheManager = $cm;
         return $cm;

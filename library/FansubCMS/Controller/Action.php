@@ -53,7 +53,11 @@ class FansubCMS_Controller_Action extends Zend_Controller_Action
      * @var FansubCMS_Helper_Delegate
      */
     protected $_delegateHelper;
-
+    /**
+     *
+     * @var FansubCMS_Cache_Helper
+     */
+    protected $_cacheHelper;
     /**
      * The class constructor
      * @param Zend_Controller_Request_Abstract $request
@@ -63,6 +67,7 @@ class FansubCMS_Controller_Action extends Zend_Controller_Action
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
         $this->_delegateHelper = new FansubCMS_Helper_Delegate($request->getModuleName());
+        $this->_cacheHelper = FansubCMS_Cache_Helper::getInstance();
         parent::__construct($request, $response, $invokeArgs);
         $this->defaultUseRole = 'fansubcms_user_custom_role_logged_in_user';
         $this->request = $request;
