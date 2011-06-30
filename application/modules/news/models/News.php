@@ -10,7 +10,7 @@
  * @author     FansubCMS Dev Team <hikaru@fansubcode.org>
  * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
-class News_Model_News extends Base_News_Model_News
+class News_Model_News extends News_Model_Base_News
 {
     /**
      * get News

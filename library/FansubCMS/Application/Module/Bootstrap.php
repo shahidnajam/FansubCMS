@@ -47,18 +47,7 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
     protected function _initModuleAutoload ()
     {
         $this->bootstrap('module');
-        
-        if(strtolower($this->getModuleName()) != 'user') { // this module is bootstrapped in main bootstrap
-            // autoload base models
-            $options = array(
-            	'namespace' => 'Base_' . ucfirst(strtolower($this->getModuleName())) . '_Model', 
-            	'basePath' => $this->path . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Base'
-            );
-            $baseModelLoader = new Zend_Loader_Autoloader_Resource($options);
-            $autoloader = Zend_Loader_Autoloader::getInstance();
-            $autoloader->pushAutoloader($baseModelLoader, 'Base_' . ucfirst(strtolower($this->getModuleName())) . '_Model');
-        }
-        
+
         $options = array(
         	'namespace' => ucfirst(strtolower($this->getModuleName())), 
         	'basePath' => $this->path

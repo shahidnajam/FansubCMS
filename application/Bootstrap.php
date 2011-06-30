@@ -65,8 +65,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $autoLoader = Zend_Loader_Autoloader::getInstance();
         $autoLoader->registerNamespace('Doctrine')
-                ->pushAutoloader(array('Doctrine', 'autoload'))
-                ->pushAutoloader(new FansubCMS_Loader_Autoloader_Basemodel(), 'Base_');
+                ->pushAutoloader(array('Doctrine', 'autoload'));
     }
 
     /**

@@ -238,7 +238,7 @@ class Install_Api_DoctrineTool
         $this->_loadDoctrineModels();
         Doctrine::loadData($path, $append);
     }
-    
+
     /**
      * 
      * Generate the models to the module folder
@@ -280,10 +280,10 @@ class Install_Api_DoctrineTool
         $this->getToPath() . DIRECTORY_SEPARATOR . 'Base' . DIRECTORY_SEPARATOR .
          '*.php');
         foreach ($baseModels as $model) {
-            $filename = str_replace($this->getToPath() . DIRECTORY_SEPARATOR, 
+            $filename = str_replace($this->getToPath() . DIRECTORY_SEPARATOR . 'Base' . DIRECTORY_SEPARATOR, 
             '', $model);
             $filenameParts = explode('_', $filename);
-            $module = strtolower($filenameParts[1]);
+            $module = strtolower($filenameParts[0]);
             $modelDir = $this->getModulePath() . DIRECTORY_SEPARATOR . $module .
              DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Base';
             if (file_exists($modelDir . DIRECTORY_SEPARATOR . $filenameParts[3])) {
@@ -484,7 +484,7 @@ class Install_Api_DoctrineTool
             $options = array(
             'baseClassName' => 'FansubCMS_Doctrine_Record', 
             'suffix' => '.php', 'baseClassesDirectory' => 'Base', 
-            'baseClassPrefix' => 'Base_', 'generateTableClasses' => true, 
+            'baseClassPrefix' => '', 'generateTableClasses' => true, 
             'generateBaseClasses' => true, 'phpDocPackage' => 'FansubCMS', 
             'phpDocSubpackage' => 'Models', 'phpDocName' => 'FansubCMS Dev Team', 
             'phpDocEmail' => 'hikaru@fansubcode.org');
@@ -494,7 +494,40 @@ class Install_Api_DoctrineTool
             $options['classPrefix'] = $classPrefix;
         }
         
-        Doctrine::generateModelsFromYaml($yaml, $path, $options);
+       // Doctrine::generateModelsFromYaml($yaml, $path, $options);
+        $this->_importSchema($yaml, 'yml', $path, $options);
+    }
+    
+    /**
+     * importSchema
+     *
+     * A method to import a Schema and translate it into a Doctrine_Record object
+     *
+     * @param  string $schema       The file containing the XML schema
+     * @param  string $format       Format of the schema file
+     * @param  string $directory    The directory where the Doctrine_Record class will be written
+     * @param  array  $models       Optional array of models to import
+     *
+     * @return void
+     */
+    protected function _importSchema($schema, $format = 'yml', $directory = null, $options = array())
+    {
+        $schema = (array) $schema;
+        $builder = new Install_Api_DoctrineBuilder();
+        $builder->setTargetPath($directory);
+        $builder->setOptions($options);
+        
+        $importer = new Doctrine_Import_Schema();
+        $array = $importer->buildSchema($schema, $format);
+
+        if (count($array) == 0) { 
+            throw new Doctrine_Import_Exception(
+                sprintf('No ' . $format . ' schema found in ' . implode(", ", $schema))
+            ); 
+        }
+        foreach ($array as $name => $definition) {           
+            $builder->buildRecord($definition);
+        }
     }
     
     /**

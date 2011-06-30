@@ -26,7 +26,7 @@
  * @author     FansubCMS Developer <##EMAIL##>
  * @version    SVN: $Id: Builder.php 7200 2010-02-21 09:37:37Z beberlei $
  */
-class User_Model_User extends Base_User_Model_User {
+class User_Model_User extends User_Model_Base_User {
     /**
      * sets the users password to its SHA256 hash
      * @param string $pass

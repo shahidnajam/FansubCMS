@@ -10,7 +10,7 @@
  * @author     FansubCMS Dev Team <hikaru@fansubcode.org>
  * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
-class Projects_Model_Screenshot extends Base_Projects_Model_Screenshot
+class Projects_Model_Screenshot extends Projects_Model_Base_Screenshot
 {
     public function updateScreenshot ($values)
     {
