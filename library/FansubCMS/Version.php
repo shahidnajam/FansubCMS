@@ -28,7 +28,7 @@ class FansubCMS_Version
      * The current application version
      * @var string
      */
-    const VERSION = '0.9-git';
+    const VERSION = '0.9.1-git';
     /**
      * 
      * Zend Framework
