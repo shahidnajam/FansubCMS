@@ -326,30 +326,6 @@ class Install_Api_DoctrineTool
         $this->_getModels($this->getFromPath());
         $this->_getSchema($this->getToPath());
         
-        $files = glob($this->getFromPath() . DIRECTORY_SEPARATOR . '*.php');
-        
-        foreach($files as $file) {
-            $cleanname = str_replace($this->getFromPath() . DIRECTORY_SEPARATOR , '', $file);
-            $cleanname = str_replace('.php', '', $cleanname);
-            $cleanname = str_replace('models', 'model', $cleanname);
-            $classNameParts = explode('_', $cleanname);
-            $className = array();
-            foreach($classNameParts as $part) {
-                $part = ucfirst($part);
-                $className[] = $part;
-            }
-            $className = implode('_', $className);
-            
-            if(strpos($className, 'Table')) {
-                continue;
-            }
-            
-            if(!($className instanceof Doctrine_Record)) {
-                continue;
-            }
-
-        }
-        
         $changes = new Doctrine_Migration_Diff($this->getFromPath(), $this->getToPath(), $this->getMigrationPath());
 
         if($changesOnly) {
@@ -458,11 +434,7 @@ class Install_Api_DoctrineTool
             array_shift($filenameParts); // 'models'
 
             $filename = '';
-            if($filenameParts[0] == 'Base') {
-                array_shift($filenameParts); // Base
-                $filename = 'Base_';
-            }
-            
+                        
             $filename .= ucfirst($module) . '_Model_';
             
             $filename .= implode('_', $filenameParts);
