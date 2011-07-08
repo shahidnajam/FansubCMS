@@ -88,13 +88,9 @@ class FansubCMS_Cache_Helper {
                 'cache_dir' => CACHE_PATH
             ));
         
-        
         if(APPLICATION_ENV == 'development') {
-            // disable the cache for development
-            $backendOptions = array(
-                'name' => 'Black-Hole',
-                'options' => array()
-            );
+            // @todo change backend to blackhole - needs refactoring of ACL !
+            $frontendOptions['options']['lifetime'] = 10; // cache should only live 10 seconds
         }
         
         $options = array(
