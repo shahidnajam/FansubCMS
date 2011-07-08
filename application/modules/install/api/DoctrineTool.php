@@ -456,7 +456,7 @@ class Install_Api_DoctrineTool
             $options = array(
             'baseClassName' => 'FansubCMS_Doctrine_Record', 
             'suffix' => '.php', 'baseClassesDirectory' => 'Base', 
-            'baseClassPrefix' => '', 'generateTableClasses' => true, 
+            'baseClassPrefix' => 'testabc', 'generateTableClasses' => true, 
             'generateBaseClasses' => true, 'phpDocPackage' => 'FansubCMS', 
             'phpDocSubpackage' => 'Models', 'phpDocName' => 'FansubCMS Dev Team', 
             'phpDocEmail' => 'hikaru@fansubcode.org');

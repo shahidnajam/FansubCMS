@@ -30,4 +30,14 @@ class Install_Api_DoctrineBuilder extends Doctrine_Import_Builder
         $className = implode('_', array($parts[0], $parts[1], 'Base', $parts[2]));
         return $className;
     }
+    
+    public function writeDefinition(array $definition)
+    {
+        
+        if(isset($definition['is_main_class']) && $definition['is_main_class']) {
+            $definition['inheritance']['extends'] = $this->_getBaseClassName($definition['topLevelClassName']);
+        }
+        
+        parent::writeDefinition($definition);
+    }
 }
