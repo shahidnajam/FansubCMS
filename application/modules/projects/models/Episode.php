@@ -12,24 +12,7 @@
  */
 class Projects_Model_Episode extends Projects_Model_Base_Episode
 {
-    public function getUpdater ()
-    {
-        if (empty($this->updated_by)) {
-            return false;
-        }
-        $q = Doctrine_Query::create();
-        $q->from('User_Model_User u')->where('u.id = ?', $this->updated_by);
-        $u = $q->fetchOne();
-
-        if(!$u) {
-            $this->set('updated_by', new Doctrine_Null());
-            $this->save();
-            return false; // user seems to be deleted
-        }
-        
-        return $u->name;
-    }
-    
+   
     public function updateEpisode ($values)
     {
         if (! empty($values['project']))
@@ -40,25 +23,6 @@ class Projects_Model_Episode extends Projects_Model_Base_Episode
             $this->number = $values['number'];
         if (! empty($values['version']))
             $this->version = $values['version'];
-        if (! empty($values['container']))
-            $this->container = $values['container'];
-        if (! empty($values['vcodec']))
-            $this->vcodec = $values['vcodec'];
-        if (! empty($values['acodec']))
-            $this->acodec = $values['acodec'];
-        if (! empty($values['crc']))
-            $this->crc = $values['crc'];
-        if (! empty($values['released']) && $values['released'] == 'yes') {
-            if (empty($values['isoDate'])) {
-                $this->released_at = date('Y-m-d H:i:s');
-            } else {
-                $this->released_at = $values['isoDate'];
-            }
-        } else 
-            if (! empty($values['released']) && $values['released'] == 'no') {
-                $this->released_at = null;
-            }
-        $this->updated_by = Zend_Auth::getInstance()->getIdentity()->id;
         $this->save();
     }
 }

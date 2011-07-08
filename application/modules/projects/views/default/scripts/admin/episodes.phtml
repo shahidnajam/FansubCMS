@@ -4,14 +4,14 @@ if(!empty($this->all)) {
     $fields = array('project');
 }
 $fields = array_merge($fields, array(
-    'number', 'name', 'crc', 'codec', 'released_at', 'updater'
+    'number', 'version', 'name'
 ));
 echo $this->modelList('Projects_Model_Episode', array(
     'prefix' => 'project_admin_episode_table_',
     'emptyListMessage' => 'project_no_episode',
     'showFieldNames' => $fields,
     'filterFields' => array(
-        'released_at' => array(
+        /*'released_at' => array(
             'viewHelper' => 'formatDate',
             'params' => array(
                 'date'
@@ -21,7 +21,7 @@ echo $this->modelList('Projects_Model_Episode', array(
         'codec' => array(
             'viewHelper' => 'container',
             'passRecord' => true
-        )
+        )*/
     ),
     'actions' => array(
         'edit' => array(

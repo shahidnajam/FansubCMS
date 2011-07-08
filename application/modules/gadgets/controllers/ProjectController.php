@@ -38,12 +38,16 @@ class Gadgets_ProjectController extends FansubCMS_Controller_Action
     public function latestAction ()
     {
         $num = $this->getRequest()->getParam('num', 5);
-        $pet = Doctrine::getTable('Projects_Model_Episode');
-        $q = $pet->buildQueryForListing('released_at DESC');
-        $q->offset(0)
-            ->limit($num)
-            ->where('released_at IS NOT NULL');
-        $this->view->latest = $q->execute();
+        $pet = Doctrine::getTable('Projects_Model_EpisodeRelease');
+        $q = $pet->createQuery('er');
+        $q->leftJoin('er.Projects_Model_Episode e')
+          ->leftJoin('e.Projects_Model_Project p')
+          ->select('er.*, e.title as title, e.number as number, e.version as version, p.name as project, p.name_slug as project_slug')
+          ->offset(0)
+          ->limit($num)
+          ->orderBy('er.released_at DESC')
+          ->where('er.released_at IS NOT NULL');
+        $this->view->latest = $q->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
     }
     
     /**

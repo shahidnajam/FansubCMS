@@ -9,13 +9,9 @@
  * @property integer $project_id
  * @property integer $number
  * @property integer $version
- * @property string $format
- * @property string $resolution
- * @property string $title
- * @property string $updated_by
- * @property timestamp $released_at
  * @property Projects_Model_Project $Projects_Model_Project
  * @property Doctrine_Collection $Projects_Model_Task
+ * @property Doctrine_Collection $Projects_Model_ChapterRelease
  * 
  * @package    FansubCMS
  * @subpackage Models
@@ -44,25 +40,6 @@ abstract class Projects_Model_Base_Chapter extends FansubCMS_Doctrine_Record
              'type' => 'integer',
              'length' => 2,
              ));
-        $this->hasColumn('format', 'string', 10, array(
-             'type' => 'string',
-             'length' => 10,
-             ));
-        $this->hasColumn('resolution', 'string', 10, array(
-             'type' => 'string',
-             'length' => 10,
-             ));
-        $this->hasColumn('title', 'string', 255, array(
-             'type' => 'string',
-             'length' => 255,
-             ));
-        $this->hasColumn('updated_by', 'string', 32, array(
-             'type' => 'string',
-             'length' => 32,
-             ));
-        $this->hasColumn('released_at', 'timestamp', null, array(
-             'type' => 'timestamp',
-             ));
 
         $this->option('type', 'InnoDB');
         $this->option('collate', 'utf8_unicode_ci');
@@ -79,6 +56,10 @@ abstract class Projects_Model_Base_Chapter extends FansubCMS_Doctrine_Record
              'onUpdate' => 'CASCADE'));
 
         $this->hasMany('Projects_Model_Task', array(
+             'local' => 'id',
+             'foreign' => 'chapter_id'));
+
+        $this->hasMany('Projects_Model_ChapterRelease', array(
              'local' => 'id',
              'foreign' => 'chapter_id'));
 

@@ -20,10 +20,13 @@ class Projects_Model_Project extends Projects_Model_Base_Project
     public function getReleasedEpisodes ()
     {
         if (is_null($this->_released)) {
-            $pet = Doctrine::getTable('Projects_Model_Episode');
-            $q = $pet->buildQueryForListing('number ASC');
-            $q->where('released_at IS NOT NULL')->andWhere(
-            'project_id = ?', $this->id);
+            $pet = Doctrine::getTable('Projects_Model_EpisodeRelease');
+            $q = $pet->createQuery('er')
+                    ->select('er.*, e.number as number, e.version as version, e.title as title')
+                    ->leftJoin('er.Projects_Model_Episode e')
+                    ->orderBy('e.number ASC, e.version ASC');
+            $q->where('er.released_at IS NOT NULL')->andWhere(
+            'e.project_id = ?', $this->id);
             $this->_released = $q->fetchArray();
         }
         return $this->_released;

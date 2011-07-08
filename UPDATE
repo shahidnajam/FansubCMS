@@ -7,3 +7,9 @@ Update from 0.8 to 0.9:
 * DELETE /public/images
 * DELETE /public/themes
 * DELETE /public/lib
+
+Update from 0.9 to 0.9.1
+
+* Remember: Passwords are now stored in bcrypt format and are system specific
+* Check for your episodes - They are now releases and episodes related to each other
+  The migration could have guessed something wrong while converting!

@@ -112,9 +112,9 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         $table = Doctrine_Core::getTable('Projects_Model_Episode');
         
         $query = $table->createQuery();
-        $query->select('*, title as name, updated_by as updater, p.name as project')
+        $query->select('*, title as name, p.name as project')
         ->leftJoin('Projects_Model_Episode.Projects_Model_Project p')
-        ->orderBy('p.name ASC, Projects_Model_Episode.number ASC, Projects_Model_Episode.container ASC');
+        ->orderBy('p.name ASC, Projects_Model_Episode.number ASC');
         if (! empty($id)) {
             $query->where('Projects_Model_Episode.project_id = ?', $id);
         }

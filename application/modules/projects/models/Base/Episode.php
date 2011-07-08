@@ -9,15 +9,10 @@
  * @property integer $project_id
  * @property integer $number
  * @property integer $version
- * @property string $vcodec
- * @property string $acodec
- * @property string $container
- * @property string $crc
  * @property string $title
- * @property string $updated_by
- * @property timestamp $released_at
  * @property Projects_Model_Project $Projects_Model_Project
  * @property Doctrine_Collection $Projects_Model_Task
+ * @property Doctrine_Collection $Projects_Model_EpisodeRelease
  * 
  * @package    FansubCMS
  * @subpackage Models
@@ -46,32 +41,9 @@ abstract class Projects_Model_Base_Episode extends FansubCMS_Doctrine_Record
              'type' => 'integer',
              'length' => 2,
              ));
-        $this->hasColumn('vcodec', 'string', 10, array(
-             'type' => 'string',
-             'length' => 10,
-             ));
-        $this->hasColumn('acodec', 'string', 10, array(
-             'type' => 'string',
-             'length' => 10,
-             ));
-        $this->hasColumn('container', 'string', 10, array(
-             'type' => 'string',
-             'length' => 10,
-             ));
-        $this->hasColumn('crc', 'string', 8, array(
-             'type' => 'string',
-             'length' => 8,
-             ));
         $this->hasColumn('title', 'string', 255, array(
              'type' => 'string',
              'length' => 255,
-             ));
-        $this->hasColumn('updated_by', 'string', 32, array(
-             'type' => 'string',
-             'length' => 32,
-             ));
-        $this->hasColumn('released_at', 'timestamp', null, array(
-             'type' => 'timestamp',
              ));
 
         $this->option('type', 'InnoDB');
@@ -89,6 +61,10 @@ abstract class Projects_Model_Base_Episode extends FansubCMS_Doctrine_Record
              'onUpdate' => 'CASCADE'));
 
         $this->hasMany('Projects_Model_Task', array(
+             'local' => 'id',
+             'foreign' => 'episode_id'));
+
+        $this->hasMany('Projects_Model_EpisodeRelease', array(
              'local' => 'id',
              'foreign' => 'episode_id'));
 
