@@ -30,13 +30,37 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      * @var Zend_Controller_Front
      */
     public $frontController;
+    /**
+     * @var string
+     */
     public $applicationStatus;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $settings;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $mailsettings;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $databasesettings;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $environmentsettings;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $routes;
+    /**
+     * @var Zend_Layout
+     */
     public $layout;
+    /**
+     * @var Zend_Cache_Manager
+     */
     public $cacheManager;
 
     /**
@@ -73,7 +97,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initSuperglobals()
     {
-        if (get_magic_quotes_gpc ()) {
+        if (get_magic_quotes_gpc()) {
             $this->_arrayStripslashes($_GET);
             $this->_arrayStripslashes($_POST);
             $this->_arrayStripslashes($_REQUEST);
