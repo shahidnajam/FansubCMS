@@ -813,8 +813,12 @@ class Textile
         $atts .= ($algn != '')  ? ' align="' . $this->iAlign($algn) . '"' : '';
         $atts .= (isset($m[4])) ? ' title="' . $m[4] . '"' : '';
         $atts .= (isset($m[4])) ? ' alt="'   . $m[4] . '"' : ' alt=""';
-        $size = @getimagesize($url);
-        if ($size) $atts .= " $size[3]";
+        
+        // @fixme since this is causing some performance issues in some situations
+        // this was disabled by Hikaru-Shindo ;)
+        
+        //$size = @getimagesize($url);
+        //if ($size) $atts .= " $size[3]";
 
         $href = (isset($m[5])) ? $this->checkRefs($m[5]) : '';
         $url = $this->checkRefs($url);
