@@ -4,7 +4,7 @@
 <div class="title"><h3><?=$news->title?></h3></div>
 <div class="created"><?=$this->translate('news_created_at_date',$this->formatDate($news->created_at))?></div>
 <div class="content"><?=$this->textile($news->text)?></div>
-<div class="comments"><a href="<?=$this->baseUrl()?>/news/<?=$news->getUrlParams()?>"><?=$this->translate('news_comment_num',count($news->getComments()))?></a></div>
+<div class="comments"><a href="<?=$this->baseUrl('/news/' . $news->getUrlParams())?>"><?=$this->translate('news_comment_num',count($news->getComments()))?></a></div>
 <div class="newsseperator"></div>
 <?php endforeach;?>
 <?= $this->paginationControl($this->news, 'Sliding', 'partials/pagination.phtml')?>

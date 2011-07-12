@@ -6,22 +6,57 @@
  * @link       http://sf.net/projects/ossigeno
  */
 // note: The original name of this class is Otk_Paginator_Adapter_Doctrine!
-class FansubCMS_Paginator_Adapter_Doctrine implements Zend_Paginator_Adapter_Interface {
+// This class was modified to fit our needs!
+class FansubCMS_Paginator_Adapter_Doctrine implements Zend_Paginator_Adapter_Interface
+{
+    /**
+     * The actual query to use
+     * 
+     * @var Doctrine_Query
+     */
     protected $_query;
+    /**
+     * The mode for the hydration
+     * 
+     * @var integer
+     */
+    protected $_hydrationMode;
     
-    public function __construct(Doctrine_Query $query) {
+    /**
+     * Construct the instance of the paginator class
+     * 
+     * @param Doctrine_Query $query
+     * @param integer $hydrationMode 
+     */
+    public function __construct(Doctrine_Query $query, $hydrationMode = Doctrine_Core::HYDRATE_RECORD)
+    {
         $this->_query = $query;
+        $this->_hydrationMode = $hydrationMode;
     }
     
-    public function getItems($offset, $count) {
+    /**
+     * Get the items
+     * 
+     * @param integer $offset
+     * @param integer $count
+     * @return mixed
+     */
+    public function getItems($offset, $count)
+    {
         $query = clone $this->_query;
         $result = $query->limit($count)
                         ->offset($offset)
-                        ->execute();
+                        ->execute(array(), $this->_hydrationMode);
         return $result;
     }
     
-    public function count() {
-        return count($this->_query->execute());
+    /**
+     * Get the item count
+     * 
+     * @return integer
+     */
+    public function count()
+    {
+        return $this->_query->count();
     }
 }
