@@ -16,7 +16,7 @@ class FansubCMS_View_Helper_Container extends Zend_View_Helper_Abstract
 	 * @param string $format Used by sprintf()
 	 * @return string
 	 */
-	public function container(Projects_Model_Episode $record, $format = '%s[%s,%s]') {
+	public function container(Projects_Model_EpisodeRelease $record, $format = '%s[%s,%s]') {
 		return sprintf($format, $record->container, $record->vcodec, $record->acodec);
 	}
 	

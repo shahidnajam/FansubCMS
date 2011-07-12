@@ -1,0 +1,12 @@
+<?= $this->form ?>
+<script type="text/javascript">
+    $("input[name='released']").click(checkChange);
+    function checkChange() {
+        if($("input[name='released']:checked").val() == "yes") {
+            $("#releasedate").removeAttr("disabled");
+        } else {
+            $("#releasedate").attr("disabled", "disabled");
+        }
+    }
+    checkChange();
+</script>

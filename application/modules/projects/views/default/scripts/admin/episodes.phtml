@@ -10,19 +10,6 @@ echo $this->modelList('Projects_Model_Episode', array(
     'prefix' => 'project_admin_episode_table_',
     'emptyListMessage' => 'project_no_episode',
     'showFieldNames' => $fields,
-    'filterFields' => array(
-        /*'released_at' => array(
-            'viewHelper' => 'formatDate',
-            'params' => array(
-                'date'
-            ),
-            'emptyText' => 'no_term'
-        ),
-        'codec' => array(
-            'viewHelper' => 'container',
-            'passRecord' => true
-        )*/
-    ),
     'actions' => array(
         'edit' => array(
             'image' => '/media/common/images/icons/16/monitor--pencil.png',
