@@ -112,16 +112,16 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         $table = Doctrine_Core::getTable('Projects_Model_Episode');
         
         $query = $table->createQuery();
-        $query->select('*, title as name, updated_by as updater, p.name as project')
+        $query->select('*, title as name, p.name as project')
         ->leftJoin('Projects_Model_Episode.Projects_Model_Project p')
-        ->orderBy('p.name ASC, Projects_Model_Episode.number ASC, Projects_Model_Episode.container ASC');
+        ->orderBy('p.name ASC, Projects_Model_Episode.number ASC');
         if (! empty($id)) {
             $query->where('Projects_Model_Episode.project_id = ?', $id);
         }
         
         $this->view->query = $query;
     }
-
+    
     public function addepisodeAction() 
     {
         $this->view->pageTitle = $this->translate('project_addepisode_headline');
@@ -173,9 +173,15 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $this->_helper->redirector->gotoSimple('episodes','admin','projects');
         }
         $this->view->form = new Projects_Form_EditProjectEpisode($p->toArray());
-        $req = $this->getRequest();
-        if($req->isPost()) { // there are profile updates
-            if($this->view->form->isValid($_POST)) {
+        $this->view->releaseQuery = Doctrine_Query::create()
+                ->select('er.*, er.id as codec, er.updated_by as updater')
+                ->from('Projects_Model_EpisodeRelease er')
+                ->where('er.episode_id = ?', $p->id);
+        
+        $this->view->episodeId = $p->id;
+        
+        if($this->request->isPost()) { // there are profile updates
+            if($this->view->form->isValid($this->request->getPost())) {
                 $values = $this->view->form->getValues();
                 $p->updateEpisode($values);
                 $this->session->message = $this->translate('project_admin_editepisode_success');
@@ -186,6 +192,86 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         }
     }
 
+    public function addEpisodeReleaseAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_add-episode-release_headline');
+        $this->view->form = new Projects_Form_EditProjectEpisodeRelease(array(), true);
+        
+        $id = $this->getRequest()->getParam('id');
+        $table = Doctrine_Core::getTable('Projects_Model_Episode');
+        $p = $table->findOneBy('id', $id ? $id : 0);
+        if(!$p) {
+            $this->session->message = $this->translate('project_episode_not_existent');
+            $this->_helper->redirector->gotoSimple('episodes','admin','projects');
+        }
+        
+        $req = $this->getRequest();
+        if($req->isPost()) { // there are profile updates
+            if($this->view->form->isValid($_POST)) {
+                $values = $this->view->form->getValues();
+                $er = new Projects_Model_EpisodeRelease();
+                $er->updateRelease($values);
+                $p->link('Projects_Model_EpisodeRelease', array($er->id), true);
+                $this->session->message = $this->translate('project_admin_add-episode-release_success');
+                $this->_helper->redirector->gotoSimple('editepisode','admin','projects', array('id' => $id));
+            } else {
+                $this->view->message = $this->translate('project_admin_add-episode-release_failed');
+            }
+        }
+    }
+
+    public function deleteEpisodeReleaseAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_delete-episode-release_headline');
+        $id = $this->request->getParam('id');
+        $table = Doctrine_Core::getTable('Projects_Model_EpisodeRelease');
+        if($id) {
+            $p = $table->find($id);
+            $epId = $p->episode_id;
+            $this->view->form = new FansubCMS_Form_Confirmation();
+            $this->view->confirmation = sprintf($this->translate('project_admin_delete-episode-release_confirmation'),$p->crc);
+            if($this->request->getParam('yes') && $p) {
+                $p->delete();
+                $this->session->message = $this->translate('project_admin_delete-episode-release_success');
+                $this->_helper->redirector->gotoSimple('editepisode', 'admin', 'projects', array('id'=> $epId));
+            } else if($this->request->getParam('no')) {
+                $this->_helper->redirector->gotoSimple('editepisode','admin','projects', array('id'=> $epId));
+            }
+        } else {
+            $this->session->message = $this->translate('project_episode-release_not_existent');
+            $this->_helper->redirector->gotoSimple('episodes','admin','projects');
+        }
+    }
+    
+    public function editEpisodeReleaseAction() 
+    {
+        $this->view->pageTitle = $this->translate('project_edit-episode-release_headline');
+        $id = $this->getRequest()->getParam('id');
+        $table = Doctrine_Core::getTable('Projects_Model_EpisodeRelease');
+        $p = $table->findOneBy('id', $id ? $id : 0);
+        if(!$p) {
+            $this->session->message = $this->translate('project_episode-release_not_existent');
+            $this->_helper->redirector->gotoSimple('episodes','admin','projects');
+        }
+        $epId = $p->episode_id;
+        $this->view->form = new Projects_Form_EditProjectEpisodeRelease($p->toArray());
+        $this->view->releaseQuery = Doctrine_Query::create()
+                ->select('er.*, er.id as codec, er.updated_by as updater')
+                ->from('Projects_Model_EpisodeRelease er')
+                ->where('er.episode_id = ?', $p->id);
+        
+        if($this->request->isPost()) { // there are profile updates
+            if($this->view->form->isValid($this->request->getPost())) {
+                $values = $this->view->form->getValues();
+                $p->updateRelease($values);
+                $this->session->message = $this->translate('project_admin_edit-episode-release_success');
+                $this->_helper->redirector->gotoSimple('editepisode','admin','projects', array('id'=>$epId));
+            } else {
+                $this->view->message = $this->translate('project_admin_editepisode_failed');
+            }
+        }
+    }
+    
     public function screenshotsAction() 
     {
         $this->view->pageTitle = $this->translate('project_screenshots_headline');

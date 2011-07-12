@@ -1,13 +1,62 @@
-<?=$this->partial('partials/datepicker.phtml',array('identifier'=>'#releasedate','altIdentifier'=>'#isoDate'))?>
 <?=$this->form?>
-<script type="text/javascript">
-    $("input[name='released']").click(checkChange);
-    function checkChange() {
-        if($("input[name='released']:checked").val() == "yes") {
-            $("#releasedate").removeAttr("disabled");
-        } else {
-            $("#releasedate").attr("disabled", "disabled");
-        }
-    }
-    checkChange();
-</script>
+<hr />
+<h2><?=$this->translate('project_releases_headline')?></h2>
+<?php
+echo $this->modelList('Projects_Model_EpisodeRelease', array(
+    'prefix' => 'project_admin_episode-release_table_',
+    'emptyListMessage' => 'project_no_episode-release',
+    'showFieldNames' => array('id', 'codec', 'crc', 'released_at', 'updater'),
+    'filterFields' => array(
+        'released_at' => array(
+            'viewHelper' => 'formatDate',
+            'params' => array(
+                'date'
+            ),
+            'emptyText' => 'no_term'
+        ),
+        'codec' => array(
+            'viewHelper' => 'container',
+            'passRecord' => true
+        )
+    ),
+    'actions' => array(
+        'edit' => array(
+            'image' => '/media/common/images/icons/16/monitor--pencil.png',
+            'label' => 'project_edit_table_action',
+            'privilege' => 'edit',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'edit-episode-release',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
+        'delete' => array(
+            'image' => '/media/common/images/icons/16/monitor--minus.png',
+            'label' => 'project_delete_table_action',
+            'privilege' => 'delete',
+            'target' => array(
+                'module' => 'projects',
+                'controller' => 'admin',
+                'action' => 'delete-episode-release',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        )
+    ),
+    'footerActions' => array(
+        'add' => array(
+            'module' => 'projects',
+            'controller' => 'admin',
+            'action' => 'add-episode-release',
+            'params' => array(
+                'id' => $this->episodeId,
+            ),
+            'label' => $this->translate('add'),
+            'image' => '/media/common/images/icons/16/monitor--plus.png'
+        )
+    )
+), $this->releaseQuery);

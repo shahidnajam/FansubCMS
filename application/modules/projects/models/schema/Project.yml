@@ -241,26 +241,9 @@ Projects_Model_Episode:
         version:
             type: integer
             length: 2
-        vcodec:
-            type: string
-            length: 10
-        acodec:
-            type: string
-            length: 10
-        container:
-            type: string
-            length: 10
-        crc:
-            type: string
-            length: 8
         title:
             type: string
-            length: 255
-        updated_by:
-            type: string
-            length: 32
-        released_at:
-            type: timestamp
+            length: 255        
     relations:
         Projects_Model_Project:
             local: project_id
@@ -273,6 +256,46 @@ Projects_Model_Episode:
        collate: utf8_unicode_ci
        charset: utf8
        
+Projects_Model_EpisodeRelease:
+    tableName: project_episode_releases
+    actAs: [Timestampable]
+    columns:
+        id:
+            type: integer
+            primary: true
+            autoincrement: true
+            notnull: true
+        episode_id:
+            type: integer
+        vcodec:
+            type: string
+            length: 10
+        acodec:
+            type: string
+            length: 10
+        container:
+            type: string
+            length: 10
+        crc:
+            type: string
+            length: 8
+        released_at:
+            type: timestamp
+        updated_by:
+            type: string
+            length: 32
+    relations:
+        Projects_Model_Episode:
+            local: episode_id
+            foreign: id
+            type: one
+            onDelete: CASCADE
+            onUpdate: CASCADE
+    options:
+       type: InnoDB
+       collate: utf8_unicode_ci
+       charset: utf8
+            
 Projects_Model_Chapter:
     tableName: project_chapters
     actAs: [Timestampable]
@@ -291,6 +314,29 @@ Projects_Model_Chapter:
         version:
             type: integer
             length: 2
+    relations:
+        Projects_Model_Project:
+            local: project_id
+            foreign: id
+            type: one
+            onDelete: CASCADE
+            onUpdate: CASCADE
+    options:
+       type: InnoDB
+       collate: utf8_unicode_ci
+       charset: utf8
+       
+Projects_Model_ChapterRelease:
+    tableName: project_chapter_releases
+    actAs: [Timestampable]
+    columns:
+        id:
+            type: integer
+            primary: true
+            autoincrement: true
+            notnull: true
+        chapter_id:
+            type: integer
         format:
             type: string
             length: 10
@@ -306,8 +352,8 @@ Projects_Model_Chapter:
         released_at:
             type: timestamp
     relations:
-        Projects_Model_Project:
-            local: project_id
+        Projects_Model_Chapter:
+            local: chapter_id
             foreign: id
             type: one
             onDelete: CASCADE

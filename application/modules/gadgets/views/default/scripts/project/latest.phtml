@@ -2,8 +2,8 @@
 <ul>
     <?php foreach ($this->latest as $ep): ?>
         <li>            
-            <?= $this->formatDate($ep->released_at, "shortdate") ?> - <a
-                href="<?= $this->baseUrl() ?>/projects/index/details/project/<?=$ep->Projects_Model_Project->name_slug?>"><?= $ep->Projects_Model_Project->name ?> <?= $ep->number ?><?= $ep->version > 1 ? 'v' . $ep->version : '' ?> (<?= $ep->vcodec ?>)</a>
+            <?= $this->formatDate($ep['released_at'], "shortdate") ?> - <a
+                href="<?= $this->baseUrl() ?>/projects/index/details/project/<?=$ep['project_slug']?>"><?= $ep['project'] ?> <?= $ep['number'] ?><?= $ep['version'] > 1 ? 'v'.$ep['version'] : ''?> (<?= $ep['vcodec'] ?>)</a>
         </li>
     <?php endforeach; ?>
 </ul>
