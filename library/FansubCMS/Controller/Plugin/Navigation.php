@@ -19,40 +19,20 @@
 class FansubCMS_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abstract {
     public function preDispatch(Zend_Controller_Request_Abstract $request) {
         $this->layout = Zend_Layout::getMvcInstance();
-        $cm = Zend_Registry::get('Zend_Cache_Manager');
+        $ch = FansubCMS_Cache_Helper::getInstance();
         # add a navigation cache
-        if(!$cm->hasCacheTemplate('Navigation_Settings')) {
-            if(function_exists('apc_add')) {
-                # apc is available
-                $backend = array(
-                    'name' => 'Apc',
-                    'options' => array()
-                    );
-            } else {
-                # there is no apc - cache to file
-                $backend = array(
-                    'name' => 'File',
-                    'options' => array(
-                        'cache_dir' => CACHE_PATH
-                    ));
-            }
-            # life time in development 30 seconds in other mode a five minutes
-            $lifetime = APPLICATION_ENV == 'development' ? 30 : 300;
+        if(!$ch->hasCacheTemplate('Navigation_Settings')) {
             $frontend = array(
                     'name' => 'Core',
                     'options' => array(
-                        'lifetime' => $lifetime,
+                        'lifetime' => 300,
                         'automatic_serialization' => true
                     )
                 );
-            $options = array(
-                'frontend' => $frontend,
-                'backend' => $backend);
             # add a new cache template for this module
-            $cm->setCacheTemplate('Navigation_Settings', $options);
-            Zend_Registry::set('Zend_Cache_Manager', $cm);
+            $ch->setCacheTemplate('Navigation_Settings', $frontend);
         }
-        $cache = $cm->getCache('Navigation_Settings');
+        $cache = $ch->getCache('Navigation_Settings');
         if(($request->getParam('module') == 'admin' || $request->getParam('controller') == 'admin') && Zend_Auth::getInstance()->hasIdentity()) {
             $config = $cache->load('Navigation_Backend_Settings');
             if(!$config) {

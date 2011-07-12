@@ -47,18 +47,7 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
     protected function _initModuleAutoload ()
     {
         $this->bootstrap('module');
-        
-        if(strtolower($this->getModuleName()) != 'user') { // this module is bootstrapped in main bootstrap
-            // autoload base models
-            $options = array(
-            	'namespace' => 'Base_' . ucfirst(strtolower($this->getModuleName())) . '_Model', 
-            	'basePath' => $this->path . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Base'
-            );
-            $baseModelLoader = new Zend_Loader_Autoloader_Resource($options);
-            $autoloader = Zend_Loader_Autoloader::getInstance();
-            $autoloader->pushAutoloader($baseModelLoader, 'Base_' . ucfirst(strtolower($this->getModuleName())) . '_Model');
-        }
-        
+
         $options = array(
         	'namespace' => ucfirst(strtolower($this->getModuleName())), 
         	'basePath' => $this->path
@@ -93,40 +82,21 @@ class FansubCMS_Application_Module_Bootstrap extends Zend_Application_Module_Boo
     
     protected function _initI18n()
     {
-        $cm = Zend_Registry::get('Zend_Cache_Manager');
-        if(!$cm->hasCacheTemplate('I18n_Settings')) {
-            if(function_exists('apc_add')) {
-                # apc is available
-                $backend = array(
-                    'name' => 'Apc',
-                    'options' => array()
-                    );
-            } else {
-                # there is no apc - cache to file
-                $backend = array(
-                    'name' => 'File',
-                    'options' => array(
-                        'cache_dir' => CACHE_PATH
-                    ));
-            }
+        $ch = FansubCMS_Cache_Helper::getInstance();
+        if(!$ch->hasCacheTemplate('I18n_Settings')) {
             # life time in development 30 seconds in other mode a half hour
-            $lifetime = APPLICATION_ENV == 'development' ? 30 : 1800;
             $frontend = array(
                     'name' => 'Core',
                     'options' => array(
-                        'lifetime' => $lifetime,
+                        'lifetime' => 1800,
                         'automatic_serialization' => true
                     )
                 );
-            $options = array(
-                'frontend' => $frontend,
-                'backend' => $backend);
             # add a new cache template for this module
-            $cm->setCacheTemplate('I18n_Settings', $options);
-            Zend_Registry::set('Zend_Cache_Manager', $cm);
+            $ch->setCacheTemplate('I18n_Settings', $frontend);
         }
-        $cache = $cm->getCache('I18n_Settings');
-        
+        $cache = $ch->getCache('I18n_Settings');
+
         $trans = $cache->load(ucfirst($this->getModuleName()));
         // there are no translations or cache is invalid - generate cache!
         $locale = $this->envSettings->locale;

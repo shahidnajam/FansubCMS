@@ -10,15 +10,15 @@
  * @author     FansubCMS Dev Team <hikaru@fansubcode.org>
  * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
-class User_Model_Role extends Base_User_Model_Role
+class User_Model_Role extends User_Model_Base_Role
 {
     private static $_roles = null;
     public static function getRoles ()
     {
         if (! isset(self::$_roles)) {
-            $cm = Zend_Registry::get('Zend_Cache_Manager');
-            $cache = $cm->getCache('FansubCMS');
-            $config = $cache->load('Acl_Settings');
+            $ch = FansubCMS_Cache_Helper::getInstance();
+            $cache = $ch->getCache('Acl_Settings');
+            $config = $cache->load('Acl');
             foreach ($config as $module => $modconf) {
                 if (empty($modconf['roles'])) {
                     continue;

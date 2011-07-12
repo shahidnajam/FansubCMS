@@ -30,13 +30,37 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      * @var Zend_Controller_Front
      */
     public $frontController;
+    /**
+     * @var string
+     */
     public $applicationStatus;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $settings;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $mailsettings;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $databasesettings;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $environmentsettings;
+    /**
+     * @var Zend_Config_Ini
+     */
     public $routes;
+    /**
+     * @var Zend_Layout
+     */
     public $layout;
+    /**
+     * @var Zend_Cache_Manager
+     */
     public $cacheManager;
 
     /**
@@ -65,8 +89,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $autoLoader = Zend_Loader_Autoloader::getInstance();
         $autoLoader->registerNamespace('Doctrine')
-                ->pushAutoloader(array('Doctrine', 'autoload'))
-                ->pushAutoloader(new FansubCMS_Loader_Autoloader_Basemodel(), 'Base_');
+                ->pushAutoloader(array('Doctrine', 'autoload'));
     }
 
     /**
@@ -74,7 +97,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initSuperglobals()
     {
-        if (get_magic_quotes_gpc ()) {
+        if (get_magic_quotes_gpc()) {
             $this->_arrayStripslashes($_GET);
             $this->_arrayStripslashes($_POST);
             $this->_arrayStripslashes($_REQUEST);
@@ -270,26 +293,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             define('CACHE_PATH', realpath(APPLICATION_PATH . '/data/cache'));
         }
         $cm = new Zend_Cache_Manager();
-
-        $lifetime = APPLICATION_ENV == 'development' ? 30 : 3600; # in development keep cache 30 seconds otherwise one hour
-
-        $options = array(
-            'frontend' => array(
-                'name' => 'Core',
-                'options' => array(
-                    'lifetime' => $lifetime,
-                    'automatic_serialization' => true
-                )
-            ),
-            'backend' => array(
-                'name' => 'File',
-                'options' => array(
-                    'cache_dir' => CACHE_PATH
-                )
-                ));
-
-
-        $cm->setCacheTemplate('FansubCMS', $options);
 
         Zend_Registry::set('Zend_Cache_Manager', $cm);
         $this->cacheManager = $cm;

@@ -63,16 +63,7 @@ class FansubCMS_Auth_Adapter implements Zend_Auth_Adapter_Interface {
                         null,
                         array('sorry, login ' . $this->_username . ' was not found'));
             } else {
-                if($user->password == hash('sha256', $user->id . $this->_password)) {
-                    $result = new Zend_Auth_Result(
-                            Zend_Auth_Result::SUCCESS,
-                            $user,
-                            array());
-                } else if ($user->password == hash('sha256', $this->_password)) {
-                    // no salt used add the salt
-                    $user->password = $user->id . $this->_password;
-                    $user->save();
-                    // auth granted
+                if($user->validatePassword($this->_password)) {
                     $result = new Zend_Auth_Result(
                             Zend_Auth_Result::SUCCESS,
                             $user,

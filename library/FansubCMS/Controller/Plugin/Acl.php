@@ -71,9 +71,22 @@ class FansubCMS_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
      */
     protected function _initAcl()
     {
-        $cm = Zend_Registry::get('Zend_Cache_Manager');
-        $cache = $cm->getCache('FansubCMS');
-        $config = $cache->load('Acl_Settings');
+        $ch = FansubCMS_Cache_Helper::getInstance();
+        # add a navigation cache
+        if(!$ch->hasCacheTemplate('Acl_Settings')) {
+            $frontend = array(
+                    'name' => 'Core',
+                    'options' => array(
+                        'lifetime' => 300,
+                        'automatic_serialization' => true
+                    )
+                );
+            # add a new cache template for this module
+            $ch->setCacheTemplate('Acl_Settings', $frontend);
+        }
+        $cache = $ch->getCache('Acl_Settings');
+        
+        $config = $cache->load('Acl');
         if (!$config) {
             $config = array();
             $modules = glob(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'module.ini');
