@@ -33,16 +33,11 @@ class FansubCMS_Auth_Storage_DoctrineSession extends Zend_Auth_Storage_Session
     
     public function write($contents)
     {
-        parent::write($contents->toArray(false));
+        parent::write($contents->id);
     }
     
     public function read()
-    {        
-        $objArr = parent::read();
-        if(empty(self::$_data)) {
-            $table = Doctrine::getTable('User_Model_User');
-            self::$_data = $table->findOneBy('id',$objArr['id']);
-        }        
-        return self::$_data;
+    {
+        return Doctrine_Core::getTable('User_Model_User')->find(parent::read());
     }
 }
