@@ -42,7 +42,7 @@ class Gadgets_ProjectController extends FansubCMS_Controller_Action
         $q = $pet->createQuery('er');
         $q->leftJoin('er.Projects_Model_Episode e')
           ->leftJoin('e.Projects_Model_Project p')
-          ->select('er.*, e.title as title, e.number as number, e.version as version, p.name as project, p.name_slug as project_slug')
+          ->select('er.*, e.title as title, e.number as number, e.version as version, p.name as project, p.name_slug as project_slug, p.mini_poster as poster')
           ->offset(0)
           ->limit($num)
           ->orderBy('er.released_at DESC')
