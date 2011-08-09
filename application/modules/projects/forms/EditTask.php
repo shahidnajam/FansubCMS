@@ -113,17 +113,20 @@ class Projects_Form_EditTask extends Zend_Form
     {
         if($project->project_type == Projects_Model_Project::TYPE_SCANLATION) {
             $table = 'Projects_Model_Chapter';
+            $join = 'Projects_Model_ChapterRelease';
             $label = 'project_admin_field_task_chapter';
         } else {
             $table = 'Projects_Model_Episode';
+            $join = 'Projects_Model_EpisodeRelease';
             $label = 'project_admin_field_task_episode';
         }
         
         $q = Doctrine_Query::create();
         $q->select('r.id, r.number, r.version')
            ->from($table . ' r')
+           ->leftJoin('r.' . $join . ' rel')
            ->where('r.project_id = ?', $project->id)
-           ->andWhere('r.released_at IS NULL');
+           ->andWhere('rel.released_at IS NULL');
         
         $releases = $q->fetchArray();
         
