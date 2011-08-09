@@ -12,6 +12,7 @@
  * @property string $poster
  * @property string $mini_poster
  * @property enum $status
+ * @property integer $element_count
  * @property enum $project_type
  * @property enum $private
  * @property Doctrine_Collection $Projects_Model_User
@@ -69,6 +70,9 @@ abstract class Projects_Model_Base_Project extends FansubCMS_Doctrine_Record
               5 => 'licensed',
              ),
              'notnull' => true,
+             ));
+        $this->hasColumn('element_count', 'integer', null, array(
+             'type' => 'integer',
              ));
         $this->hasColumn('project_type', 'enum', null, array(
              'type' => 'enum',

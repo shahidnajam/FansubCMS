@@ -64,6 +64,19 @@ class Projects_Form_EditProject extends Zend_Form {
                 ->setValue(isset($values['name_jp']) ? $values['name_jp'] : null)
                 ->setLabel('project_admin_field_name_jp');
 
+        # episode count
+        $episodes = $this->createElement('text', 'episode_count')
+                ->addFilter('StripTags')
+                ->addFilter('StringTrim')
+                ->addValidator('Int', false, array(
+                'meesages' => array(
+                        Zend_Validate_Int::NOT_INT => 'default_form_error_int'
+                )
+                ))
+                ->setValue(isset($values['element_count']) ? $values['element_count'] : null)
+                ->setLabel('project_admin_field_episode_count');
+
+        
         # status
         $status = $this->createElement('select', 'status')
                 ->addValidator('NotEmpty', true, array(
@@ -149,6 +162,7 @@ class Projects_Form_EditProject extends Zend_Form {
         # add elements to the form
         $this->addElement($name)
                 ->addElement($namejp)
+                ->addElement($episodes)
                 ->addElement($status)
                 ->addElement($description)
                 ->addElement($poster)

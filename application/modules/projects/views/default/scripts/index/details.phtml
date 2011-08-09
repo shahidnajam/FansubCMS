@@ -10,7 +10,9 @@
 <h3><?=$this->translate('project_description')?></h3>
 <?php $status = 'project_status_'.$this->project->status; ?>
 <span class="project-status-desc"><?=$this->translate('project_status')?></span>
-<span class="<?=$status?>"><?=$this->translate($status)?></span>
+<span class="<?=$status?>"><?=$this->translate($status)?></span><br />
+<span class="project-status-desc"><?=$this->translate('project_episodes')?></span>
+<span class="project-epsiode-count"><?=$this->project->getReleaseEpisodeCount()?> / <?=empty($this->project->element_count) ? $this->translate('project_episode_unknown_count') : $this->project->element_count ?></span>
 <div><?=$this->textile($this->project->description)?></div>
 <div class="seperator"></div>
 <br class="clearfix" />

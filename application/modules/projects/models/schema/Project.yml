@@ -35,6 +35,8 @@ Projects_Model_Project:
             type: enum
             values: ['planned','progress','pending','completed','dropped','licensed']
             notnull: true
+        element_count:
+            type: integer
         project_type:
             type: enum
             values: ['fansub','scanlation']

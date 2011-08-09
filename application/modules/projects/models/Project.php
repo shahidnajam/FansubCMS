@@ -17,7 +17,7 @@ class Projects_Model_Project extends Projects_Model_Base_Project
     
     private $_released;
     
-    public function getReleasedEpisodes ()
+    public function getReleasedEpisodes()
     {
         if (is_null($this->_released)) {
             $pet = Doctrine::getTable('Projects_Model_EpisodeRelease');
@@ -30,6 +30,22 @@ class Projects_Model_Project extends Projects_Model_Base_Project
             $this->_released = $q->fetchArray();
         }
         return $this->_released;
+    }
+    
+    /**
+     * Get count of released unique episodes
+     * 
+     * @return integer
+     */
+    public function getReleaseEpisodeCount()
+    {
+        $pet = Doctrine::getTable('Projects_Model_EpisodeRelease');
+        $q = $pet->createQuery('er')
+                ->leftJoin('er.Projects_Model_Episode e')
+                ->where('er.released_at IS NOT NULL')
+                ->andWhere('e.project_id = ?', $this->id)
+                ->groupBy('e.number');
+        return $q->count();
     }
     
     public function updateProject (array $values)
@@ -51,6 +67,11 @@ class Projects_Model_Project extends Projects_Model_Base_Project
             $this->status = $values['status'];
         if (! empty($values['private']))
             $this->private = $values['private'];
+        if (! empty($values['episode_count']))
+            $this->element_count = $values['episode_count'];
+        else
+            $this->element_count = null;
+        
         $this->save();
         
         if (! empty($values['leaders'])) {
