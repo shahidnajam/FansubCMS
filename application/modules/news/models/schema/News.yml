@@ -29,6 +29,15 @@ News_Model_News:
             values: ['yes','no']
             default: 'no'
             notnull: true
+       sourcetype:
+            type: string
+            length: 64
+       sourcekey:
+            type: string
+            length: 64
+    indexes:
+        news_src_idx:
+            fields: [sourcetype, sourcekey]
     relations:
         User_Model_User:
             local: user_id
@@ -80,6 +89,15 @@ News_Model_Comment:
             type: string
             length: 64
             notnull: true
+        sourcetype:
+            type: string
+            length: 64
+        sourcekey:
+            type: string
+            length: 64
+    indexes:
+        comment_src_idx:
+            fields: [sourcetype, sourcekey]
     relations:
         News_Model_News:
             local: news_id

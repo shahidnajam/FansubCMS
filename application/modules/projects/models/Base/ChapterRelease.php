@@ -12,6 +12,8 @@
  * @property string $title
  * @property string $updated_by
  * @property timestamp $released_at
+ * @property string $sourcetype
+ * @property string $sourcekey
  * @property Projects_Model_Chapter $Projects_Model_Chapter
  * 
  * @package    FansubCMS
@@ -51,7 +53,23 @@ abstract class Projects_Model_Base_ChapterRelease extends FansubCMS_Doctrine_Rec
         $this->hasColumn('released_at', 'timestamp', null, array(
              'type' => 'timestamp',
              ));
+        $this->hasColumn('sourcetype', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
+        $this->hasColumn('sourcekey', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
 
+
+        $this->index('chaprel_src_idx', array(
+             'fields' => 
+             array(
+              0 => 'sourcetype',
+              1 => 'sourcekey',
+             ),
+             ));
         $this->option('type', 'InnoDB');
         $this->option('collate', 'utf8_unicode_ci');
         $this->option('charset', 'utf8');

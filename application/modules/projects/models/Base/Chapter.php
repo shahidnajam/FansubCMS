@@ -9,6 +9,8 @@
  * @property integer $project_id
  * @property integer $number
  * @property integer $version
+ * @property string $sourcetype
+ * @property string $sourcekey
  * @property Projects_Model_Project $Projects_Model_Project
  * @property Doctrine_Collection $Projects_Model_Task
  * @property Doctrine_Collection $Projects_Model_ChapterRelease
@@ -40,7 +42,23 @@ abstract class Projects_Model_Base_Chapter extends FansubCMS_Doctrine_Record
              'type' => 'integer',
              'length' => 2,
              ));
+        $this->hasColumn('sourcetype', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
+        $this->hasColumn('sourcekey', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
 
+
+        $this->index('chap_src_idx', array(
+             'fields' => 
+             array(
+              0 => 'sourcetype',
+              1 => 'sourcekey',
+             ),
+             ));
         $this->option('type', 'InnoDB');
         $this->option('collate', 'utf8_unicode_ci');
         $this->option('charset', 'utf8');

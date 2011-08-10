@@ -14,6 +14,8 @@
  * @property enum $active
  * @property enum $activated
  * @property timestamp $last_login
+ * @property string $sourcetype
+ * @property string $sourcekey
  * @property Doctrine_Collection $Projects_Model_User
  * @property Doctrine_Collection $Projects_Model_Leader
  * @property Doctrine_Collection $Projects_Model_Task
@@ -89,7 +91,23 @@ abstract class User_Model_Base_User extends FansubCMS_Doctrine_Record
         $this->hasColumn('last_login', 'timestamp', null, array(
              'type' => 'timestamp',
              ));
+        $this->hasColumn('sourcetype', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
+        $this->hasColumn('sourcekey', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
 
+
+        $this->index('user_src_idx', array(
+             'fields' => 
+             array(
+              0 => 'sourcetype',
+              1 => 'sourcekey',
+             ),
+             ));
         $this->option('type', 'InnoDB');
         $this->option('collate', 'utf8_unicode_ci');
         $this->option('charset', 'utf8');

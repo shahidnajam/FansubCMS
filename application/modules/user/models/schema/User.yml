@@ -40,6 +40,15 @@ User_Model_User:
             notnull: true
         last_login:
             type: timestamp
+        sourcetype:
+            type: string
+            length: 64
+        sourcekey:
+            type: string
+            length: 64
+    indexes:
+        user_src_idx:
+            fields: [sourcetype, sourcekey]
     options:
        type: InnoDB
        collate: utf8_unicode_ci

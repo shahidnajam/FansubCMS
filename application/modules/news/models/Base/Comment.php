@@ -14,6 +14,8 @@
  * @property enum $spam
  * @property enum $visible
  * @property string $ip
+ * @property string $sourcetype
+ * @property string $sourcekey
  * @property News_Model_News $News_Model_News
  * 
  * @package    FansubCMS
@@ -78,7 +80,23 @@ abstract class News_Model_Base_Comment extends FansubCMS_Doctrine_Record
              'length' => 64,
              'notnull' => true,
              ));
+        $this->hasColumn('sourcetype', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
+        $this->hasColumn('sourcekey', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
 
+
+        $this->index('comment_src_idx', array(
+             'fields' => 
+             array(
+              0 => 'sourcetype',
+              1 => 'sourcekey',
+             ),
+             ));
         $this->option('type', 'InnoDB');
         $this->option('collate', 'utf8_unicode_ci');
         $this->option('charset', 'utf8');

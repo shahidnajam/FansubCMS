@@ -13,6 +13,8 @@
  * @property string $crc
  * @property timestamp $released_at
  * @property string $updated_by
+ * @property string $sourcetype
+ * @property string $sourcekey
  * @property Projects_Model_Episode $Projects_Model_Episode
  * 
  * @package    FansubCMS
@@ -56,7 +58,23 @@ abstract class Projects_Model_Base_EpisodeRelease extends FansubCMS_Doctrine_Rec
              'type' => 'string',
              'length' => 32,
              ));
+        $this->hasColumn('sourcetype', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
+        $this->hasColumn('sourcekey', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
 
+
+        $this->index('eprel_src_idx', array(
+             'fields' => 
+             array(
+              0 => 'sourcetype',
+              1 => 'sourcekey',
+             ),
+             ));
         $this->option('type', 'InnoDB');
         $this->option('collate', 'utf8_unicode_ci');
         $this->option('charset', 'utf8');

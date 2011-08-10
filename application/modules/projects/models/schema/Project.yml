@@ -47,6 +47,15 @@ Projects_Model_Project:
             values: ['yes','no']
             default: 'yes'
             notnull: true
+        sourcetype:
+            type: string
+            length: 64
+        sourcekey:
+            type: string
+            length: 64
+    indexes:
+        projects_src_idx:
+            fields: [sourcetype, sourcekey]
     options:
        type: InnoDB
        collate: utf8_unicode_ci
@@ -213,6 +222,15 @@ Projects_Model_Screenshot:
         description:
             type: string
             length: 6000
+        sourcetype:
+            type: string
+            length: 64
+        sourcekey:
+            type: string
+            length: 64
+    indexes:
+        screenshot_src_idx:
+            fields: [sourcetype, sourcekey]
     relations:
         Projects_Model_Project:
             local: project_id
@@ -245,7 +263,16 @@ Projects_Model_Episode:
             length: 2
         title:
             type: string
-            length: 255        
+            length: 255
+        sourcetype:
+            type: string
+            length: 64
+        sourcekey:
+            type: string
+            length: 64
+    indexes:
+        ep_src_idx:
+            fields: [sourcetype, sourcekey]
     relations:
         Projects_Model_Project:
             local: project_id
@@ -286,6 +313,15 @@ Projects_Model_EpisodeRelease:
         updated_by:
             type: string
             length: 32
+        sourcetype:
+            type: string
+            length: 64
+        sourcekey:
+            type: string
+            length: 64
+    indexes:
+        eprel_src_idx:
+            fields: [sourcetype, sourcekey]
     relations:
         Projects_Model_Episode:
             local: episode_id
@@ -316,6 +352,15 @@ Projects_Model_Chapter:
         version:
             type: integer
             length: 2
+        sourcetype:
+            type: string
+            length: 64
+        sourcekey:
+            type: string
+            length: 64
+    indexes:
+        chap_src_idx:
+            fields: [sourcetype, sourcekey]
     relations:
         Projects_Model_Project:
             local: project_id
@@ -353,6 +398,15 @@ Projects_Model_ChapterRelease:
             length: 32
         released_at:
             type: timestamp
+        sourcetype:
+            type: string
+            length: 64
+        sourcekey:
+            type: string
+            length: 64
+    indexes:
+        chaprel_src_idx:
+            fields: [sourcetype, sourcekey]
     relations:
         Projects_Model_Chapter:
             local: chapter_id

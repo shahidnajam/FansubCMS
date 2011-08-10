@@ -10,6 +10,8 @@
  * @property string $title
  * @property string $text
  * @property enum $public
+ * @property string $sourcetype
+ * @property string $sourcekey
  * @property User_Model_User $User_Model_User
  * @property Doctrine_Collection $News_Model_Comment
  * 
@@ -50,7 +52,23 @@ abstract class News_Model_Base_News extends FansubCMS_Doctrine_Record
              'default' => 'no',
              'notnull' => true,
              ));
+        $this->hasColumn('sourcetype', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
+        $this->hasColumn('sourcekey', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
 
+
+        $this->index('news_src_idx', array(
+             'fields' => 
+             array(
+              0 => 'sourcetype',
+              1 => 'sourcekey',
+             ),
+             ));
         $this->option('type', 'InnoDB');
         $this->option('collate', 'utf8_unicode_ci');
         $this->option('charset', 'utf8');

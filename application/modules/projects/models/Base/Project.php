@@ -15,6 +15,8 @@
  * @property integer $element_count
  * @property enum $project_type
  * @property enum $private
+ * @property string $sourcetype
+ * @property string $sourcekey
  * @property Doctrine_Collection $Projects_Model_User
  * @property Doctrine_Collection $Projects_Model_Leader
  * @property Doctrine_Collection $Projects_Model_TaskType
@@ -94,7 +96,23 @@ abstract class Projects_Model_Base_Project extends FansubCMS_Doctrine_Record
              'default' => 'yes',
              'notnull' => true,
              ));
+        $this->hasColumn('sourcetype', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
+        $this->hasColumn('sourcekey', 'string', 64, array(
+             'type' => 'string',
+             'length' => 64,
+             ));
 
+
+        $this->index('projects_src_idx', array(
+             'fields' => 
+             array(
+              0 => 'sourcetype',
+              1 => 'sourcekey',
+             ),
+             ));
         $this->option('type', 'InnoDB');
         $this->option('collate', 'utf8_unicode_ci');
         $this->option('charset', 'utf8');
