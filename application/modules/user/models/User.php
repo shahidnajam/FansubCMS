@@ -39,6 +39,15 @@ class User_Model_User extends User_Model_Base_User
         $this->_set('password', $hasher->HashPassword($password));
     }
 
+    /**
+     * Sets the user's password and assumes it is already hashed
+     * 
+     * @param string $password 
+     */
+    public function setHashedPassword($password)
+    {
+        $this->_set('password', $password);
+    }
 
     /**
      * This method returns an array of the team
