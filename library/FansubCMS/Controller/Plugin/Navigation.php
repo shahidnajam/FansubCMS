@@ -16,8 +16,10 @@
  *  along with FansubCMS.  If not, see <http://www.gnu.org/licenses/>
  */
 
-class FansubCMS_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abstract {
-    public function preDispatch(Zend_Controller_Request_Abstract $request) {
+class FansubCMS_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abstract
+{
+    public function postDispatch(Zend_Controller_Request_Abstract $request) 
+    {
         $this->layout = Zend_Layout::getMvcInstance();
         $ch = FansubCMS_Cache_Helper::getInstance();
         # add a navigation cache

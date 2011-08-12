@@ -55,10 +55,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     public $routes;
     /**
-     * @var Zend_Layout
-     */
-    public $layout;
-    /**
      * @var Zend_Cache_Manager
      */
     public $cacheManager;
@@ -119,6 +115,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->mailsettings = new Zend_Config_Ini(APPLICATION_PATH . "/configs/email.ini", "email");
         $this->databasesettings = new Zend_Config_Ini(APPLICATION_PATH . "/configs/database.ini", "database");
         $this->environmentsettings = new Zend_Config_Ini(APPLICATION_PATH . "/configs/environment.ini", "environment");
+        
+        # merge settings in main settings obj
+        $this->settings->merge($this->mailsettings);
+        $this->settings->merge($this->databasesettings);
+        $this->settings->merge($this->environmentsettings);
     }
 
     /**
@@ -127,18 +128,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initDoctrine()
     {
-        if (empty($this->databasesettings->db->dsn)) {
-            $dbDefaultDsn = $this->databasesettings->db->dbms . "://" . $this->databasesettings->db->user . ":" . $this->databasesettings->db->password . "@" . $this->databasesettings->db->host . "/" . $this->databasesettings->db->database;
+        if (empty($this->settings->db->dsn)) {
+            $dbDefaultDsn = $this->settings->db->dbms . "://" . $this->settings->db->user . ":" . $this->settings->db->password . "@" . $this->settings->db->host . "/" . $this->settings->db->database;
         } else {
-            $dbDefaultDsn = $this->databasesettings->db->dsn;
+            $dbDefaultDsn = $this->settings->db->dsn;
         }
         
-        $conn = Doctrine_Manager::connection($dbDefaultDsn, $this->databasesettings->db->database, "defaultConnection");
+        $conn = Doctrine_Manager::connection($dbDefaultDsn, $this->settings->db->database, "defaultConnection");
         $conn->execute("SET NAMES 'UTF8'");
         $conn->setAttribute(Doctrine::ATTR_USE_NATIVE_ENUM, true);
 
         if(!defined('DATABASE_DATE_FORMAT')) {
-            define("DATABASE_DATE_FORMAT", !empty($this->databasesettings->db->dateformat) ? $this->databasesettings->db->dateformat : "YYYY-MM-dd HH:mm:ss");
+            define("DATABASE_DATE_FORMAT", !empty($this->settings->db->dateformat) ? $this->settings->db->dateformat : "YYYY-MM-dd HH:mm:ss");
         }
 
         $manager = Doctrine_Manager::getInstance();
@@ -154,7 +155,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initApplication()
     {
         Zend_Session::setOptions(array(
-                    'name' => $this->environmentsettings->page->session->name,
+                    'name' => $this->settings->page->session->name,
                     'save_path' => realpath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'sessions')
                 ));
 
@@ -163,18 +164,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('FrontController');
         $this->frontController = Zend_Controller_Front::getInstance();
 
+        # now add our own dispatcher
+        $this->frontController->setDispatcher(new FansubCMS_Controller_Dispatcher_Standard());
+        
         # prefix default module as well
         $this->frontController->setParam('prefixDefaultModule', true);
-
-
+        
         # set default and module controller directrories
         //  $this->frontController->setControllerDirectory($this->settings->controllers->toArray());
         $this->frontController->addModuleDirectory(APPLICATION_PATH . "/modules");
         $this->frontController->removeControllerDirectory('default');
-
+        
         # set default module
         $this->frontController->setDefaultModule("news");
-
 
         # Init application-wide Session
         $applicationSessionNamespace = new Zend_Session_Namespace('application');
@@ -190,7 +192,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('AuthSessionNamespace', $authSessionNamespace);
 
         # set timezone
-        date_default_timezone_set(empty($this->environmentsettings->page->timezone) ? 'Europe/Berlin' : $this->environmentsettings->page->timezone);
+        date_default_timezone_set(empty($this->settings->page->timezone) ? 'Europe/Berlin' : $this->settings->page->timezone);
 
         # hook to settings
         $this->settings->applicationStatus = $this->applicationStatus;
@@ -213,76 +215,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $router->addConfig($this->routes->router, 'routes');
         }
     }
-
-    /**
-     * init view
-     * @return void
-     */
-    protected function _initView()
-    {
-        # get a view object -> to set the path to view-scripts, -helpers and set a suffix
-        $view = new Zend_View();
-
-        # set some header settings
-        $view->setEncoding('UTF-8');
-        $view->doctype('XHTML1_TRANSITIONAL');
-        $view->headMeta()->appendHttpEquiv(
-                'Content-Type', 'text/html;charset=utf-8'
-        );
-
-
-        $layoutPath = $this->settings->frontend->layoutpath;
-        $layoutAdd = isset($this->environmentsettings->page->layout) ? $this->environmentsettings->page->layout : 'default';
-        $layoutPath = $layoutPath . DIRECTORY_SEPARATOR . $layoutAdd;
-
-        if (!file_exists($layoutPath . DIRECTORY_SEPARATOR . 'frontend.phtml'))
-            die('The layout does not exist or frontend.phtml is missing!');
-
-        if (!empty($layoutPath)) {
-            # set the default view path
-            $view->addScriptPath(
-                    (!empty($this->settings->view->defaultPath) ? $this->settings->view->defaultPath : APPLICATION_PATH . "/modules/cms/views/scripts/"));
-            # set the view helper path
-            $view->addHelperPath(
-                    (!empty($this->settings->view->helperPath) ? $this->settings->view->helperPath : APPLICATION_PATH . "/modules/views/helpers/"),
-                    (!empty($this->settings->view->helperNamespace) ? $this->settings->view->helperNamespace : "Zend_View_Helper_")
-            );
-
-
-            # view renderer
-            $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer();
-            $viewRenderer->setView($view);
-            # make the view use the renderer we just configured
-            Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
-
-            $this->layout = Zend_Layout::startMvc(array('layoutPath' => $layoutPath, 'layout' => 'frontend'));
-
-            # assign layout variables
-            $this->layout->assign('language', $this->environmentsettings->locale);
-            $this->layout->assign('group', $this->environmentsettings->page->group->name);
-            $this->layout->assign('group_short', $this->environmentsettings->page->group->short);
-        }
-    }
-
-    /**
-     * init the gadgets
-     * @return void
-     */
-    protected function _initGadgets()
-    {
-        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/environment.ini', 'gadgets');
-        $config = $config->toArray();
-        if (!isset($config['gadget']) || !is_array($config['gadget'])) {
-            $this->layout->getView()->gadgets = array();
-            return;
-        }
-        foreach ($config['gadget'] as $k => $v) {
-            if (!isset($config['gadget'][$k]['params']) || !is_array($config['gadget'][$k]['params']))
-                $config['gadget'][$k]['params'] = array();
-        }
-        $this->layout->getView()->gadgets = $config['gadget'];
-    }
-
+    
     /**
      * init cache manager
      * @return Zend_Cache_Manager
@@ -305,7 +238,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initI18n()
     {
-        $trans = new Zend_Translate('Array',array(''=>''), $this->environmentsettings->locale);
+        $trans = new Zend_Translate('Array',array(''=>''), $this->settings->locale);
 
         # the translations itself will be added in module bootstraps
         
@@ -337,30 +270,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         # init error handler
         $this->frontController->throwExceptions(false);
-        # not-logged-in-so-go-to-login plugin
-        $aclPlugin = new FansubCMS_Controller_Plugin_Acl(Zend_Auth::getInstance()->setStorage(new FansubCMS_Auth_Storage_DoctrineSession));
-        $this->frontController->registerPlugin($aclPlugin);
         $errorhandler = new Zend_Controller_Plugin_ErrorHandler();
         $errorhandler->setErrorHandler(array('module' => 'cms', 'controller' => 'error', 'action' => 'error'));
         $this->frontController->registerPlugin($errorhandler);
-        # set the admin layout using plugin
-        $layoutPath = $this->settings->backend->layoutpath;
-        $layoutAdd = isset($this->environmentsettings->page->adminLayout) ? $this->environmentsettings->page->adminLayout : 'default';
-        $layoutPath .= DIRECTORY_SEPARATOR . $layoutAdd;
-
         
+        # not-logged-in-so-go-to-login plugin
+        $aclPlugin = new FansubCMS_Controller_Plugin_Acl(Zend_Auth::getInstance()->setStorage(new FansubCMS_Auth_Storage_DoctrineSession));
+        $this->frontController->registerPlugin($aclPlugin);
         
-        if (!empty($layoutPath)) {
-            $layoutPlugin = new FansubCMS_Controller_Plugin_Layout();
-            $layoutPlugin->registerAdminLayout('admin', $layoutPath, 'admin');
-            $this->frontController->registerPlugin($layoutPlugin);
-        }
-        
+        # check if install or update is needed
         $installPlugin = new FansubCMS_Controller_Plugin_InstallCheck();
         $this->frontController->registerPlugin($installPlugin);
-
-        $layoutVersionPlugin = new FansubCMS_Controller_Plugin_LayoutVersion($this->environmentsettings);
-        $this->frontController->registerPlugin($layoutVersionPlugin);
 
         # the navigation plugin
         $navPlugin = new FansubCMS_Controller_Plugin_Navigation();
