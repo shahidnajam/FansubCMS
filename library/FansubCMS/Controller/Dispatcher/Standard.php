@@ -134,14 +134,9 @@ class FansubCMS_Controller_Dispatcher_Standard extends Zend_Controller_Dispatche
         );
         $view->setEncoding('UTF-8');
         
-        // set view path
-        $viewRenderer->setView($view)->setViewBasePathSpec(APPLICATION_PATH .
-                DIRECTORY_SEPARATOR . "modules" .
-                DIRECTORY_SEPARATOR . $module .
-                DIRECTORY_SEPARATOR . "views" .
-                DIRECTORY_SEPARATOR . 'default'
-        );
-
+        // set view paths
+        $viewRenderer->setView($view);
+        
         $view->addScriptPath(APPLICATION_PATH .
                 DIRECTORY_SEPARATOR . "modules" .
                 DIRECTORY_SEPARATOR . 'gadgets' .
@@ -172,6 +167,13 @@ class FansubCMS_Controller_Dispatcher_Standard extends Zend_Controller_Dispatche
         if(is_readable($cmsViewDir)) {
             $view->addScriptPath($cmsViewDir);
         }
+        
+        $view->addScriptPath(APPLICATION_PATH .
+                DIRECTORY_SEPARATOR . "modules" .
+                DIRECTORY_SEPARATOR . $module .
+                DIRECTORY_SEPARATOR . "views" .
+                DIRECTORY_SEPARATOR . 'default' . 
+                DIRECTORY_SEPARATOR . 'scripts');
         
         $moduleViewDir = APPLICATION_PATH .
                 DIRECTORY_SEPARATOR . "modules" .
