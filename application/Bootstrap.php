@@ -274,6 +274,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $errorhandler->setErrorHandler(array('module' => 'cms', 'controller' => 'error', 'action' => 'error'));
         $this->frontController->registerPlugin($errorhandler);
         
+        # gadget plugin
+        $gadgetPlugin = new FansubCMS_Controller_Plugin_Gadget();
+        $this->frontController->registerPlugin($gadgetPlugin);
+        
         # not-logged-in-so-go-to-login plugin
         $aclPlugin = new FansubCMS_Controller_Plugin_Acl(Zend_Auth::getInstance()->setStorage(new FansubCMS_Auth_Storage_DoctrineSession));
         $this->frontController->registerPlugin($aclPlugin);
