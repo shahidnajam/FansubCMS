@@ -185,6 +185,16 @@ class FansubCMS_Controller_Dispatcher_Standard extends Zend_Controller_Dispatche
             $view->addScriptPath($moduleViewDir);
         }
         
+        $resourceViewDir = APPLICATION_PATH .
+                DIRECTORY_SEPARATOR . "resource" .
+                DIRECTORY_SEPARATOR . 'templates' .
+                DIRECTORY_SEPARATOR . $module .
+                DIRECTORY_SEPARATOR . $layout;
+        if(is_readable($resourceViewDir)) {
+            $view->addScriptPath($resourceViewDir);
+        }
+        
+        
         // set path to default view helpers
         $view->addHelperPath(APPLICATION_PATH .
                 DIRECTORY_SEPARATOR . "layouts" .
