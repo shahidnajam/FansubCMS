@@ -52,7 +52,7 @@ class User_AdminController extends FansubCMS_Controller_Action
         if($id) {
             $user = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
-            $this->view->confirmation = sprintf($this->translate('user_admin_delete_confirmation'),$user->name);
+            $this->view->confirmation = $this->translate('user_admin_delete_confirmation', array('username' => $user->name));
             if($this->request->getParam('yes') && $user) {
                 $user->delete();
                 $this->session->message = $this->translate('user_admin_delete_success');
@@ -147,7 +147,7 @@ class User_AdminController extends FansubCMS_Controller_Action
         if($id) {
             $t = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
-            $this->view->confirmation = sprintf($this->translate('user_admin_taskdelete_confirmation'),$t->name);
+            $this->view->confirmation = $this->translate('user_admin_taskdelete_confirmation',array('name' => $t->name));
             if($this->request->getParam('yes') && $t) {
                 $t->delete();
                 $this->session->message = $this->translate('user_admin_taskdelete_success');

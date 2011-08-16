@@ -45,7 +45,7 @@ class Group_ContactController extends FansubCMS_Controller_Action {
                 $mailer->addHeader('X-MailGenerator','ContactForm on FansubCMS');
                 $mailer->addHeader('X-Mailer','FansubCMS');
                 $mailer->addHeader('X-Priority','3');
-                $message = $this->translate('contact_mail_text',array($values['author'],$values['email'],$values['content']));
+                $message = $this->translate('contact_mail_text',array('name' => $values['author'], 'email' => $values['email'], 'text' => $values['content']));
                 $mailer->setBodyText($message,'UTF-8');
                 if($mailer->send($mtr)) {
                     $this->view->message = $this->translate('group_contact_mail_sent_successful');

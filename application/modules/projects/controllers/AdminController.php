@@ -52,7 +52,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         if($id) {
             $p = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
-            $this->view->confirmation = sprintf($this->translate('project_admin_delete_confirmation'),$p->name);
+            $this->view->confirmation = $this->translate('project_admin_delete_confirmation', array('name' => $p->name));
             if($this->request->getParam('yes') && $p) {
                 $p->delete();
                 $this->session->message = $this->translate('project_admin_delete_success');
@@ -102,10 +102,10 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         if(!empty($id)) {
             $project = Doctrine_Query::create()->from('Projects_Model_Project p')->where('p.id = ?', $id)->fetchOne();
             
-            $this->view->pageTitle = sprintf($this->translate('project_admin_episodes_headline'),$project->name);
+            $this->view->pageTitle = $this->translate('project_admin_episodes_headline',array('name' => $project->name));
             $this->view->all = false;
         } else {
-            $this->view->pageTitle = sprintf($this->translate('project_admin_episodes_headline_2'));
+            $this->view->pageTitle = $this->translate('project_admin_episodes_headline_2');
             $this->view->all = true;
         }
         
@@ -148,7 +148,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         if($id) {
             $p = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
-            $this->view->confirmation = sprintf($this->translate('project_admin_deleteepisode_confirmation'),$p->title);
+            $this->view->confirmation = $this->translate('project_admin_deleteepisode_confirmation', array('name' => $p->title));
             if($this->request->getParam('yes') && $p) {
                 $p->delete();
                 $this->session->message = $this->translate('project_admin_deleteepisode_success');
@@ -229,7 +229,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $p = $table->find($id);
             $epId = $p->episode_id;
             $this->view->form = new FansubCMS_Form_Confirmation();
-            $this->view->confirmation = sprintf($this->translate('project_admin_delete-episode-release_confirmation'),$p->crc);
+            $this->view->confirmation = $this->translate('project_admin_delete-episode-release_confirmation',array('crc' => $p->crc));
             if($this->request->getParam('yes') && $p) {
                 $p->delete();
                 $this->session->message = $this->translate('project_admin_delete-episode-release_success');
@@ -319,7 +319,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         if($id) {
             $p = $table->find($id);
             $this->view->form = new FansubCMS_Form_Confirmation();
-            $this->view->confirmation = sprintf($this->translate('project_admin_deletescreenshot_confirmation'), $p->Projects_Model_Project->name, $p->screenshot);
+            $this->view->confirmation = $this->translate('project_admin_deletescreenshot_confirmation', array('project' => $p->Projects_Model_Project->name, 'screen' => $p->screenshot));
             if($this->request->getParam('yes') && $p) {
                 $p->delete();
                 $this->session->message = $this->translate('project_admin_deletescreenshot_success');
@@ -370,7 +370,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         
         $this->checkAllowed($p, 'team');
         
-        $this->view->pageTitle = sprintf($this->translate('project_team_headline'), $p->name);
+        $this->view->pageTitle = $this->translate('project_team_headline', array('name' => $p->name));
         
         $leaders = array();
         foreach($p->Projects_Model_Leader as $leader) {
@@ -394,7 +394,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         }
         
         $this->checkAllowed($p, 'addteammember');
-        $this->view->pageTitle = sprintf($this->translate('project_addteammember_headline'), $p->name);
+        $this->view->pageTitle = $this->translate('project_addteammember_headline', array('name' => $p->name));
         
         $form = new Projects_Form_EditTeamMember($p, array(), true);
         
@@ -434,7 +434,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $this->_helper->redirector->gotoSimple('team','admin','projects');
         }
         $this->checkAllowed($pu->Projects_Model_Project, 'editteammember');
-        $this->view->pageTitle = sprintf($this->translate('project_editteammember_headline'), $pu->Projects_Model_Project->name);
+        $this->view->pageTitle = $this->translate('project_editteammember_headline', array('name' => $pu->Projects_Model_Project->name));
         
         $this->view->user = $pu->User_Model_User;
         
@@ -475,10 +475,10 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         }
         $this->checkAllowed($pu->Projects_Model_Project, 'deleteteammember');
         
-        $this->view->pageTitle = sprintf($this->translate('project_deleteteammember_headline'), $pu->Projects_Model_Project->name);
+        $this->view->pageTitle = $this->translate('project_deleteteammember_headline', array('name' => $pu->Projects_Model_Project->name));
 
         $this->view->form = new FansubCMS_Form_Confirmation();
-        $this->view->confirmation = sprintf($this->translate('project_admin_deleteteammember_confirmation'), $pu->Projects_Model_Project->name, $pu->User_Model_User->name);
+        $this->view->confirmation = $this->translate('project_admin_deleteteammember_confirmation', array('projectname' => $pu->Projects_Model_Project->name, 'username' => $pu->User_Model_User->name));
         if($this->request->getParam('yes') && $pu) {
             $pu->delete();
             $this->session->message = $this->translate('project_admin_deleteteammember_success');
@@ -500,7 +500,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         
         $this->checkAllowed($p, 'task-type');
         
-        $this->view->pageTitle = sprintf($this->translate('project_task-type_headline'), $p->name);
+        $this->view->pageTitle = $this->translate('project_task-type_headline', array('name' => $p->name));
 
         $query = Doctrine_Query::create();
         $query->select('ptt.id, ptt.title, ptt.description')
@@ -522,7 +522,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         }
         
         $this->checkAllowed($p, 'add-task-type');
-        $this->view->pageTitle = sprintf($this->translate('project_add-task-type_headline'), $p->name);
+        $this->view->pageTitle = $this->translate('project_add-task-type_headline',array('name' => $p->name));
         
         $form = new Projects_Form_EditTaskType(array(), true);
         
@@ -559,7 +559,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
             $this->_helper->redirector->gotoSimple('index','admin','projects');
         }
         $this->checkAllowed($ptt->Projects_Model_Project, 'edit-task-type');
-        $this->view->pageTitle = sprintf($this->translate('project_edit-task-type_headline'), $ptt->Projects_Model_Project->name);
+        $this->view->pageTitle = $this->translate('project_edit-task-type_headline', array('name' => $ptt->Projects_Model_Project->name));
         
         $form = new Projects_Form_EditTaskType($ptt->toArray(), false);
         
@@ -595,10 +595,10 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         }
         $this->checkAllowed($ptt->Projects_Model_Project, 'delete-task-type');
         
-        $this->view->pageTitle = sprintf($this->translate('project_delete-task-type_headline'), $ptt->Projects_Model_Project->name);
+        $this->view->pageTitle = $this->translate('project_delete-task-type_headline', array('name' => $ptt->Projects_Model_Project->name));
 
         $this->view->form = new FansubCMS_Form_Confirmation();
-        $this->view->confirmation = sprintf($this->translate('project_admin_delete-task-type_confirmation'), $ptt->title);
+        $this->view->confirmation = $this->translate('project_admin_delete-task-type_confirmation', array('name' => $ptt->title));
         if($this->request->getParam('yes') && $ptt) {
             $ptt->delete();
             $this->session->message = $this->translate('project_admin_delete-task-type_success');
@@ -620,7 +620,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         
         $this->checkAllowed($p, 'tasks');
         
-        $this->view->pageTitle = sprintf($this->translate('project_tasks_headline'), $p->name);
+        $this->view->pageTitle = $this->translate('project_tasks_headline', array('name' => $p->name));
 
         $select = 'pt.id, ptt.title as type_title, pt.done, pt.comment, u.name as username, r.number as number, r.version as version';
 
@@ -653,7 +653,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         }
         
         $this->checkAllowed($p, 'add-task');
-        $this->view->pageTitle = sprintf($this->translate('project_add-task_headline'), $p->name);
+        $this->view->pageTitle = $this->translate('project_add-task_headline', array('name' => $p->name));
         
         $form = new Projects_Form_EditTask($p, array(), true);
         
@@ -700,7 +700,7 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         }
         $this->checkAllowed($pt->Projects_Model_TaskType->Projects_Model_Project, 'edit-task');
         $this->checkAllowed($pt, 'edit');
-        $this->view->pageTitle = sprintf($this->translate('project_edit-task_headline'), $pt->Projects_Model_TaskType->Projects_Model_Project->name);
+        $this->view->pageTitle = $this->translate('project_edit-task_headline', array('name' => $pt->Projects_Model_TaskType->Projects_Model_Project->name));
         
         $form = new Projects_Form_EditTask($pt->Projects_Model_TaskType->Projects_Model_Project, $pt->toArray(), false);
         
@@ -750,10 +750,10 @@ class Projects_AdminController extends FansubCMS_Controller_Action
         }
         $this->checkAllowed($pt->Projects_Model_TaskType->Projects_Model_Project, 'delete-task');
         
-        $this->view->pageTitle = sprintf($this->translate('project_delete-task_headline'), $pt->Projects_Model_TaskType->Projects_Model_Project->name);
+        $this->view->pageTitle = $this->translate('project_delete-task_headline', array('name' => $pt->Projects_Model_TaskType->Projects_Model_Project->name));
 
         $this->view->form = new FansubCMS_Form_Confirmation();
-        $this->view->confirmation = sprintf($this->translate('project_admin_delete-task_confirmation'), $pt->Projects_Model_TaskType->title, $pt->User_Model_User->name);
+        $this->view->confirmation = $this->translate('project_admin_delete-task_confirmation', array('task' => $pt->Projects_Model_TaskType->title, 'username' => $pt->User_Model_User->name));
         if($this->request->getParam('yes') && $pt) {
             $pt->delete();
             $this->session->message = $this->translate('project_admin_delete-task_success');

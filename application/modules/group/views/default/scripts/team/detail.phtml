@@ -1,4 +1,4 @@
-<h1><?=$this->translate('member_detail_headline',$this->user->name)?></h1>
+<h1><?=$this->translate('member_detail_headline',array('username' => $this->user->name))?></h1>
 <div id="team-detail-avatar"><img src="<?=$this->gravatar($this->user->email,150)?>" alt="" /></div>
 <div class="float-left">
     <h2><?=$this->translate('member_detail_tasks_headline')?></h2>

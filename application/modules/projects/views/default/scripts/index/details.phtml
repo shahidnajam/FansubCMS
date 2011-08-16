@@ -63,5 +63,5 @@
     <?php endif; ?>
 </table>
 <?php else: ?>
-<?=$this->translate('project_not_exist',$this->projectName)?>
+<?=$this->translate('project_not_exist', array('name' => $this->projectName))?>
 <?php endif; ?>

@@ -178,7 +178,7 @@ class Cms_AdminController extends FansubCMS_Controller_Action
         $title = $this->request->getParam('title');
         $file = $this->_staticPath . DIRECTORY_SEPARATOR . $title . '.html';
         if (file_exists($file)) {
-            $this->view->confirmation = $this->translate('cms_admin_static_delete_confirmation', $title);
+            $this->view->confirmation = $this->translate('cms_admin_static_delete_confirmation', array('name' => $title));
             $this->view->form = new FansubCMS_Form_Confirmation();
             if ($this->request->getParam('yes')) {
                 if (unlink($file)) {

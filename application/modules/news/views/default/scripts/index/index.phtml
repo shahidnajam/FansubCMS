@@ -1,10 +1,10 @@
 <?php if(count($this->news)):?>
 <?php foreach($this->news as $news):?>
-<div class="author"><img src="<?=$this->gravatar($news->User_Model_User->email,100)?>" alt="" /><br/><?=$this->translate('news_author',$news->User_Model_User->name)?> </div>
+<div class="author"><img src="<?=$this->gravatar($news->User_Model_User->email,100)?>" alt="" /><br/><?=$this->translate('news_author',array('username' => $news->User_Model_User->name))?> </div>
 <div class="title"><h3><?=$news->title?></h3></div>
-<div class="created"><?=$this->translate('news_created_at_date',$this->formatDate($news->created_at))?></div>
+<div class="created"><?=$this->translate('news_created_at_date',array('date' => $this->formatDate($news->created_at)))?></div>
 <div class="content"><?=$this->textile($news->text)?></div>
-<div class="comments"><a href="<?=$this->baseUrl('/news/' . $news->getUrlParams())?>"><?=$this->translate('news_comment_num',count($news->getComments()))?></a></div>
+<div class="comments"><a href="<?=$this->baseUrl('/news/' . $news->getUrlParams())?>"><?=$this->translate('news_comment_num',array('count' => count($news->getComments())))?></a></div>
 <div class="newsseperator"></div>
 <?php endforeach;?>
 <?= $this->paginationControl($this->news, 'Sliding', 'partials/pagination.phtml')?>
