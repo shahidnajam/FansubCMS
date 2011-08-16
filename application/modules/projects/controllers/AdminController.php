@@ -783,10 +783,12 @@ class Projects_AdminController extends FansubCMS_Controller_Action
                 ->leftJoin('t.Projects_Model_TaskType tt')
                 ->leftJoin('tt.Projects_Model_Project p')
                 ->leftJoin('t.Projects_Model_Chapter c')
+                ->leftJoin('c.Projects_Model_ChapterRelease cr')
                 ->leftJoin('t.Projects_Model_Episode e')
+                ->leftJoin('e.Projects_Model_EpisodeRelease er')
                 ->where('t.user_id = ?', $identity->id)
-                ->andWhere('c.released_at IS NULL')
-                ->andWhere('e.released_at IS NULL')
+                ->andWhere('cr.released_at IS NULL')
+                ->andWhere('er.released_at IS NULL')
                 ->orderBy('p.name, c.number ASC, e.number ASC');
         
         $this->view->query = $q;
