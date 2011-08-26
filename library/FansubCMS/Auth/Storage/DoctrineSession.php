@@ -38,6 +38,10 @@ class FansubCMS_Auth_Storage_DoctrineSession extends Zend_Auth_Storage_Session
     
     public function read()
     {
-        return Doctrine_Core::getTable('User_Model_User')->find(parent::read());
+        if(empty(self::$_data)) {
+            self::$_data = Doctrine_Core::getTable('User_Model_User')->find(parent::read());
+        }
+        
+        return self::$_data;
     }
 }
