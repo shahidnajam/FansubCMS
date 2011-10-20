@@ -15,14 +15,14 @@ class FansubCMS_View_Helper_FormatText extends Zend_View_Helper_Abstract {
 	 * @return string
 	 */
     public function formatText($text) {
-    	$text = str_replace("\xC2\xA0",' ',$text); // nbsp ersetzen durch normanel space
-    	$text = trim($text,"\n"); // unnötige zeichen am anfang und ende entfernen
-        $this->_wrapText($text);
+    	$text = str_replace("\xC2\xA0",' ',$text); // replace nbsp with regular spaces
+    	$text = trim($text,"\n"); // remove useless letters on start and end
+        //$this->_wrapText($text); // deactivated because it breaks some things
     	$text = $this->view->escape($text);
-    	$text = nl2br($text); // Zeilenumbrüche hinzufügen
-    	// URLs verlinken
+    	$text = nl2br($text); // Add line breaks
+    	// Link urls
         $pattern = "!\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))!";
-   	    $text = preg_replace($pattern, '<a href="\1" target="_blank">\1</a>', $text); // urls mit links versehen
+   	    $text = preg_replace($pattern, '<a href="\1" target="_blank">\1</a>', $text); // add links to urls
 
    	    return $text;
     }
