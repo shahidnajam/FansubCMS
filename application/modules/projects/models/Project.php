@@ -25,8 +25,8 @@ class Projects_Model_Project extends Projects_Model_Base_Project
                     ->select('er.*, e.number as number, e.version as version, e.title as title')
                     ->leftJoin('er.Projects_Model_Episode e')
                     ->orderBy('e.number ASC, e.version ASC');
-            $q->where('er.released_at IS NOT NULL')->andWhere(
-            'e.project_id = ?', $this->id);
+            $q->where('er.released_at IS NOT NULL')
+                    ->andWhere('e.project_id = ?', $this->id);
             $this->_released = $q->fetchArray();
         }
         return $this->_released;
@@ -41,10 +41,11 @@ class Projects_Model_Project extends Projects_Model_Base_Project
     {
         $pet = Doctrine::getTable('Projects_Model_EpisodeRelease');
         $q = $pet->createQuery('er')
+                ->select('e.number, er.id')
                 ->leftJoin('er.Projects_Model_Episode e')
                 ->where('er.released_at IS NOT NULL')
                 ->andWhere('e.project_id = ?', $this->id)
-                ->groupBy('e.number');
+                ->groupBy('e.number, er.id');
         return $q->count();
     }
     
