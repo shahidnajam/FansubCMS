@@ -25,7 +25,8 @@ class News_AdminController extends FansubCMS_Controller_Action
         
         $query = $table->createQuery('n');
         $query->select('n.*, n.id as comments, n.id as id, u.name as author')
-            ->leftJoin('n.User_Model_User u');
+            ->leftJoin('n.User_Model_User u')
+            ->orderBy('n.created_at DESC');
             
         $this->view->query = $query;     
     }
