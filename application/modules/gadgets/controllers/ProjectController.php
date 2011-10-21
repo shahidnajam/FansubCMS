@@ -66,8 +66,8 @@ class Gadgets_ProjectController extends FansubCMS_Controller_Action
           ->where('p.private = ?', 'no')
           ->limit($num)
           ->orderBy('pt.updated_at DESC')
-          ->groupBy('pe.number, pe.version, pc.number, pc.version');
-        
+          ->groupBy('pe.number, pe.version, pc.number, pc.version, p.name, p.name_slug, p.name_jp, p.project_type, ptt.title, pt.done, pe.*, pt.*');
+
         $this->view->result = $q->fetchArray();
     }
 }
