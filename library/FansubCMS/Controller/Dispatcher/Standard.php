@@ -103,7 +103,8 @@ class FansubCMS_Controller_Dispatcher_Standard extends Zend_Controller_Dispatche
     {
         // Determine which layout to use
         if($this->isAdminRequest()) {
-            $layout = $this->_settings->page->adminLayout;
+            $layout = empty($this->_settings->page->adminLayout) ? 
+                $this->_settings->page->layout : $this->_settings->page->adminLayout;
         } else {
             $layout = $this->_settings->page->layout;
         }
@@ -114,7 +115,6 @@ class FansubCMS_Controller_Dispatcher_Standard extends Zend_Controller_Dispatche
         if(!is_readable($layoutPath . DIRECTORY_SEPARATOR . $layoutFile)) {
             throw new Exception('The layout could not be found or is not readable.');
         }
-        
         // start mvc layout
         $layoutInstance = Zend_Layout::startMvc(array('layoutPath' => $layoutPath, 'layout' => $this->isAdminRequest() ? 'admin' : 'frontend'));
 
