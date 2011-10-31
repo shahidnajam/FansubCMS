@@ -238,11 +238,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initI18n()
     {
+        $locale = new Zend_Locale($this->settings->locale);
         $trans = new Zend_Translate('Array',array(''=>''), $this->settings->locale);
 
         # the translations itself will be added in module bootstraps
         
         // save the translation in the registry
+        Zend_Registry::set('Zend_Locale', $locale);
         Zend_Registry::set('Zend_Translate', $trans);
     }
 
