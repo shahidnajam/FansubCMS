@@ -58,7 +58,9 @@ class Gadgets_ProjectController extends FansubCMS_Controller_Action
         $num = $this->getRequest()->getParam('num', 5);
         $q = Doctrine_Query::create();
         $q->from('Projects_Model_Task pt')
-          ->select('p.name, p.name_slug, p.name_jp, p.project_type, ptt.title, pt.done, pc.*, pe.*')
+          ->select('p.name, p.name_slug, p.name_jp, p.project_type, ptt.title, 
+          	pt.done, pc.number, pc.version, pc.project_id, pe.number, pe.title, 
+          	pe.version, pe.project_id')
           ->leftJoin('pt.Projects_Model_TaskType ptt')
           ->leftJoin('ptt.Projects_Model_Project p')
           ->leftJoin('pt.Projects_Model_Episode pe')
@@ -66,8 +68,11 @@ class Gadgets_ProjectController extends FansubCMS_Controller_Action
           ->where('p.private = ?', 'no')
           ->limit($num)
           ->orderBy('pt.updated_at DESC')
-          ->groupBy('pe.number, pe.version, pc.number, pc.version');
-        
+          ->groupBy('pe.number, pe.version, pc.number, pc.version, p.name, p.name_slug, 
+          	p.name_jp, p.project_type, ptt.title, pt.done, pc.number, pc.version, 
+          	pc.project_id, pe.number, pe.title, pe.version, pe.project_id, p.id, pe.id, 
+          	pc.id, ptt.id, pt.id, pt.updated_at');
+          
         $this->view->result = $q->fetchArray();
     }
 }
