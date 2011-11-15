@@ -19,6 +19,19 @@
         )
     ),
     'actions' => array(
+        'preview' => array(
+            'image' => '/media/common/images/icons/16/clapperboard.png',
+            'label' => 'news_preview_table_action',
+            'privilege' => 'edit',
+            'target' => array(
+                'module' => 'news',
+                'controller' => 'admin',
+                'action' => 'preview',
+                'params' => array(
+                    'id' => '__id__'
+                )
+            )
+        ),
     	'comments' => array(
             'image' => '/media/common/images/icons/16/balloon.png',
             'label' => 'news_comments_table_action',
