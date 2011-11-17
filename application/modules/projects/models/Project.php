@@ -39,13 +39,14 @@ class Projects_Model_Project extends Projects_Model_Base_Project
      */
     public function getReleaseEpisodeCount()
     {
-        $pet = Doctrine::getTable('Projects_Model_EpisodeRelease');
-        $q = $pet->createQuery('er')
-                ->select('e.number, er.id')
-                ->leftJoin('er.Projects_Model_Episode e')
+        $pet = Doctrine::getTable('Projects_Model_Episode');
+        $q = $pet->createQuery('e')
+                ->select('COUNT(e.number) AS count')
+                ->leftJoin('e.Projects_Model_EpisodeRelease er')
                 ->where('er.released_at IS NOT NULL')
                 ->andWhere('e.project_id = ?', $this->id)
-                ->groupBy('e.number, er.id');
+                ->groupBy('e.number');
+        
         return $q->count();
     }
     
