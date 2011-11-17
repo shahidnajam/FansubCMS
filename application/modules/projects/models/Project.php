@@ -41,13 +41,13 @@ class Projects_Model_Project extends Projects_Model_Base_Project
     {
         $pet = Doctrine::getTable('Projects_Model_Episode');
         $q = $pet->createQuery('e')
-                ->select('COUNT(e.number) AS count')
+                ->select('e.number')
                 ->leftJoin('e.Projects_Model_EpisodeRelease er')
                 ->where('er.released_at IS NOT NULL')
                 ->andWhere('e.project_id = ?', $this->id)
                 ->groupBy('e.number');
-        
-        return $q->count();
+
+        return count($q->execute(array(), Doctrine_Core::HYDRATE_SCALAR));
     }
     
     public function updateProject (array $values)
