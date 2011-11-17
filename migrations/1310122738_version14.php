@@ -9,7 +9,8 @@ class Version14 extends Doctrine_Migration_Base
         parent::preUp();
         
         // get a mapping of current ids for later use
-        $episodes = Projects_Model_EpisodeTable::getInstance()->findAll();
+        $conn = Doctrine_Manager::getInstance()->connection();
+        $episodes = $conn->execute('SELECT * FROM project_episodes')->fetchAll();
         
         $mapping = array();
         $afterDelete = array();
@@ -21,9 +22,6 @@ class Version14 extends Doctrine_Migration_Base
             }
         }
         
-        $conn = Doctrine_Manager::getInstance()->connection();
-        $episodes = $conn->execute('SELECT * FROM project_episodes')->fetchAll();
-
         foreach($episodes as $episode) {
             
             $rel = new Projects_Model_EpisodeRelease();
