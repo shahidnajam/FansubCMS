@@ -52,11 +52,12 @@ class Projects_IndexController extends FansubCMS_Controller_Action {
         $num = round($num, 0); // prevent from floting point values
         
         $q = Doctrine_Query::create();
-        $q->from('Projects_Model_Episode pe')
+        $q->from('Projects_Model_EpisodeRelease per')
+          ->leftJoin('per.Projects_Model_Episode pe')
           ->leftJoin('pe.Projects_Model_Project p')
-          ->where('pe.released_at IS NOT NULL')
+          ->where('per.released_at IS NOT NULL')
           ->andWhere('p.private = ?', 'no')
-          ->orderBy('pe.released_at DESC')
+          ->orderBy('per.released_at DESC')
           ->limit($num);
           
         $this->_generateFeed($q->execute(array(), Doctrine::HYDRATE_RECORD));
@@ -76,20 +77,20 @@ class Projects_IndexController extends FansubCMS_Controller_Action {
 
         foreach($episodes as $episode) {
             # build the ep title to be shown
-            $epTitle = $episode->Projects_Model_Project->name . ' ' . $episode->number;
-            if($episode->version > 1) {
-                $epTitle .= 'v' . $episode->version;
+            $epTitle = $episode->Projects_Model_Episode->Projects_Model_Project->name . ' ' . $episode->Projects_Model_Episode->number;
+            if($episode->Projects_Model_Episode->version > 1) {
+                $epTitle .= 'v' . $episode->Projects_Model_Episode->version;
             }
             
             # url encode project title
-            $projUrl = urlencode($episode->Projects_Model_Project->name);
+            $projUrl = $episode->Projects_Model_Episode->Projects_Model_Project->name_slug;
             
             # add entry
             $entries[]=array(
                     'title'=>$epTitle,
                     'link'=>'http://'.$_SERVER['HTTP_HOST'].$this->view->baseUrl().'/projects/index/details/project/' . $projUrl,
-                    'description'=>$episode->title,
-                    'content'=>$episode->title,
+                    'description'=>$episode->Projects_Model_Episode->title,
+                    'content'=>$episode->Projects_Model_Episode->title,
                     'lastUpdate'=>strtotime($episode->released_at),
             );
         }
