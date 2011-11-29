@@ -29,6 +29,8 @@ News_Model_News:
             values: ['yes','no']
             default: 'no'
             notnull: true
+       publish_date:
+            type: timestamp
        sourcetype:
             type: string
             length: 64

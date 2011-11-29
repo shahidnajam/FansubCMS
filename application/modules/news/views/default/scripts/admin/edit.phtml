@@ -1,2 +1,14 @@
 <?=$this->markitup('#text')?>
+<?=$this->partial('partials/datepicker.phtml',array('identifier'=>'#publishdate','altIdentifier'=>'#isoDate'))?>
 <?=$this->form?>
+<script type="text/javascript">
+    $("input[name='public']").click(checkChange);
+    function checkChange() {
+        if($("input[name='public']:checked").val() == "yes") {
+            $("#publishdate").removeAttr("disabled");
+        } else {
+            $("#publishdate").attr("disabled", "disabled");
+        }
+    }
+    checkChange();
+</script>

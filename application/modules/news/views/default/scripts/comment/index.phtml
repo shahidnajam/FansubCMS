@@ -1,7 +1,7 @@
 <?php if($this->news): ?>
 <div class="author"><img src="<?=$this->gravatar($this->news->User_Model_User->email,100)?>" alt="" /><br/><?=$this->translate('news_author',array('username' => $this->news->User_Model_User->name))?></div>
 <div class="title"><h3><?=$this->news->title?></h3></div>
-<div class="created"><?=$this->translate('news_created_at_date',array('date' => $this->formatDate($this->news->created_at)))?></div>
+<div class="created"><?=$this->translate('news_created_at_date',array('date' => $this->formatDate($this->news->publish_date)))?></div>
 <div class="content"><?=$this->textile($this->news->text)?></div>
 <br class="clearfix" />
 <h3 class="inline-headline"><?=$this->translate('news_comment')?></h3>

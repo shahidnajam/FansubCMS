@@ -30,9 +30,10 @@ class News_Model_NewsTable extends Doctrine_Table
         $q = $this->createQuery('n');
         $q->leftJoin('n.User_Model_User u')
           ->leftJoin('n.News_Model_Comment c')
-          ->orderBy('created_at DESC');
+          ->orderBy('publish_date DESC');
         if ($type === true) {
-            $q->where('public = ?', 'yes');
+            $q->where('public = ?', 'yes')
+                ->andWhere('publish_date <= NOW()');
         } else 
             if ($type === false) {
                 $q->where('public = ?', 'no');

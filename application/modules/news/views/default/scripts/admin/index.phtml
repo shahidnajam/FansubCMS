@@ -2,7 +2,7 @@
     'prefix' => 'news_admin_index_table_',
     'emptyListMessage' => 'news_no_news',
     'showFieldNames' => array(
-        'title', 'created_at', 'comments', 'public', 'author'
+        'id' ,'title', 'created_at', 'comments', 'public', 'publish_date', 'author'
     ),
     'filterFields' => array(
         'created_at' => array(
@@ -10,6 +10,9 @@
         ),
         'comments' => array(
             'viewHelper' => 'count'  
+        ),
+        'publish_date' => array(
+            'viewHelper' => 'formatDate',
         ),
         'public' => array(
             'viewHelper' => 'prefixTranslate',

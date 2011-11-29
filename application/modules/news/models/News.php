@@ -22,15 +22,18 @@ class News_Model_News extends News_Model_Base_News
     static function getNews ($limit, $offset, $public = true)
     {
         $q = Doctrine_Query::create();
+        
         $q->from('News_Model_News n')
             ->limit($limit)
             ->offset($offset);
+        
         if ($public === false) {
             $q->where('public = ?', 'no');
-        } else 
-            if ($public === true) {
-                $q->where('public = ?', 'yes');
-            }
+        } else if ($public === true) {
+            $q->where('public = ?', 'yes')
+                ->andWhere('publish_date <= NOW()');
+        }
+        
         return $q->execute();
     }
     /**

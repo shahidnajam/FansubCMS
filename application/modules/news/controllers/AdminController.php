@@ -26,7 +26,7 @@ class News_AdminController extends FansubCMS_Controller_Action
         $query = $table->createQuery('n');
         $query->select('n.*, n.id as comments, n.id as id, u.name as author')
             ->leftJoin('n.User_Model_User u')
-            ->orderBy('n.created_at DESC');
+            ->orderBy('n.publish_date DESC');
             
         $this->view->query = $query;     
     }
@@ -42,14 +42,25 @@ class News_AdminController extends FansubCMS_Controller_Action
             $this->_helper->redirector->gotoRoute(array('action'=>'index','controller'=>'admin','module'=>'news'),'news');
         }
         $this->view->form = new News_Form_EditNews($n->toArray());
-        $req = $this->getRequest();
-        if($req->isPost()) { // there are profile updates
-            if($this->view->form->isValid($_POST)) {
+        
+        if($this->_request->isPost()) { // there are profile updates
+            if($this->view->form->isValid($this->_request->getPost())) {
                 $values = $this->view->form->getValues();
                 $n->title = $values['title'];
                 $n->text = $values['text'];
                 $public = $values['public'] == 'yes' ? 'yes' : 'no';
                 $n->public = $public;
+                
+                if(!empty($values['public']) && $values['public'] == 'yes') {
+                    if (empty($values['isoDate'])) {
+                        $n->publish_date = date('Y-m-d H:i:s');
+                    } else {
+                        $n->publish_date = $values['isoDate'];
+                    }
+                } else if (!empty($values['public']) && $values['public'] == 'no') {
+                    $n->publish_date = null;
+                }
+                
                 $n->save();
                 $this->_helper->redirector->gotoRoute(array('action'=>'index','controller'=>'admin','module'=>'news'),'news');
             } else {
@@ -90,17 +101,30 @@ class News_AdminController extends FansubCMS_Controller_Action
     {
         $this->view->pageTitle = $this->translate('news_admin_add_headline');
         $this->view->form = new News_Form_EditNews(null, true);
-        $req = $this->getRequest();
-        if($req->isPost()) { // there are profile updates
-            if($this->view->form->isValid($_POST)) {
+        
+        if($this->_request->isPost()) { // there are profile updates
+            if($this->view->form->isValid($this->_request->getPost())) {
                 $values = $this->view->form->getValues();
+                
                 $n = new News_Model_News;
                 $n->title = $values['title'];
                 $n->text = $values['text'];
                 $public = $values['public'] == 'yes' ? 'yes' : 'no';
                 $n->public = $public;
+                
+                if(!empty($values['public']) && $values['public'] == 'yes') {
+                    if (empty($values['isoDate'])) {
+                        $n->publish_date = date('Y-m-d H:i:s');
+                    } else {
+                        $n->publish_date = $values['isoDate'];
+                    }
+                } else if (!empty($values['public']) && $values['public'] == 'no') {
+                        $n->publish_date = null;
+                }
+                
                 $n->user_id = Zend_Auth::getInstance()->getIdentity()->id;
                 $n->save();
+                
                 $this->session->message = $this->translate('news_admin_add_success');
                 $this->_helper->redirector->gotoRoute(array('action'=>'index','controller'=>'admin','module'=>'news'),'news');
                 $this->view->form = new News_Form_EditNews(null,true);

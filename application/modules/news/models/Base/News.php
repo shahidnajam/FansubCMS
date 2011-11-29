@@ -10,6 +10,7 @@
  * @property string $title
  * @property string $text
  * @property enum $public
+ * @property timestamp $publish_date
  * @property string $sourcetype
  * @property string $sourcekey
  * @property User_Model_User $User_Model_User
@@ -51,6 +52,9 @@ abstract class News_Model_Base_News extends FansubCMS_Doctrine_Record
              ),
              'default' => 'no',
              'notnull' => true,
+             ));
+        $this->hasColumn('publish_date', 'timestamp', null, array(
+             'type' => 'timestamp',
              ));
         $this->hasColumn('sourcetype', 'string', 64, array(
              'type' => 'string',

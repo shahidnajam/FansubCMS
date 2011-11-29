@@ -62,11 +62,23 @@ class News_Form_EditNews extends Zend_Form {
                 ->setLabel('news_admin_add_field_public')
                 ->setValue(isset($values['public']) ? $values['public'] : 'no');
 
+        # publish date
+        $envConf = Zend_Registry::get('environmentSettings');
+        $time = empty($values['publish_date']) ? time() : strtotime($values['publish_date']);
+        $date = new Zend_Date($time,null,$envConf->locale);
+        $publishDate = $this->createElement('text', 'publishdate')
+                ->setValue($date->toString(Zend_Date::DATE_SHORT))
+                ->setLabel('news_admin_field_news_publish_date');
+        $iso = $this->createElement('hidden', 'isoDate')
+                ->setDecorators(array('viewhelper'))
+                ->setValue(isset($values['publish_date']) ? $values['publish_date'] : null);
 
         # add elements to the form
         $this->addElement($title)
                 ->addElement($text)
-                ->addElement($public);
+                ->addElement($public)
+                ->addElement($publishDate)
+                ->addElement($iso);
 
         # commit button
         $this->addElement('submit', 'submit', array('label' => $insert ? 'field_add' : 'field_edit', 'class' => 'button'));
