@@ -70,10 +70,7 @@ class News_Model_News extends News_Model_Base_News
     {
         $conf = Zend_Registry::get('environmentSettings');
         if ($conf->news->usePermaLink) {
-            $date = new Zend_Date(strtotime($this->created_at));
-            return 'archive/' . $date->toString('YYYY') . '/' .
-             $date->toString('MM') . '/' . $date->toString('dd') . '/' .
-             urlencode($this->title_slug);
+            return 'article/' . urlencode($this->title_slug);
         } else {
             return 'comment/index/id/' . $this->id;
         }

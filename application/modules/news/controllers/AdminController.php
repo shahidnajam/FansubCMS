@@ -244,15 +244,11 @@ class News_AdminController extends FansubCMS_Controller_Action
             $this->_helper->redirector->gotoRoute(array('action'=>'index','controller'=>'admin','module'=>'news'),'news');
         }
         
-        $date = Zend_Date::now();
         $this->_helper->redirector->gotoRoute(array(
             'action' => 'index',
             'controller' => 'comment',
             'module' => 'news',
-            'year' => $date->toString('Y'),
-            'month' => $date->toString('m'),
-            'day' => $date->toString('d'),
             'title' => $n->title_slug
-        ), 'news_perma'); 
+        ), 'news_new_perma'); 
     }
 }

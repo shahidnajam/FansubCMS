@@ -36,7 +36,7 @@ class FansubCMS_View_Helper_FormatDate {
 	 * @return string
 	 */
 	public function formatDate($date, $formatName = null, $formatStr = null) {
-		$date = new Zend_Date(strtotime($date));
+                $date = empty($date) ? Zend_Date::now() : new Zend_Date(strtotime($date));
 		if(($formatName !== null) && (array_key_exists($formatName,$this->date_formats))) {
 			return $date->toString($this->date_formats[$formatName]);
 		} if(!empty($formatStr)) {

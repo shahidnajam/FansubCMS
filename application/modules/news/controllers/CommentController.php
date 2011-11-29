@@ -28,16 +28,13 @@ class News_CommentController extends FansubCMS_Controller_Action {
         $envConf = Zend_Registry::get('environmentSettings');
         $req = $this->getRequest();
         $id = $req->getParam('id');
-        $day = $req->getParam('day');
-        $month = $req->getParam('month');
-        $year = $req->getParam('year');
         $title = $req->getParam('title');
         $this->view->news = false;
         $this->view->paginator = false;
         $this->view->writeForm = new News_Form_Comment('#');
-        if ($id && !$envConf->news->usePermaLink) {
+        if ($id) {
             $this->view->news = News_Model_News::getNewsById($id);
-        } else if($year && $month && $day && $title && $envConf->news->usePermaLink) {
+        } else if($title) {
             $this->view->news = News_Model_News::getNewsBySlug(urldecode($title));
         }
 
